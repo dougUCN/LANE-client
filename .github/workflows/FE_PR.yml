@@ -1,0 +1,31 @@
+name: LANE_Frontend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env: # Note that env variables are only accessible from within a `steps` context
+  PYTHON_VERSION: 3.6.9
+  NODE_VERSION: 16
+
+jobs:
+  eslint_check:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set up Node js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Eslint code check
+        run: npm run lint:pr
