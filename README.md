@@ -1,13 +1,13 @@
-# LANE Frontend
+# LANE client
 
-This Readme is for contributors only looking to work on the LANE Frontend. Otherwise, refer to the documentation on the [main repository](https://github.com/dougUCN/LANE.git)
+This Readme is for contributors only looking to work on the LANE client. Otherwise, refer to the documentation on the [main repository](https://github.com/dougUCN/LANE.git)
 
 ### 1. Getting started
 
 Begin by cloning the repository:
 
 ```
-git clone https://github.com/dougUCN/LANE_frontend.git --recurse-submodules
+git clone https://github.com/dougUCN/LANE-client.git --recurse-submodules
 ```
 
 ### 2. Installing FE dependencies
