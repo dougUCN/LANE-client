@@ -1,7 +1,5 @@
 # LANE client
 
-This Readme is for contributors only looking to work on the LANE client. Otherwise, refer to the documentation on the [main repository](https://github.com/dougUCN/LANE.git)
-
 ### 1. Getting started
 
 Begin by cloning the repository:
