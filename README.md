@@ -5,7 +5,7 @@
 Begin by cloning the repository:
 
 ```
-git clone https://github.com/dougUCN/LANE-client.git --recurse-submodules
+git clone https://github.com/dougUCN/LANE-client.git
 ```
 
 ### 2. Installing FE dependencies
