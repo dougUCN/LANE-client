@@ -42,6 +42,7 @@ jobs:
         with:
           repository: dougUCN/LANE-server
           path: server
+          submodules: recursive
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v3
