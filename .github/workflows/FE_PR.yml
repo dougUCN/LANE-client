@@ -1,4 +1,4 @@
-name: LANE_client_PR
+name: LANE_client
 
 on:
   push:
