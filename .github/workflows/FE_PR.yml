@@ -1,4 +1,4 @@
-name: LANE_Frontend
+name: LANE_client_PR
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       - name: Eslint code check
         run: npm run lint:pr
 
-  FE_builds_successfully:
+  client_builds_successfully:
     runs-on: ubuntu-20.04
 
     steps:
@@ -76,7 +76,7 @@ jobs:
         working-directory: client
         run: npm run generate
 
-      - name: Build FE
+      - name: Build client
         working-directory: client
         run: npm run build
 
