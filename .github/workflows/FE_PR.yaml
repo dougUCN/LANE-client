@@ -27,6 +27,28 @@ jobs:
 
       - name: Eslint code check
         run: npm run lint:pr
+        
+    unit_tests:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout client repo
+        uses: actions/checkout@v3
+        with:
+          path: client
+
+      - name: Set up Node js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Node dependencies
+        working-directory: client
+        run: npm ci
+
+      - name: Unit Tests
+        working-directory: client
+        run: npm run test
 
   client_builds_successfully:
     runs-on: ubuntu-20.04
@@ -76,10 +98,6 @@ jobs:
       - name: Get schema from BE and generate Tsx file
         working-directory: client
         run: npm run generate
-
-      - name: Unit Tests
-        working-directory: client
-        run: npm run test
 
       - name: Build client
         working-directory: client
