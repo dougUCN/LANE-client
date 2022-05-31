@@ -31,7 +31,7 @@ jobs:
   unit_tests:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout client repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Node js
