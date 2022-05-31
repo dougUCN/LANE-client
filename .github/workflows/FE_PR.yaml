@@ -27,15 +27,12 @@ jobs:
 
       - name: Eslint code check
         run: npm run lint:pr
-        
-    unit_tests:
-    runs-on: ubuntu-20.04
 
+  unit_tests:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout client repo
         uses: actions/checkout@v3
-        with:
-          path: client
 
       - name: Set up Node js
         uses: actions/setup-node@v3
