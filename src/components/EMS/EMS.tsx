@@ -2,10 +2,11 @@ import React from "react";
 import { useSubscription } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassEnd } from "@fortawesome/free-solid-svg-icons";
+
 import {
   GetAllLiveHistogramsDocument,
   GetAllLiveHistogramsSubscription,
-} from "../../generated";
+} from "generated";
 import HistogramChart from "./HistogramChart";
 
 const handleSubscription = (

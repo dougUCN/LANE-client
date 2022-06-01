@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React from "react";
 import {
   LineChart,
   Line,
@@ -12,7 +11,8 @@ import {
 } from "recharts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchMinus } from "@fortawesome/free-solid-svg-icons";
-import { LiveHistogram, Point } from "../../generated";
+import { LiveHistogram } from "generated";
+
 import useChart from "./hooks/useChart";
 import Button from "../shared/Button";
 
