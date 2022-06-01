@@ -79,7 +79,7 @@ jobs:
       - name: Run server in background
         working-directory: server
         run: |
-          daphne nEDM_server.asgi:application &
+          daphne LANE_server.asgi:application &
 
       - name: Set up Node js
         uses: actions/setup-node@v3
