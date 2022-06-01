@@ -4,10 +4,10 @@ import EMS from "../components/EMS";
 const EMSPage = () => {
   return (
     <>
-      <Helmet>
-        <title>LANE - EMS</title>
-        <EMS />
-      </Helmet>
+      {/* <Helmet> */}
+      {/* <title>LANE - EMS</title> */}
+      <EMS />
+      {/* </Helmet> */}
     </>
   );
 };
