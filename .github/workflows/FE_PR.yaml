@@ -28,6 +28,23 @@ jobs:
       - name: Eslint code check
         run: npm run lint:pr
 
+  unit_tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Unit Tests
+        run: npm run test
+
   client_builds_successfully:
     runs-on: ubuntu-20.04
 
@@ -36,7 +53,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: client
-      
+
       - name: Checkout server repo
         uses: actions/checkout@v3
         with:
@@ -62,7 +79,7 @@ jobs:
       - name: Run server in background
         working-directory: server
         run: |
-          daphne nEDM_server.asgi:application &
+          daphne LANE_server.asgi:application &
 
       - name: Set up Node js
         uses: actions/setup-node@v3
@@ -80,5 +97,3 @@ jobs:
       - name: Build client
         working-directory: client
         run: npm run build
-
-
