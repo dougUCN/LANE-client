@@ -7,7 +7,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import darkModeLogo from "/logo/lane-dark-mode.svg";
 import lightModeLogo from "/logo/lane-light-mode.svg";
 
-import useDarkMode from "hooks/useDarkMode/useDarkMode";
+import useDarkMode from "hooks/useDarkMode";
 import StyledLink from "./StyledLink";
 
 const Navbar = () => {
