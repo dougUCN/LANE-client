@@ -1,13 +1,14 @@
-import { Helmet } from "react-helmet";
+import React from "react";
 import EMS from "../components/EMS";
 
 const EMSPage = () => {
+  React.useEffect(() => {
+    document.title = "LANE - EMS";
+  }, []);
+
   return (
     <>
-      {/* <Helmet> */}
-      {/* <title>LANE - EMS</title> */}
       <EMS />
-      {/* </Helmet> */}
     </>
   );
 };
