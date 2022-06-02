@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react-hooks";
+import liveHistogramsFixture from "fixtures/ems";
 import useChart from "../useChart";
-import liveHistogramsFixture from "../../../../fixtures/ems";
 
 describe("useChart", () => {
   const histogramFixture = liveHistogramsFixture[0];

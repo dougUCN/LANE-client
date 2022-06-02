@@ -6,13 +6,8 @@ import { Provider, Client, defaultExchanges, subscriptionExchange } from "urql";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import {
-  EMSPage,
-  RunSchedulerPage,
-  ControlPanelPage,
-  LoginPage,
-} from "./pages";
-import Navbar from "./components/Navbar";
+import { EMSPage, RunSchedulerPage, ControlPanelPage, LoginPage } from "pages";
+import Navbar from "components/Navbar";
 
 // Need the min timeout
 // https://github.com/apollographql/subscriptions-transport-ws/issues/377#issuecomment-1000431567

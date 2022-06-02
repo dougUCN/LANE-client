@@ -5,7 +5,6 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,8 +13,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "./src"
   },
-  "include": ["src"],
+  "paths": {
+    "components/*": ["./src/components/*"],
+    "generated/*": ["./src/generated.ts"],
+    "fixtures/*": ["./src/fixtures/*"],
+    "hooks/*": ["./src/hooks/*"],
+    "pages/*": ["./src/pages/*"],
+    "utils/*": ["./src/utils/*"]
+  },
+  "types": ["vite/client"],
+  "include": ["src", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
