@@ -6,7 +6,13 @@ import { Provider, Client, defaultExchanges, subscriptionExchange } from "urql";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import { EMSPage, RunSchedulerPage, ControlPanelPage, LoginPage } from "pages";
+import {
+  EMSPage,
+  PastRunPage,
+  RunSchedulerPage,
+  ControlPanelPage,
+  LoginPage,
+} from "pages";
 import Navbar from "components/Navbar";
 
 // Need the min timeout
@@ -36,7 +42,10 @@ root.render(
         <Routes>
           <Route path="/" element={<Navbar />}>
             <Route path="/" element={<Navigate replace to="/ems" />} />
-            <Route path="ems" element={<EMSPage />} />
+            <Route path="ems">
+              <Route index element={<EMSPage />} />
+              <Route path=":runName" element={<PastRunPage />} />
+            </Route>
             <Route path="run-scheduler" element={<RunSchedulerPage />} />
             <Route path="control-panel" element={<ControlPanelPage />} />
             <Route path="login" element={<LoginPage />} />

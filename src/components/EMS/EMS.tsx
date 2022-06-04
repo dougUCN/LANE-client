@@ -43,7 +43,6 @@ const EMS = () => {
     );
   }
 
-  // printing out just one histogram for now
   return (
     <div>
       {liveHistograms?.map(
