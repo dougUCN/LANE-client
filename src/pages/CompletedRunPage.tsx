@@ -1,8 +1,8 @@
-import PastRun from "components/EMS/PastRun";
+import CompletedRun from "components/EMS/CompletedRun";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-const PastRunPage = () => {
+const CompletedRunPage = () => {
   const params = useParams();
 
   React.useEffect(() => {
@@ -11,9 +11,9 @@ const PastRunPage = () => {
 
   return (
     <div>
-      <PastRun />
+      <CompletedRun />
     </div>
   );
 };
 
-export default PastRunPage;
+export default CompletedRunPage;
