@@ -38,11 +38,12 @@ const CompletedRun = () => {
   return (
     <div>
       <h2 className="text-center font-bold text-2xl mt-5">Run #{runNumber}</h2>
-      {histograms.map((histogram, index) => (
-        <React.Fragment key={`${histogram?.id}_${index}`}>
-          <HistogramChart histogram={histogram} />
-        </React.Fragment>
-      ))}
+      {histograms &&
+        histograms.map((histogram, index) => (
+          <React.Fragment key={`${histogram?.id}_${index}`}>
+            <HistogramChart histogram={histogram} />
+          </React.Fragment>
+        ))}
     </div>
   );
 };
