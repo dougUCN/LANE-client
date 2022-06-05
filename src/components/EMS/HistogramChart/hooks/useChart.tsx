@@ -1,8 +1,8 @@
 import React from "react";
-import { LiveHistogram, Point } from "generated";
+import { LiveHistogram, Histogram, Point } from "generated";
 import useStateFromProps from "./useStateFromProps";
 
-const useChart = (liveHistogram: LiveHistogram | null) => {
+const useChart = (liveHistogram: LiveHistogram | Histogram | null) => {
   const dataFromProps = liveHistogram?.data || [];
   const rightFromProps = liveHistogram?.xrange.max ?? 10;
   const topFromProps = liveHistogram?.yrange.max ?? 0;

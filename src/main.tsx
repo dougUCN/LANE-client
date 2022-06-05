@@ -6,8 +6,15 @@ import { Provider, Client, defaultExchanges, subscriptionExchange } from "urql";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import { EMSPage, RunSchedulerPage, ControlPanelPage, LoginPage } from "pages";
+import {
+  EMSPage,
+  CompletedRunPage,
+  RunSchedulerPage,
+  ControlPanelPage,
+  LoginPage,
+} from "pages";
 import Navbar from "components/Navbar";
+import NotFound from "components/shared/NotFound";
 
 // Need the min timeout
 // https://github.com/apollographql/subscriptions-transport-ws/issues/377#issuecomment-1000431567
@@ -34,9 +41,13 @@ root.render(
     <Provider value={client}>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Navbar />}>
             <Route path="/" element={<Navigate replace to="/ems" />} />
-            <Route path="ems" element={<EMSPage />} />
+            <Route path="ems">
+              <Route index element={<EMSPage />} />
+              <Route path=":runName" element={<CompletedRunPage />} />
+            </Route>
             <Route path="run-scheduler" element={<RunSchedulerPage />} />
             <Route path="control-panel" element={<ControlPanelPage />} />
             <Route path="login" element={<LoginPage />} />

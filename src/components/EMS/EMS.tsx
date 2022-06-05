@@ -43,13 +43,12 @@ const EMS = () => {
     );
   }
 
-  // printing out just one histogram for now
   return (
     <div>
       {liveHistograms?.map(
         (liveHistogram: typeof liveHistograms[0], index: number) => (
           <React.Fragment key={`${liveHistogram?.id}_${index}`}>
-            <HistogramChart liveHistogram={liveHistogram} />
+            <HistogramChart histogram={liveHistogram} />
           </React.Fragment>
         ),
       )}

@@ -1,5 +1,5 @@
 import React from "react";
-import EMS from "components/EMS";
+import { EMS } from "components/EMS";
 
 const EMSPage = () => {
   React.useEffect(() => {

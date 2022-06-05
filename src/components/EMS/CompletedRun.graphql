@@ -1,0 +1,21 @@
+query getHistograms($names: [String]) {
+  getHistograms(names: $names) {
+    id
+    name
+    data {
+      x
+      y
+    }
+    xrange {
+      min
+      max
+    }
+    yrange {
+      min
+      max
+    }
+    len
+    type
+    created
+  }
+}
