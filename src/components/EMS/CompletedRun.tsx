@@ -18,11 +18,14 @@ const CompletedRun = () => {
     variables: { names: [runName || ""] },
   });
 
-  console.log("params", runName);
-  console.log("result", result);
+  const runNumber = runName?.replace(/\D/g, "") || "";
 
   const histograms = result.data?.getHistograms;
   const isLoading = result.fetching;
+
+  React.useEffect(() => {
+    document.title = runNumber ? `LANE - Run #${runNumber}` : "LANE";
+  }, [runNumber]);
 
   if (!isLoading && (!histograms || !histograms?.length)) {
     return <NotFound customText="run" />;
@@ -34,6 +37,7 @@ const CompletedRun = () => {
 
   return (
     <div>
+      <h2 className="text-center font-bold text-2xl mt-5">Run #{runNumber}</h2>
       {histograms.map((histogram, index) => (
         <React.Fragment key={`${histogram?.id}_${index}`}>
           <HistogramChart histogram={histogram} />

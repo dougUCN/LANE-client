@@ -1,4 +1,10 @@
+import React from "react";
+
 const NotFound = ({ customText }: { customText?: string }) => {
+  React.useEffect(() => {
+    document.title = "LANE - 404";
+  });
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 py-48">
       <div className="flex flex-col">
