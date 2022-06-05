@@ -1,8 +1,10 @@
+import LoadingSpinner from "components/shared/LoadingSpinner";
 import NotFound from "components/shared/NotFound";
 import { GetHistogramsDocument } from "generated";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "urql";
+import HistogramChart from "./HistogramChart";
 
 type CompletedRunPageParams = {
   runName: string;
@@ -20,12 +22,25 @@ const CompletedRun = () => {
   console.log("result", result);
 
   const histograms = result.data?.getHistograms;
+  const isLoading = result.fetching;
 
-  if (!histograms || !histograms?.length) {
+  if (!isLoading && (!histograms || !histograms?.length)) {
     return <NotFound customText="run" />;
   }
 
-  return <div>Completed Run Goes Here</div>;
+  if (isLoading && (!histograms || !histograms?.length)) {
+    return <LoadingSpinner className="mt-24" />;
+  }
+
+  return (
+    <div>
+      {histograms.map((histogram, index) => (
+        <React.Fragment key={`${histogram?.id}_${index}`}>
+          <HistogramChart histogram={histogram} />
+        </React.Fragment>
+      ))}
+    </div>
+  );
 };
 
 export default CompletedRun;

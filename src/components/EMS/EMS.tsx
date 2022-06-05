@@ -48,7 +48,7 @@ const EMS = () => {
       {liveHistograms?.map(
         (liveHistogram: typeof liveHistograms[0], index: number) => (
           <React.Fragment key={`${liveHistogram?.id}_${index}`}>
-            <HistogramChart liveHistogram={liveHistogram} />
+            <HistogramChart histogram={liveHistogram} />
           </React.Fragment>
         ),
       )}

@@ -11,16 +11,16 @@ import {
 } from "recharts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchMinus } from "@fortawesome/free-solid-svg-icons";
-import { LiveHistogram } from "generated";
+import { Histogram, LiveHistogram } from "generated";
 
 import useChart from "./hooks/useChart";
 import Button from "../shared/Button";
 
 type Props = {
-  liveHistogram: LiveHistogram | null;
+  histogram: LiveHistogram | Histogram | null;
 };
 
-const HistogramChart = ({ liveHistogram }: Props) => {
+const HistogramChart = ({ histogram }: Props) => {
   const {
     data,
     left,
@@ -33,9 +33,9 @@ const HistogramChart = ({ liveHistogram }: Props) => {
     setRefAreaRight,
     zoomOut,
     zoom,
-  } = useChart(liveHistogram);
+  } = useChart(histogram);
 
-  if (!liveHistogram) {
+  if (!histogram) {
     return null;
   }
 
