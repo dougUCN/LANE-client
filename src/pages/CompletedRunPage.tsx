@@ -1,4 +1,4 @@
-import CompletedRun from "components/EMS/CompletedRun";
+import { CompletedRun } from "components/EMS";
 
 const CompletedRunPage = () => {
   return (

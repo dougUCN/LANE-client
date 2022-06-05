@@ -9,14 +9,12 @@ import {
   ReferenceArea,
   ResponsiveContainer,
 } from "recharts";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchMinus } from "@fortawesome/free-solid-svg-icons";
 import { Histogram, LiveHistogram } from "generated";
-
-import useChart from "./hooks/useChart";
-import Button from "../shared/Button";
+import Button from "components/shared/Button";
 import { formatDate, formatName } from "utils/formatters";
+import useChart from "./hooks/useChart";
 
 type Props = {
   histogram: LiveHistogram | Histogram | null;
