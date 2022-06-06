@@ -14,6 +14,7 @@ const useChart = (liveHistogram: LiveHistogram | Histogram | null) => {
   const [refAreaRight, setRefAreaRight] = React.useState<number | null>(null); // x-axis on mouse release
   const [top, setTop] = useStateFromProps<number>(topFromProps); // y-axis max
   const [bottom, setBottom] = React.useState<number>(0); // y-axis min
+  const [canZoom, setCanZoom] = React.useState<boolean>(false);
 
   const zoomOut = () => {
     setData(data.slice());
@@ -68,6 +69,12 @@ const useChart = (liveHistogram: LiveHistogram | Histogram | null) => {
     setTop(top);
   };
 
+  React.useEffect(() => {
+    left === 0 && right === rightFromProps
+      ? setCanZoom(false)
+      : setCanZoom(true);
+  }, [left, right, rightFromProps]);
+
   return {
     data,
     right,
@@ -76,6 +83,7 @@ const useChart = (liveHistogram: LiveHistogram | Histogram | null) => {
     refAreaRight,
     top,
     bottom,
+    canZoom,
     setData,
     setRight,
     setLeft,

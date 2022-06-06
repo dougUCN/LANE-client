@@ -6,13 +6,8 @@ import { Provider, Client, defaultExchanges, subscriptionExchange } from "urql";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import {
-  EMSPage,
-  CompletedRunPage,
-  RunSchedulerPage,
-  ControlPanelPage,
-  LoginPage,
-} from "pages";
+import { RunSchedulerPage, ControlPanelPage, LoginPage } from "pages";
+import { CompletedRun, EMS, LiveRun } from "components/EMS";
 import Navbar from "components/Navbar";
 import NotFound from "components/shared/NotFound";
 
@@ -45,8 +40,9 @@ root.render(
           <Route path="/" element={<Navbar />}>
             <Route path="/" element={<Navigate replace to="/ems" />} />
             <Route path="ems">
-              <Route index element={<EMSPage />} />
-              <Route path=":runName" element={<CompletedRunPage />} />
+              <Route index element={<EMS />} />
+              <Route path="live-run" element={<LiveRun />} />
+              <Route path=":runName" element={<CompletedRun />} />
             </Route>
             <Route path="run-scheduler" element={<RunSchedulerPage />} />
             <Route path="control-panel" element={<ControlPanelPage />} />
