@@ -37,7 +37,9 @@ const CompletedRun = () => {
 
   return (
     <div>
-      <h2 className="text-center font-bold text-2xl mt-5">Run #{runNumber}</h2>
+      <h2 className="text-center dark:text-slate-100 font-bold text-2xl mt-5">
+        Run #{runNumber}
+      </h2>
       {histograms &&
         histograms.map((histogram, index) => (
           <React.Fragment key={`${histogram?.id}_${index}`}>
