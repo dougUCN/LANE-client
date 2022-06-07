@@ -1,0 +1,16 @@
+query getCompletedRuns($first: Int!, $after: String) {
+  getHistTableEntries(first: $first, after: $after) {
+    edges {
+      cursor
+      node {
+        name
+        created
+        histIDs
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
