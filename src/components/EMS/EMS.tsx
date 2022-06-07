@@ -8,21 +8,26 @@ import { Link } from "react-router-dom";
 import { formatDate } from "utils/formatters";
 import LoadingSpinner from "components/shared/LoadingSpinner";
 
-const EMS = () => {
-  React.useEffect(() => {
-    document.title = "LANE - EMS";
-  }, []);
+const limit = 15;
 
+type EMSProps = {
+  variables: any;
+  isLastPage: boolean;
+  onLoadMore: any;
+};
+const EMS = ({ variables, isLastPage, onLoadMore }: EMSProps) => {
   const [result] = useQuery({
     query: GetCompletedRunsDocument,
     variables: {
-      first: 15,
-      after: null,
+      first: variables.first,
+      after: variables.after,
     },
   });
-
+  console.log("variables", variables);
   const tableEntries = result.data?.getHistTableEntries?.edges;
-  const isLoading = result.fetching;
+  const pageInfo = result.data?.getHistTableEntries?.pageInfo;
+
+  console.log("result data", result.data);
 
   if (!tableEntries) {
     return <LoadingSpinner className="mt-24" />;
@@ -54,6 +59,11 @@ const EMS = () => {
                 <TableRow tableEntry={tableEntry?.node} />
               ))
             )}
+            {isLastPage && pageInfo?.hasNextPage && (
+              <button onClick={() => onLoadMore(pageInfo.endCursor)}>
+                load more
+              </button>
+            )}
           </tbody>
         </table>
       </div>
@@ -61,9 +71,10 @@ const EMS = () => {
   );
 };
 
-export default EMS;
-
-const TableRow = ({ tableEntry }: { tableEntry?: HistTableEntry | null }) => {
+type TableRowProps = {
+  tableEntry?: HistTableEntry | null;
+};
+const TableRow = ({ tableEntry }: TableRowProps) => {
   if (!tableEntry) {
     return null;
   }
@@ -92,3 +103,39 @@ const TableRow = ({ tableEntry }: { tableEntry?: HistTableEntry | null }) => {
     </tr>
   );
 };
+
+const EMSWrapper = () => {
+  React.useEffect(() => {
+    document.title = "LANE - EMS";
+  }, []);
+
+  const [pageVariables, setPageVariables] = React.useState([
+    {
+      GetCompletedRunsDocument,
+      first: limit,
+      after: null,
+    },
+  ]);
+
+  console.log("page variables", pageVariables);
+
+  return (
+    <div>
+      {pageVariables.map((variables, i) => (
+        <EMS
+          key={"" + variables.after}
+          variables={variables}
+          isLastPage={i === pageVariables.length - 1}
+          onLoadMore={(after: null) =>
+            setPageVariables([
+              ...pageVariables,
+              { after, first: limit, GetCompletedRunsDocument },
+            ])
+          }
+        />
+      ))}
+    </div>
+  );
+};
+
+export default EMSWrapper;
