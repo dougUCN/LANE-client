@@ -15,6 +15,7 @@ import { Histogram, LiveHistogram } from "generated";
 import Button from "components/shared/Button";
 import { formatDate, formatName } from "utils/formatters";
 import useChart from "./hooks/useChart";
+import useDarkMode from "hooks/useDarkMode";
 
 type Props = {
   histogram: LiveHistogram | Histogram | null;
@@ -29,11 +30,14 @@ const HistogramChart = ({ histogram }: Props) => {
     refAreaRight,
     bottom,
     top,
+    canZoom,
     setRefAreaLeft,
     setRefAreaRight,
     zoomOut,
     zoom,
   } = useChart(histogram);
+
+  const [isDark] = useDarkMode();
 
   if (!histogram) {
     return null;
@@ -41,18 +45,21 @@ const HistogramChart = ({ histogram }: Props) => {
 
   return (
     <div
-      className="highlight-bar-charts"
+      className="highlight-bar-charts dark:text-slate-300 dark:bg-gray-900"
       style={{ userSelect: "none", width: "100%" }}
     >
       <div className="mx-3 flex flex-row justify-between items-center">
         <div className="select-text">
-          <strong>{formatName(histogram.type)}</strong>
+          <strong className="dark:text-slate-100">
+            {formatName(histogram.type)}
+          </strong>
           <div>
-            <strong>Creation Date: </strong>
+            <strong className="dark:text-slate-100">Creation Date: </strong>
             {formatDate(histogram.created)}
           </div>
         </div>
         <Button
+          disabled={!canZoom}
           type="button"
           className={clsx("px-4", "py-2", "mx-3", "my-3")}
           onClick={() => zoomOut()}
@@ -76,18 +83,21 @@ const HistogramChart = ({ histogram }: Props) => {
           }}
           onMouseUp={() => zoom()}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid strokeDasharray={isDark ? "7 7" : "3 3"} />
           <XAxis
             allowDataOverflow
             dataKey="x"
             domain={[left, right]}
             type="number"
+            stroke={isDark ? "#cbd5e1" : ""} // slate-300
+            axisLine={false}
           />
           <YAxis
             allowDataOverflow
             domain={[bottom, top]}
             type="number"
             yAxisId="1"
+            stroke={isDark ? "#cbd5e1" : ""}
           />
           <YAxis
             orientation="right"
@@ -95,14 +105,19 @@ const HistogramChart = ({ histogram }: Props) => {
             domain={[bottom, top]}
             type="number"
             yAxisId="2"
+            stroke={isDark ? "#cbd5e1" : ""}
+            axisLine={false}
           />
-          <Tooltip />
+          <Tooltip
+            contentStyle={{ backgroundColor: isDark ? "#374151" : "#F1F5F9" }} // gray-700 slate-100
+          />
           <Line
             yAxisId="1"
             type="linear"
             dot={false}
             dataKey="y"
-            stroke="#8884d8"
+            stroke={isDark ? "#03ac1d" : "#8884d8"} // line-green line-blue
+            strokeWidth={2}
             isAnimationActive={false}
           />
 
