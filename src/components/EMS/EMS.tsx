@@ -1,4 +1,9 @@
-import { GetCompletedRunsDocument, HistTableEntry } from "generated";
+import {
+  GetCompletedRunsDocument,
+  HistTableEntry,
+  HistTablePage,
+  PageInfo,
+} from "generated";
 import React from "react";
 import { useQuery } from "urql";
 
@@ -8,26 +13,31 @@ import { Link } from "react-router-dom";
 import { formatDate } from "utils/formatters";
 import LoadingSpinner from "components/shared/LoadingSpinner";
 
-const limit = 15;
+const ROWS_PER_QUERY = 15;
 
-type EMSProps = {
-  variables: any;
-  isLastPage: boolean;
-  onLoadMore: any;
+type CompletedRunsTableProps = {
+  tableEntriesFromProps: HistTablePage["edges"];
+  setCursor: (cursor: string | null) => void;
+  pageInfo?: PageInfo | null;
 };
-const EMS = ({ variables, isLastPage, onLoadMore }: EMSProps) => {
-  const [result] = useQuery({
-    query: GetCompletedRunsDocument,
-    variables: {
-      first: variables.first,
-      after: variables.after,
-    },
-  });
-  console.log("variables", variables);
-  const tableEntries = result.data?.getHistTableEntries?.edges;
-  const pageInfo = result.data?.getHistTableEntries?.pageInfo;
+const CompletedRunsTable = ({
+  tableEntriesFromProps,
+  setCursor,
+  pageInfo,
+}: CompletedRunsTableProps) => {
+  const [tableEntries, setTableEntries] = React.useState(tableEntriesFromProps);
+  const prevTableEntries = React.useRef<typeof tableEntries>();
 
-  console.log("result data", result.data);
+  React.useEffect(() => {
+    if (
+      prevTableEntries.current?.length &&
+      prevTableEntries.current[0]?.node?.name !== tableEntriesFromProps &&
+      tableEntriesFromProps?.length &&
+      tableEntriesFromProps[0]?.node?.name
+    ) {
+      setTableEntries([...prevTableEntries.current, ...tableEntriesFromProps]);
+    }
+  }, [tableEntriesFromProps]);
 
   if (!tableEntries) {
     return <LoadingSpinner className="mt-24" />;
@@ -55,14 +65,31 @@ const EMS = ({ variables, isLastPage, onLoadMore }: EMSProps) => {
             {!tableEntries.length ? (
               <p>No completed runs found.</p>
             ) : (
-              tableEntries.map(tableEntry => (
-                <TableRow tableEntry={tableEntry?.node} />
-              ))
-            )}
-            {isLastPage && pageInfo?.hasNextPage && (
-              <button onClick={() => onLoadMore(pageInfo.endCursor)}>
-                load more
-              </button>
+              tableEntries.map((tableEntry, index) =>
+                pageInfo?.hasNextPage && index === tableEntries.length - 1 ? (
+                  <tr
+                    key={`${tableEntry?.node?.name}_${index}`}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  >
+                    <td>
+                      <button
+                        onClick={() => {
+                          prevTableEntries.current = tableEntries;
+                          setCursor(pageInfo?.endCursor || null);
+                        }}
+                      >
+                        load more
+                      </button>
+                    </td>
+                  </tr>
+                ) : (
+                  <TableRow
+                    key={`${tableEntry?.node?.name}_${index}`}
+                    tableEntry={tableEntry?.node}
+                    isLastEntry={index === tableEntries.length - 1}
+                  />
+                ),
+              )
             )}
           </tbody>
         </table>
@@ -73,6 +100,7 @@ const EMS = ({ variables, isLastPage, onLoadMore }: EMSProps) => {
 
 type TableRowProps = {
   tableEntry?: HistTableEntry | null;
+  isLastEntry: boolean;
 };
 const TableRow = ({ tableEntry }: TableRowProps) => {
   if (!tableEntry) {
@@ -104,38 +132,37 @@ const TableRow = ({ tableEntry }: TableRowProps) => {
   );
 };
 
-const EMSWrapper = () => {
+const EMS = () => {
   React.useEffect(() => {
     document.title = "LANE - EMS";
   }, []);
 
-  const [pageVariables, setPageVariables] = React.useState([
-    {
-      GetCompletedRunsDocument,
-      first: limit,
-      after: null,
-    },
-  ]);
+  const [cursor, setCursor] = React.useState<string | null>(null);
 
-  console.log("page variables", pageVariables);
+  const [result] = useQuery({
+    query: GetCompletedRunsDocument,
+    variables: {
+      first: ROWS_PER_QUERY,
+      after: cursor,
+    },
+  });
+
+  const tableEntries = result?.data?.getHistTableEntries?.edges;
+  const pageInfo = result?.data?.getHistTableEntries?.pageInfo;
+
+  if (!tableEntries) {
+    return <LoadingSpinner className="mt-24" />;
+  }
 
   return (
     <div>
-      {pageVariables.map((variables, i) => (
-        <EMS
-          key={"" + variables.after}
-          variables={variables}
-          isLastPage={i === pageVariables.length - 1}
-          onLoadMore={(after: null) =>
-            setPageVariables([
-              ...pageVariables,
-              { after, first: limit, GetCompletedRunsDocument },
-            ])
-          }
-        />
-      ))}
+      <CompletedRunsTable
+        tableEntriesFromProps={tableEntries}
+        pageInfo={pageInfo}
+        setCursor={setCursor}
+      />
     </div>
   );
 };
 
-export default EMSWrapper;
+export default EMS;
