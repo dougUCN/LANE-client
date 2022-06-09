@@ -1,17 +1,18 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { useQuery } from "urql";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+
+import { formatDate } from "utils/formatters";
+import LoadingSpinner from "components/shared/LoadingSpinner";
+import Button from "components/shared/Button";
 import {
   GetCompletedRunsDocument,
   HistTableEntry,
   HistTablePage,
   PageInfo,
 } from "generated";
-import React from "react";
-import { useQuery } from "urql";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { formatDate } from "utils/formatters";
-import LoadingSpinner from "components/shared/LoadingSpinner";
 
 const ROWS_PER_QUERY = 15;
 
@@ -44,7 +45,7 @@ const CompletedRunsTable = ({
   }
 
   return (
-    <div className="mx-48 my-12">
+    <div className="mx-48 my-12 text-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -63,37 +64,34 @@ const CompletedRunsTable = ({
           </thead>
           <tbody>
             {!tableEntries.length ? (
-              <p>No completed runs found.</p>
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td colSpan={4} className="px-6 py-4 text-center">
+                  No completed runs found
+                </td>
+              </tr>
             ) : (
-              tableEntries.map((tableEntry, index) =>
-                pageInfo?.hasNextPage && index === tableEntries.length - 1 ? (
-                  <tr
-                    key={`${tableEntry?.node?.name}_${index}`}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                  >
-                    <td>
-                      <button
-                        onClick={() => {
-                          prevTableEntries.current = tableEntries;
-                          setCursor(pageInfo?.endCursor || null);
-                        }}
-                      >
-                        load more
-                      </button>
-                    </td>
-                  </tr>
-                ) : (
-                  <TableRow
-                    key={`${tableEntry?.node?.name}_${index}`}
-                    tableEntry={tableEntry?.node}
-                    isLastEntry={index === tableEntries.length - 1}
-                  />
-                ),
-              )
+              tableEntries.map((tableEntry, index) => (
+                <TableRow
+                  key={`${tableEntry?.node?.name}_${index}`}
+                  tableEntry={tableEntry?.node}
+                  isLastEntry={index === tableEntries.length - 1}
+                />
+              ))
             )}
           </tbody>
         </table>
       </div>
+      {pageInfo?.hasNextPage && (
+        <Button
+          className="px-4 py-2 mt-5"
+          onClick={() => {
+            prevTableEntries.current = tableEntries;
+            setCursor(pageInfo?.endCursor || null);
+          }}
+        >
+          Load More
+        </Button>
+      )}
     </div>
   );
 };
