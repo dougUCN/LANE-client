@@ -8,7 +8,9 @@ on:
 
 env: # Note that env variables are only accessible from within a `steps` context
   PYTHON_VERSION: 3.6.9
-  NODE_VERSION: 16
+  NODE_VERSION: 16.15.0
+  LANE_SECRET_KEY: ${{secrets.LANE_SECRET_KEY}}
+  LANE_DEBUG: True
 
 jobs:
   eslint_check:
@@ -70,11 +72,7 @@ jobs:
         working-directory: server
         run: |
           pip install --upgrade pip
-          pip install -r dependencies.txt
-
-      - name: Generate secret key and security file
-        working-directory: server
-        run: python test/genSecurityFile.py --debug True
+          pip install -r requirements.txt
 
       - name: Run server in background
         working-directory: server

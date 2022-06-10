@@ -8,7 +8,18 @@ Begin by cloning the repository:
 git clone https://github.com/dougUCN/LANE-client.git
 ```
 
-### 2. Installing FE dependencies
+### 2. LANL Proxy settings
+
+If not installing on a LANL computer, skip to the next step
+
+To set npm proxy settings for LANL, run
+
+```
+npm config set proxy http://proxyout.lanl.gov:8080
+npm config set https-proxy http://proxyout.lanl.gov:8080 # Yes, the address should be http
+```
+
+### 3. Installing FE dependencies
 
 In the `client` directory, run
 
@@ -33,4 +44,3 @@ npm run dev
 # Contributing
 
 See the [contribution guidelines](CONTRIBUTING.md)
-
