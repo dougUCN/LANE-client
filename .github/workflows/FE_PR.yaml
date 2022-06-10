@@ -8,7 +8,7 @@ on:
 
 env: # Note that env variables are only accessible from within a `steps` context
   PYTHON_VERSION: 3.6.9
-  NODE_VERSION: 16.15.1
+  NODE_VERSION: 16.15.0
   LANE_SECRET_KEY: ${{secrets.LANE_SECRET_KEY}}
   LANE_DEBUG: True
 
@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Node dependencies
-        run: npm ci --force
+        run: npm ci
 
       - name: Eslint code check
         run: npm run lint:pr
@@ -42,7 +42,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Node dependencies
-        run: npm ci --force
+        run: npm ci
 
       - name: Unit Tests
         run: npm run test
