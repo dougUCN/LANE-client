@@ -1,5 +1,4 @@
-# Configuration taken from GraphQL Code Generator Guide
-# https://www.graphql-code-generator.com/docs/guides/react#apollo-and-urql
+# Generate schema from staging endpoint hosted on Heroku
 
 schema: https://lane-server.herokuapp.com/graphql/
 documents: ./src/**/*.graphql

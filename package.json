@@ -11,8 +11,9 @@
     "lint:fix": "eslint -- --fix",
     "lint:pr": "eslint src/**/*.{ts,tsx} --fix-dry-run --max-warnings 0",
     "prettier": "prettier --write \"**/*.{ts,tsx,json,scss,md}\"",
-    "generate": "graphql-codegen",
-    "generate:staging": "graphql-codegen --config codegen-staging.yaml"
+    "generate": "graphql-codegen --config codegen/codegen.yaml",
+    "generate:staging": "graphql-codegen --config codegen/codegen-staging.yaml",
+    "generate:local": "graphql-codegen --config codegen/codegen-local.yaml"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
