@@ -1,6 +1,6 @@
 # Generates schema from local graphql files
 # Assumes that the LANE-server repo is in the same directory as LANE-client
-schema: ../**/schema/*.graphql
+schema: ../*server/schema/*.graphql
 documents: ./src/**/*.graphql
 generates:
   ./src/generated.ts:

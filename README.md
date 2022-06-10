@@ -32,7 +32,7 @@ then run any one of the below 3 steps
 ```bash
 npm run generate        # BE server needs to be running at http://127.0.0.1:8000/graphql/
 # or
-npm run generate:local # BE repository needs to be cloned in the same directory that LANE-client is located
+npm run generate:local # BE repository with the name `*server` needs to be cloned in the same directory that LANE-client is located
 # or
 npm run generate:staging # https://lane-server.herokuapp.com/graphql/ must be accessible
 ```
