@@ -1,18 +1,26 @@
 import { parseISO } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
-export const formatDate = (date: string) => {
+type Options = "date" | "time" | "both";
+
+export const formatDate = (date: string, options?: Options) => {
   if (isNaN(Date.parse(date))) {
     return date;
   }
 
   // convertedDate is the local time of the machine; not UTC
   const convertedDate = parseISO(date);
-  return formatInTimeZone(
-    convertedDate,
-    "America/Denver",
-    "yyyy/MM/dd 'at' HH:mm:ss zzz",
-  );
+  const format = (options?: Options) => {
+    switch (options) {
+      case "date":
+        return "yyyy/MM/dd";
+      case "time":
+        return "HH:mm:ss zzz";
+      default:
+        return "yyyy/MM/dd 'at' HH:mm:ss zzz";
+    }
+  };
+  return formatInTimeZone(convertedDate, "America/Denver", format(options));
 };
 
 // Input: something_123_like_this_456
