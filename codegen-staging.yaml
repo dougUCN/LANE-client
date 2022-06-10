@@ -1,0 +1,11 @@
+# Configuration taken from GraphQL Code Generator Guide
+# https://www.graphql-code-generator.com/docs/guides/react#apollo-and-urql
+
+schema: https://lane-server.herokuapp.com/graphql/
+documents: ./src/**/*.graphql
+generates:
+  ./src/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
