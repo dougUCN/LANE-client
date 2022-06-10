@@ -27,12 +27,14 @@ In the `client` directory, run
 npm install
 ```
 
-**Note:** The following step requires the BE graphql endpoint to be running
+then run any one of the below 3 steps
 
-then
-
-```
-npm run generate
+```bash
+npm run generate        # BE server needs to be running at http://127.0.0.1:8000/graphql/
+# or
+npm run generate:local # BE repository needs to be cloned in the same directory that LANE-client is located
+# or
+npm run generate:staging # https://lane-server.herokuapp.com/graphql/ must be accessible
 ```
 
 and to run the FE
