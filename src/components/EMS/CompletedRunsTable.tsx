@@ -20,12 +20,7 @@ const CompletedRunsTable = ({
   const prevTableEntries = React.useRef<typeof tableEntries>();
 
   React.useEffect(() => {
-    if (
-      prevTableEntries.current?.length &&
-      prevTableEntries.current[0]?.node?.name !== tableEntriesFromProps &&
-      tableEntriesFromProps?.length &&
-      tableEntriesFromProps[0]?.node?.name
-    ) {
+    if (prevTableEntries.current?.length && tableEntriesFromProps?.length) {
       setTableEntries([...prevTableEntries.current, ...tableEntriesFromProps]);
     }
   }, [tableEntriesFromProps]);
@@ -72,7 +67,7 @@ const CompletedRunsTable = ({
       </div>
       {pageInfo?.hasNextPage && (
         <Button
-          className="px-4 py-2 mt-5"
+          className="mt-5"
           onClick={() => {
             prevTableEntries.current = tableEntries;
             setCursor(pageInfo?.endCursor || null);

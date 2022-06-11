@@ -1,24 +1,27 @@
 subscription getAllLiveHistograms {
   getLiveHistograms {
-    id
-    name
-    created
-    type
-    data {
-      x
-      y
+    histograms {
+      id
+      name
+      created
+      type
+      data {
+        x
+        y
+      }
+      xrange {
+        min
+        max
+      }
+      yrange {
+        min
+        max
+      }
+      current {
+        x
+        y
+      }
     }
-    xrange {
-      min
-      max
-    }
-    yrange {
-      min
-      max
-    }
-    current {
-      x
-      y
-    }
+    lastRun
   }
 }

@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import {
   LineChart,
   Line,
@@ -9,6 +8,7 @@ import {
   ReferenceArea,
   ResponsiveContainer,
 } from "recharts";
+import { CategoricalChartState } from "recharts/types/chart/generateCategoricalChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchMinus } from "@fortawesome/free-solid-svg-icons";
 import { Histogram, LiveHistogram } from "generated";
@@ -61,7 +61,8 @@ const HistogramChart = ({ histogram }: Props) => {
         <Button
           disabled={!canZoom}
           type="button"
-          className={clsx("px-4", "py-2", "mx-3", "my-3")}
+          size="sm"
+          className="m-3"
           onClick={() => zoomOut()}
         >
           <FontAwesomeIcon icon={faSearchMinus} /> Reset Zoom
@@ -73,8 +74,8 @@ const HistogramChart = ({ histogram }: Props) => {
           width={800}
           height={400}
           data={data}
-          onMouseDown={e => {
-            if (e.activeLabel) setRefAreaLeft(parseInt(e.activeLabel));
+          onMouseDown={(e: CategoricalChartState | null) => {
+            if (e?.activeLabel) setRefAreaLeft(parseInt(e.activeLabel));
           }}
           onMouseMove={e => {
             if (e.activeLabel && refAreaLeft) {
