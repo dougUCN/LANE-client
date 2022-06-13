@@ -15,20 +15,15 @@ jobs:
       url: http://ec2-44-202-29-2.compute-1.amazonaws.com/
 
     steps:
-      - name: Checkout client repo
-        uses: actions/checkout@v3
-        with:
-          ref: aws-deploy
-
-      - name: Print current working-directory
-        run: |
-          pwd
-          ls -a
-
       - name: Execute remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
           host: ec2-44-202-29-2.compute-1.amazonaws.com
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_KEY }}
-          script: pm2 --version
+          script: |
+            cd $HOME/LANE-client
+            pwd
+            git pull
+            chmod u+x ./aws/deploy.sh
+            sh ./aws/deploy.sh

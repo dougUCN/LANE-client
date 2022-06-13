@@ -7,9 +7,6 @@ echo "Jump to app folder"
 cd $HOME/LANE-client
 pwd
 
-echo "Update app from Git"
-git pull
-
 echo "Check for any dependency updates"
 NPM_DEPENDENCIES_UPDATED=($(git diff --name-only HEAD HEAD~1 | grep "^package.*json$"))
 if [[ "$NPM_DEPENDENCIES_UPDATED" != "" ]]; then
