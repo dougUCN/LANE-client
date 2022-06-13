@@ -1,0 +1,24 @@
+# See /aws/deploy.sh for steps executed after an ssh
+name: AWS Staging Deployment
+
+on:
+  push:
+    branches:
+      # - main
+      - aws-deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    environment:
+      name: Staging
+      url: http://ec2-44-202-29-2.compute-1.amazonaws.com/
+
+    steps:
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_KEY }}
+          script: sh aws/deploy.sh
