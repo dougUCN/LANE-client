@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout client repo
         uses: actions/checkout@v3
+        with:
+          ref: aws-deploy
 
       - name: Execute remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
