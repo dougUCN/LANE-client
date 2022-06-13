@@ -27,5 +27,5 @@ echo "Build app"
 npm run build
 
 echo "Run new PM2 action"
-#cp ./aws/ecosystem.config.js ecosystem.config.js
+cp ./aws/ecosystem.config.js ecosystem.config.js
 pm2 start ecosystem.config.js
