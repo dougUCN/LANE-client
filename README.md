@@ -45,7 +45,7 @@ npm run dev
 
 # Live Demo
 
-See the live demo [here](http://ec2-44-202-29-2.compute-1.amazonaws.com/)
+See the live demo [here](http://ec2-44-202-29-2.compute-1.amazonaws.com/)!
 
 # Contributing
 
