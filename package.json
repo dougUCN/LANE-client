@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "staging": "vite dist --host 0.0.0.0",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
