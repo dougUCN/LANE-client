@@ -23,6 +23,8 @@ Upon opening a pull request on `main`, linting checks will be applied with the s
 
 This project uses [Github Actions](https://docs.github.com/en/actions) to validate all pull requests. To view the pipelines applied to this project, either view the `Actions` tab on Github, or see the yaml config files titled `.github/workflows/*.yml`
 
+The Node version for the Github Actions verification is 16.15.0 (which matches the version used in on the staging and production servers). Note that attempting to run `npm install` on 16.15.1 requires the `--force` flag for successful install
+
 ### 3. Working with the GraphQL Client (URQL)
 
 This project uses URQL as the GraphQL Client. For more information on how to use URQL, please refer to the [official documentation](https://formidable.com/open-source/urql/docs/basics/react-preact/#run-a-first-query).
@@ -63,6 +65,30 @@ Django default settings are such that the `/` at the end of the above urls is _m
 
 Ariadne implements [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol for GraphQL subscriptions. Unfortunately, this is not a maintained library. Furthermore, as of May 2022 Ariadne has not implemented support for [graphql-ws](https://github.com/enisdenjo/graphql-ws), which is an active library for a similar protocol. Fundamentally, `graphql-ws` and `subscriptions-transport-ws` are different protocols, and as such any clients attempting to access the server with `graphql-ws` for subscriptions will be unsuccessful
 
-### Nginx and PM2
+### 7. Nginx
 
-To be updated once production server is running
+Nginx is utilized as a reverse proxy that routes requests to the client (on port 3000). For additional information on Nginx see the [official documentation](https://www.nginx.com/resources/wiki/start/). The Nginx `.conf` files for both staging and production servers are version controlled on this repository.
+
+### 8. PM2
+
+PM2 is the process manager that ensures the client application stays online. View the official documentation [here](https://pm2.keymetrics.io/docs/usage/quick-start/). PM2 is utilized on both staging and production servers. The `ecosystem.config.js` files that serve as the configuration start scripts for PM2 are version controlled on this repository.
+
+### 9. Staging
+
+[AWS EC2](https://aws.amazon.com/ec2/) is the staging server. It may be accessed at http://ec2-44-202-29-2.compute-1.amazonaws.com/ems. (Note that LANE currently only supports `http` not `https`)
+
+The Node version on staging is 16.15.0, which matches the version in production and in the github actions pipelines.
+
+The steps for setting up the client on AWS EC2 are outlined as follows:
+
+1. Make an AWS account and launch an EC2 instance
+2. Generate an SSH key-pair for the EC2 instance, and save the private key.
+3. Create a security group with SSH, http, and https access permissions
+4. ssh into the EC2 instance, install `nvm` (with Node version 16.15.0), `git`, and `nginx` using provided AWS EC2 package managers. Install `pm2` globally with `npm install pm2 -g`
+5. Use `systemctl` to start nginx
+6. Create a nginx configuration file in `/etc/nginx/conf.d/lane.conf`. (This is version controlled in the repo)
+7. Restart nginx
+8. Verify that the `aws/deploy.sh` script runs correctly on EC2. (It is likely that `chmod u+x` is required)
+9. Add your EC2 login username and private key into Github secrets on the repo
+
+The github actions for CI on AWS will ssh into the EC2 instance, run `git pull` and then run the pulled `aws/deploy.sh`
