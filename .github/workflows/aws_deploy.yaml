@@ -4,8 +4,7 @@ name: AWS Staging Deployment
 on:
   push:
     branches:
-      # - main
-      - aws-deploy
+      - main
 
 jobs:
   deploy:
