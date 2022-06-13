@@ -14,7 +14,7 @@ jobs:
       url: http://ec2-44-202-29-2.compute-1.amazonaws.com/
 
     steps:
-      - name: Execute remote ssh commands using ssh key
+      - name: Deploy to EC2 via ssh commands
         uses: appleboy/ssh-action@master
         with:
           host: ec2-44-202-29-2.compute-1.amazonaws.com
