@@ -20,10 +20,15 @@ jobs:
         with:
           ref: aws-deploy
 
+      - name: Print current working-directory
+        run: |
+          pwd
+          ls -a
+
       - name: Execute remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
           host: ec2-44-202-29-2.compute-1.amazonaws.com
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_KEY }}
-          script: sh ./aws/deploy.sh
+          script: sh aws/deploy.sh
