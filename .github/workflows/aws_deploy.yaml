@@ -31,4 +31,4 @@ jobs:
           host: ec2-44-202-29-2.compute-1.amazonaws.com
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_KEY }}
-          script: sh aws/deploy.sh
+          script: pwd
