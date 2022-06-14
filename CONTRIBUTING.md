@@ -88,7 +88,8 @@ The steps for setting up the client on AWS EC2 are outlined as follows:
 5. Use `systemctl` to start nginx
 6. Create a nginx configuration file in `/etc/nginx/conf.d/lane.conf`. (This is version controlled in the repo)
 7. Restart nginx
-8. Verify that the `aws/deploy.sh` script runs correctly on EC2. (It is likely that `chmod u+x` is required)
-9. Add your EC2 login username and private key into Github secrets on the repo
+8. `git clone` the LANE-client repo into the `$HOME` directory
+9. Verify that the `aws/deploy.sh` script runs correctly on EC2. (It is likely that `chmod u+x` is required)
+10. Add your EC2 login username and private key into Github secrets on the repo
 
 The github actions for CI on AWS will ssh into the EC2 instance, run `git pull` and then run the pulled `aws/deploy.sh`
