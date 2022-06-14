@@ -21,7 +21,7 @@ echo "Generate typescript from Heroku endpoint"
 npm run generate:staging
 
 echo "Create .env.local file with Heroku endpoint URLs"
-printf 'VITE_GRAPHQL_HTTP_ENDPOINT="https://lane-server.herokuapp.com/graphql/"\\nVITE_GRAPHQL_WS_ENDPOINT="ws://lane-server.herokuapp.com/graphql/"' > '.env.local'
+printf 'VITE_GRAPHQL_HTTP_ENDPOINT="https://lane-server.herokuapp.com/graphql/"\nVITE_GRAPHQL_WS_ENDPOINT="ws://lane-server.herokuapp.com/graphql/"' > '.env.local'
 
 echo "Build app"
 npm run build
