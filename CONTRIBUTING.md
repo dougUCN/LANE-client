@@ -61,9 +61,15 @@ The http endpoint (for Queries and Mutations) is located at `http://localhost:80
 
 Django default settings are such that the `/` at the end of the above urls is _mandatory_
 
-**Note**
+**Note:** Ariadne implements [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol for GraphQL subscriptions. Unfortunately, this is not a maintained library. Furthermore, as of May 2022 Ariadne has not implemented support for [graphql-ws](https://github.com/enisdenjo/graphql-ws), which is an active library for a similar protocol. Fundamentally, `graphql-ws` and `subscriptions-transport-ws` are different protocols, and as such any clients attempting to access the server with `graphql-ws` for subscriptions will be unsuccessful
 
-Ariadne implements [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) protocol for GraphQL subscriptions. Unfortunately, this is not a maintained library. Furthermore, as of May 2022 Ariadne has not implemented support for [graphql-ws](https://github.com/enisdenjo/graphql-ws), which is an active library for a similar protocol. Fundamentally, `graphql-ws` and `subscriptions-transport-ws` are different protocols, and as such any clients attempting to access the server with `graphql-ws` for subscriptions will be unsuccessful
+By default, LANE client assumes the graphql endpoint is located at `localhost:8000/graphql/`. To point a local instance of the LANE client towards an endpoint hosted elsewhere, such as the staging server on Heroku, in the root directory create a file `.env.local` with the contents
+
+```
+# Environment variables exposed to vite must start with VITE_
+VITE_GRAPHQL_HTTP_ENDPOINT="https://lane-server.herokuapp.com/graphql/"
+VITE_GRAPHQL_WS_ENDPOINT="ws://lane-server.herokuapp.com/graphql/"
+```
 
 ### 7. Nginx
 
