@@ -66,7 +66,6 @@ Django default settings are such that the `/` at the end of the above urls is _m
 By default, LANE client assumes the graphql endpoint is located at `localhost:8000/graphql/`. To point a local instance of the LANE client towards an endpoint hosted elsewhere, such as the staging server on Heroku, in the root directory create a file `.env.local` with the contents
 
 ```
-# Environment variables exposed to vite must start with VITE_
 VITE_GRAPHQL_HTTP_ENDPOINT="https://lane-server.herokuapp.com/graphql/"
 VITE_GRAPHQL_WS_ENDPOINT="ws://lane-server.herokuapp.com/graphql/"
 ```
