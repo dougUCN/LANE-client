@@ -11,15 +11,22 @@ import { CompletedRun, EMS, LiveRun } from "components/EMS";
 import Navbar from "components/Navbar";
 import NotFound from "components/shared/NotFound";
 
+const GRAPHQL_WS_ENDPOINT =
+  import.meta.env.VITE_GRAPHQL_WS_ENDPOINT || "ws://localhost:8000/graphql/";
+
+const GRAPHQL_HTTP_ENDPOINT =
+  import.meta.env.VITE_GRAPHQL_HTTP_ENDPOINT ||
+  "http://localhost:8000/graphql/";
+
 // Need the min timeout
 // https://github.com/apollographql/subscriptions-transport-ws/issues/377#issuecomment-1000431567
-const subscriptionClient = new SubscriptionClient(
-  "ws://localhost:8000/graphql/",
-  { reconnect: true, minTimeout: 10000 },
-);
+const subscriptionClient = new SubscriptionClient(GRAPHQL_WS_ENDPOINT, {
+  reconnect: true,
+  minTimeout: 10000,
+});
 
 const client = new Client({
-  url: "http://localhost:8000/graphql/",
+  url: GRAPHQL_HTTP_ENDPOINT,
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
