@@ -91,13 +91,7 @@ const Navbar = () => {
                 <StyledLink to="/ems">EMS</StyledLink>
               </li>
               <li className="flex items-center">
-                <StyledLink to="/run-scheduler">Run Scheduler</StyledLink>
-              </li>
-              <li className="flex items-center">
-                <StyledLink to="/control-panel">Control Panel</StyledLink>
-              </li>
-              <li className="flex items-center">
-                <StyledLink to="/login">Login</StyledLink>
+                <StyledLink to="/run-config">Run Config</StyledLink>
               </li>
             </ul>
           </div>

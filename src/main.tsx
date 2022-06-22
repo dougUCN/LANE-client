@@ -6,8 +6,8 @@ import { Provider, Client, defaultExchanges, subscriptionExchange } from "urql";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import { RunSchedulerPage, ControlPanelPage, LoginPage } from "pages";
 import { CompletedRun, EMS, LiveRun } from "components/EMS";
+import { RunConfig } from "components/RunConfig";
 import Navbar from "components/Navbar";
 import NotFound from "components/shared/NotFound";
 
@@ -51,9 +51,7 @@ root.render(
               <Route path="live-run" element={<LiveRun />} />
               <Route path=":runName" element={<CompletedRun />} />
             </Route>
-            <Route path="run-scheduler" element={<RunSchedulerPage />} />
-            <Route path="control-panel" element={<ControlPanelPage />} />
-            <Route path="login" element={<LoginPage />} />
+            <Route path="run-config" element={<RunConfig />} />
           </Route>
         </Routes>
       </BrowserRouter>
