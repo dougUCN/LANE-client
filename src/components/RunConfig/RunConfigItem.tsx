@@ -20,7 +20,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         "py-3",
         "text-xs",
         "text-gray-700",
-        "bg-gray-50",
+        "bg-gray-200",
         "dark:bg-gray-700",
         "dark:text-gray-400",
         "flex",
@@ -48,11 +48,15 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         />
       </div>
       <div className="flex-auto">
-        <div className="dark:text-slate-100">Config Name</div>
+        <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
+          Config Name
+        </div>
         {formatDate(runConfig.name)}
       </div>
       <div className="flex-1">
-        <div className="dark:text-slate-100">Last Loaded</div>
+        <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
+          Last Loaded
+        </div>
         {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "-"}
       </div>
       <div className="flex basis-1/12 items-center">
