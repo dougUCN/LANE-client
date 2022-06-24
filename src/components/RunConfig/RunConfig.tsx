@@ -2,12 +2,10 @@
 import React from "react";
 import { useQuery } from "urql";
 import { GetRunConfigsDocument } from "generated";
-import LoadingSpinner from "components/shared/LoadingSpinner";
 import RunConfigItem from "./RunConfigItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Button from "components/shared/Button";
-import Modal from "components/shared/Modal";
+import { Button, Modal, LoadingSpinner } from "components/shared";
 
 const RunConfig = () => {
   React.useEffect(() => {
@@ -42,7 +40,6 @@ const RunConfig = () => {
           <Button
             size="sm"
             className="m-3"
-            type="button"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
@@ -53,7 +50,31 @@ const RunConfig = () => {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-      />
+      >
+        {/** Modal Header */}
+        <div className="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Modal Title
+          </h3>
+        </div>
+        {/** Modal Body */}
+        <div className="p-6 space-y-6">
+          <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            Modal Content
+          </p>
+        </div>
+        {/** Modal Footer */}
+        <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+          <Button type="button">Create</Button>
+          <Button
+            onClick={() => setIsCreateModalOpen(false)}
+            type="button"
+            color="secondary"
+          >
+            Cancel
+          </Button>
+        </div>
+      </Modal>
     </>
   );
 };

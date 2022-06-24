@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { formatDate } from "utils/formatters";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { Radio } from "components/shared";
 
 type Props = {
   runConfig: RunConfig;
@@ -28,24 +29,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
       )}
     >
       <div className="flex basis-1/12 items-center">
-        <input
-          type="radio"
-          value=""
-          name="default-radio"
-          className={clsx(
-            "w-4",
-            "h-4",
-            "text-blue-600",
-            "bg-gray-100",
-            "border-gray-300",
-            "focus:ring-blue-500",
-            "dark:focus:ring-blue-600",
-            "dark:ring-offset-gray-800",
-            "focus:ring-2",
-            "dark:bg-gray-700",
-            "dark:border-gray-600",
-          )}
-        />
+        <Radio />
       </div>
       <div className="flex-auto">
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
