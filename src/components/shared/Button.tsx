@@ -1,38 +1,67 @@
 import React from "react";
 import clsx from "clsx";
-import useDarkMode from "hooks/useDarkMode";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
+  color?: "primary" | "secondary";
   size?: "xs" | "tiny" | "sm" | "md" | "lg";
   className?: string;
 };
 
-const Button = ({ children, className, size = "md", ...props }: Props) => {
-  const [isDark] = useDarkMode();
+const Button = ({
+  children,
+  color = "primary",
+  size = "md",
+  className,
+  ...props
+}: Props) => {
+  const primaryColor = [
+    "text-white",
+    "shadow",
+    "outline-none",
+    "ease-linear",
+    "transition-all",
+    "duration-150",
+    "bg-blue-600",
+    "hover:shadow-md",
+    "dark:bg-blue-700",
+    "hover:bg-blue-800",
+    "dark:hover:bg-blue-900",
+    "disabled:bg-gray-400",
+    "disabled:hover:bg-gray-400",
+  ].join(" ");
+
+  const secondaryColor = [
+    "text-gray-500",
+    "bg-white",
+    "border",
+    "border-gray-200",
+    "hover:bg-gray-100",
+    "disabled:hover:bg-white",
+    "disabled:hover:text-gray-500",
+    "hover:text-gray-900",
+    "dark:bg-gray-700",
+    "dark:text-gray-300",
+    "dark:border-gray-500",
+    "dark:hover:text-white",
+    "dark:hover:bg-gray-600",
+    "disabled:hover:bg:white",
+    "dark:disabled:hover:bg-gray-700",
+    "dark:disabled:hover:text-gray-300",
+  ].join(" ");
 
   return (
     <button
       type="button"
       className={clsx(
-        "text-white",
+        "rounded",
         "font-bold",
         `text-${size}`,
         "px-4",
         "py-2",
-        "rounded",
-        "shadow",
-        "hover:shadow-md",
-        "outline-none",
         "focus:outline-none",
-        "ease-linear",
-        "transition-all",
-        "duration-150",
-        "disabled:bg-gray-400",
         "disabled:cursor-not-allowed",
-        isDark ? "bg-blue-700" : "bg-blue-600",
-        isDark ? "hover:bg-blue-900" : "hover:bg-blue-800",
-
+        color === "primary" ? primaryColor : secondaryColor,
         className,
       )}
       {...props}
