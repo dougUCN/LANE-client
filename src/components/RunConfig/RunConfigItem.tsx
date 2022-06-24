@@ -51,9 +51,9 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         <div className="dark:text-slate-100">Config Name</div>
         {formatDate(runConfig.name)}
       </div>
-      <div className="flex-auto">
+      <div className="flex-1">
         <div className="dark:text-slate-100">Last Loaded</div>
-        {formatDate(runConfig.lastLoaded)}
+        {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "-"}
       </div>
       <div className="flex basis-1/12 items-center">
         <button type="button" onClick={() => {}}>
