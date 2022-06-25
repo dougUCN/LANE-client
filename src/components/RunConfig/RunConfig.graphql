@@ -1,0 +1,11 @@
+query getRunConfigs {
+  getRunConfigs {
+    runConfigs {
+      id
+      name
+      lastLoaded
+      totalTime
+    }
+    canCreateNewRun
+  }
+}
