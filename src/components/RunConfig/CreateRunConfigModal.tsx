@@ -1,4 +1,6 @@
-import { Button, Modal } from "components/shared";
+import { useForm } from "react-hook-form";
+import { Button, Modal, TextField } from "components/shared";
+import React from "react";
 
 type Props = {
   isOpen: boolean;
@@ -6,6 +8,16 @@ type Props = {
 };
 
 const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
+  const createButtonRef = React.useRef<HTMLButtonElement>(null);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data: any) => console.log("data", data);
+
+  console.log(watch("exampleRequired")); // watch input value by passing the name of it
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       {/** Modal Header */}
@@ -16,13 +28,23 @@ const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
       </div>
       {/** Modal Body */}
       <div className="p-6 space-y-6">
-        <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-          Modal Content
-        </p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            type="submit"
+            label="Config Name"
+            value="test"
+            hasError={!!errors.exampleRequired}
+            errorMessage="This field is required."
+            register={register("exampleRequired", { required: true })}
+            onKeyDown={() => createButtonRef?.current?.focus()}
+          />
+        </form>
       </div>
       {/** Modal Footer */}
       <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-        <Button type="button">Create</Button>
+        <Button ref={createButtonRef ?? null} type="button">
+          Create
+        </Button>
         <Button onClick={onClose} type="button" color="secondary">
           Cancel
         </Button>

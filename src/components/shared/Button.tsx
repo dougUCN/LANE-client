@@ -8,13 +8,10 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string;
 };
 
-const Button = ({
-  children,
-  color = "primary",
-  size = "md",
-  className,
-  ...props
-}: Props) => {
+const Button = (
+  { children, color = "primary", size = "md", className, ...props }: Props,
+  ref?: React.ForwardedRef<HTMLButtonElement>,
+) => {
   const primaryColor = [
     "text-white",
     "shadow",
@@ -27,6 +24,8 @@ const Button = ({
     "dark:bg-blue-700",
     "hover:bg-blue-800",
     "dark:hover:bg-blue-900",
+    "focus:ring-blue-300",
+    "dark:focus:ring-blue-800",
     "disabled:bg-gray-400",
     "disabled:hover:bg-gray-400",
   ].join(" ");
@@ -46,14 +45,18 @@ const Button = ({
     "dark:hover:text-white",
     "dark:hover:bg-gray-600",
     "disabled:hover:bg:white",
+    "focus:ring-gray-200",
+    "dark:focus:ring-gray-700",
     "dark:disabled:hover:bg-gray-700",
     "dark:disabled:hover:text-gray-300",
   ].join(" ");
 
   return (
     <button
+      ref={ref}
       type="button"
       className={clsx(
+        "focus:ring-4",
         "rounded",
         "font-bold",
         `text-${size}`,
@@ -71,4 +74,4 @@ const Button = ({
   );
 };
 
-export default Button;
+export default React.forwardRef(Button);
