@@ -82,4 +82,4 @@ const TextField = (
   );
 };
 
-export default TextField;
+export default React.forwardRef(TextField);

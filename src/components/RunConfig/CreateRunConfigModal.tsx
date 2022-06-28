@@ -8,7 +8,6 @@ type Props = {
 };
 
 const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
-  const createButtonRef = React.useRef<HTMLButtonElement>(null);
   const {
     register,
     handleSubmit,
@@ -17,6 +16,7 @@ const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
   } = useForm();
   const onSubmit = (data: any) => console.log("data", data);
 
+  console.log("has error", !!errors.exampleRequired);
   console.log(watch("exampleRequired")); // watch input value by passing the name of it
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -32,17 +32,24 @@ const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
           <TextField
             type="submit"
             label="Config Name"
-            value="test"
             hasError={!!errors.exampleRequired}
             errorMessage="This field is required."
-            register={register("exampleRequired", { required: true })}
-            onKeyDown={() => createButtonRef?.current?.focus()}
+            register={register("runConfigName", { required: true })}
+          />
+          <TextField
+            className="mt-2"
+            type="submit"
+            label="Duration"
+            minLength={1}
+            hasError={!!errors.duration}
+            errorMessage="This field is required."
+            register={register("duration", { required: true })}
           />
         </form>
       </div>
       {/** Modal Footer */}
       <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-        <Button ref={createButtonRef ?? null} type="button">
+        <Button onClick={handleSubmit(onSubmit)} type="button">
           Create
         </Button>
         <Button onClick={onClose} type="button" color="secondary">
