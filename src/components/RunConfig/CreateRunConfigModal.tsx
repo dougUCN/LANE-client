@@ -1,6 +1,7 @@
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
+import { useMutation } from "urql";
 import { Button, Modal, TextField } from "components/shared";
-import React from "react";
+import { CreateRunConfigDocument } from "generated";
 
 type Props = {
   isOpen: boolean;
@@ -8,16 +9,29 @@ type Props = {
 };
 
 const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
+  const [createRunConfigResult, createRunConfig] = useMutation(
+    CreateRunConfigDocument,
+  );
+
+  const submit = (data: FieldValues) => {
+    const { name, totalTime } = data;
+    const variables = { name, totalTime };
+    createRunConfig(variables).then(result => {
+      console.log("result", result);
+    });
+  };
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data: any) => console.log("data", data);
 
-  console.log("has error", !!errors.exampleRequired);
-  console.log(watch("exampleRequired")); // watch input value by passing the name of it
+  const onSubmit = (data: FieldValues) => {
+    submit(data);
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       {/** Modal Header */}
@@ -30,20 +44,25 @@ const CreateRunConfigModal = ({ isOpen, onClose }: Props) => {
       <div className="p-6 space-y-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
+            className="mb-2"
             type="submit"
             label="Config Name"
-            hasError={!!errors.exampleRequired}
+            minLength={1}
+            hasError={!!errors.name}
             errorMessage="This field is required."
-            register={register("runConfigName", { required: true })}
+            register={register("name", { required: true })}
           />
           <TextField
             className="mt-2"
             type="submit"
-            label="Duration"
+            label="Duration (in seconds)"
             minLength={1}
-            hasError={!!errors.duration}
+            hasError={!!errors.totalTime}
             errorMessage="This field is required."
-            register={register("duration", { required: true })}
+            register={register("totalTime", {
+              required: true,
+              valueAsNumber: true,
+            })}
           />
         </form>
       </div>

@@ -1,0 +1,7 @@
+mutation createRunConfig($name: String!, $totalTime: Int!) {
+  createRunConfig(runConfig: { name: $name, totalTime: $totalTime }) {
+    id
+    message
+    success
+  }
+}
