@@ -2,7 +2,7 @@ mutation createRunConfig($name: String!, $totalTime: Int!) {
   createRunConfig(runConfig: { name: $name, totalTime: $totalTime }) {
     message
     success
-    modified {
+    modifiedRunConfig {
       id
     }
   }

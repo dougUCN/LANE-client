@@ -6,12 +6,16 @@ import { formatDate } from "utils/formatters";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { Radio } from "components/shared";
+import DeleteRunConfigModal from "./DeleteRunConfigModal";
 
 type Props = {
   runConfig: RunConfig;
   className?: string;
 };
 const RunConfigItem = ({ runConfig, className }: Props) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] =
+    React.useState<boolean>(false);
+
   return (
     <div
       className={clsx(
@@ -50,13 +54,18 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
             icon={faPenToSquare}
           />
         </button>
-        <button type="button" onClick={() => {}}>
+        <button type="button" onClick={() => setIsDeleteModalOpen(true)}>
           <FontAwesomeIcon
             className="ml-4 text-dark-blue dark:text-white fa-xl"
             icon={faTrashCan}
           />
         </button>
       </div>
+      <DeleteRunConfigModal
+        isOpen={isDeleteModalOpen}
+        closeModal={() => setIsDeleteModalOpen(false)}
+        runConfig={runConfig}
+      />
     </div>
   );
 };

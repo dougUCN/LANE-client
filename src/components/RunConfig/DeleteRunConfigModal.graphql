@@ -1,0 +1,9 @@
+mutation deleteRunConfig($id: ID!) {
+  deleteRunConfig(id: $id) {
+    message
+    success
+    modifiedRunConfig {
+      id
+    }
+  }
+}

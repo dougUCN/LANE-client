@@ -16,6 +16,19 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
     CreateRunConfigDocument,
   );
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  React.useEffect(() => {
+    if (createRunConfigResult.error) {
+      setApiError(createRunConfigResult.error.message);
+    }
+  }, [createRunConfigResult.error]);
+
   const submit = (data: FieldValues) => {
     const { name, totalTime } = data;
     const variables = { name, totalTime };
@@ -29,13 +42,6 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
       });
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
-
   const onSubmit = (data: FieldValues) => {
     submit(data);
     if (isSuccessful && !apiError) {
@@ -48,12 +54,6 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
     setApiError("");
     closeModal();
   };
-
-  React.useEffect(() => {
-    if (createRunConfigResult.error) {
-      setApiError(createRunConfigResult.error.message);
-    }
-  }, [createRunConfigResult.error]);
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
@@ -96,11 +96,16 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
         </form>
       </div>
       {/** Modal Footer */}
-      <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-        <Button onClick={handleSubmit(onSubmit)} type="button">
+      <div className="flex justify-between items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+        <Button className="px-8" onClick={handleSubmit(onSubmit)} type="button">
           Create
         </Button>
-        <Button onClick={handleOnClose} type="button" color="secondary">
+        <Button
+          className="px-8"
+          onClick={handleOnClose}
+          type="button"
+          color="secondary"
+        >
           Cancel
         </Button>
       </div>

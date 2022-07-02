@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import React from "react";
 import { useQuery } from "urql";
-import { GetRunConfigsDocument } from "generated";
-import RunConfigItem from "./RunConfigItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+import { GetRunConfigsDocument } from "generated";
 import { Button, LoadingSpinner } from "components/shared";
+import RunConfigItem from "./RunConfigItem";
 import CreateRunConfigModal from "./CreateRunConfigModal";
 
 const RunConfig = () => {

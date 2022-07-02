@@ -1,6 +1,6 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import React from "react";
 import clsx from "clsx";
-import { UseFormRegister, UseFormRegisterReturn } from "react-hook-form";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   register: UseFormRegisterReturn;
