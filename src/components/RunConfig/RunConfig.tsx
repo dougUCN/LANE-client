@@ -50,7 +50,7 @@ const RunConfig = () => {
       </div>
       <CreateRunConfigModal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        closeModal={() => setIsCreateModalOpen(false)}
       />
     </>
   );
