@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 import { CombinedError, useMutation } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
@@ -65,22 +64,24 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
           <p className="ml-6 mt-2">{apiError}</p>
         </div>
       )}
-      <div className="mx-6 my-6 text-sm font-medium">
-        <div className="flex flex-row justify-around text-gray-900 dark:text-gray-300">
-          <div className={clsx("block", "font-bold", "mb-2")}>
+      <div className="mx-6 my-4 text-sm font-medium">
+        <div className="grid grid-cols-2 text-gray-900 dark:text-gray-300">
+          <div className="justify-self-center mb-1 dark:text-slate-100 font-bold dark:font-semibold">
             Run Config Name
-            <p className="mt-2 font-normal">{name}</p>
+            <p className="mt-1 text-sm font-normal text-gray-700 dark:text-gray-400">
+              {name}
+            </p>
           </div>
-          <div className={clsx("block", "font-bold", "mb-2")}>
+          <div className="justify-self-center mb-1 dark:text-slate-100 font-bold dark:font-semibold">
             Last Loaded
-            <p className="mt-2 font-normal">
+            <p className="mt-1 text-sm font-normal text-gray-700 dark:text-gray-400">
               {lastLoaded ? formatDate(lastLoaded) : "Never Used"}
             </p>
           </div>
         </div>
       </div>
       {/** Modal Footer */}
-      <div className="flex justify-between items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+      <div className="flex justify-around items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
         <Button className="px-8" onClick={handleDelete} type="button">
           Delete
         </Button>

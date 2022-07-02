@@ -55,11 +55,13 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
     closeModal();
   };
 
+  const hasFormErrors = !!errors.runConfigName || !!errors.totalTime;
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       {/** Modal Header */}
       <div className="p-4 rounded-t border-b dark:border-gray-600">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-center text-xl font-semibold text-gray-900 dark:text-white">
           Create New Run Config
         </h3>
       </div>
@@ -96,8 +98,13 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
         </form>
       </div>
       {/** Modal Footer */}
-      <div className="flex justify-between items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-        <Button className="px-8" onClick={handleSubmit(onSubmit)} type="button">
+      <div className="flex justify-around items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+        <Button
+          disabled={hasFormErrors}
+          className="px-8"
+          onClick={handleSubmit(onSubmit)}
+          type="button"
+        >
           Create
         </Button>
         <Button

@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import React from "react";
-import { RunConfig } from "generated";
 import clsx from "clsx";
-import { formatDate } from "utils/formatters";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+
 import { Radio } from "components/shared";
+import { RunConfig } from "generated";
+import { formatDate } from "utils/formatters";
 import DeleteRunConfigModal from "./DeleteRunConfigModal";
 
 type Props = {
@@ -24,31 +24,33 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         "px-6",
         "py-3",
         "text-xs",
-        "text-gray-700",
         "bg-gray-200",
         "dark:bg-gray-700",
+        "text-gray-700",
         "dark:text-gray-400",
-        "flex",
+        "grid",
+        "grid-cols-4",
+        "place-items-center",
         className,
       )}
     >
-      <div className="flex basis-1/12 items-center">
+      <div className="justify-self-start">
         <Radio />
       </div>
-      <div className="flex-auto">
+      <div className="justify-self-start">
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Config Name
         </div>
         {formatDate(runConfig.name)}
       </div>
-      <div className="flex-1">
+      <div className="justify-self-start">
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Last Loaded
         </div>
-        {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "-"}
+        {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "Never"}
       </div>
-      <div className="flex basis-1/12 items-center">
-        <button type="button" onClick={() => {}}>
+      <div className="justify-self-end">
+        <button type="button">
           <FontAwesomeIcon
             className="mr-4 text-dark-blue dark:text-white fa-xl"
             icon={faPenToSquare}
