@@ -31,11 +31,11 @@ const Button = (
   ].join(" ");
 
   const secondaryColor = [
-    "text-gray-500",
-    "bg-white",
+    "text-gray-700",
+    "bg-gray-300",
     "border",
-    "border-gray-200",
-    "hover:bg-gray-100",
+    "border-gray-400",
+    "hover:bg-gray-600",
     "disabled:hover:bg-white",
     "disabled:hover:text-gray-500",
     "hover:text-gray-900",

@@ -31,6 +31,7 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
     deleteRunConfig(variables)
       .then(() => {
         setIsSuccessful(true);
+        setApiError("");
       })
       .catch((error: CombinedError) => {
         setIsSuccessful(false);
