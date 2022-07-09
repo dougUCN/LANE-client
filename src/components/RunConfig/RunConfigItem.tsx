@@ -25,7 +25,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Config Name
         </div>
-        {formatDate(runConfig.name)}
+        {runConfig.name}
       </div>
       <div className={clsx(configItemTextFieldStyles)}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
