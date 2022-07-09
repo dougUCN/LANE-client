@@ -35,7 +35,7 @@ const Button = (
     "bg-gray-300",
     "border",
     "border-gray-400",
-    "hover:bg-gray-600",
+    "hover:bg-gray-200",
     "disabled:hover:bg-white",
     "disabled:hover:text-gray-500",
     "hover:text-gray-900",
