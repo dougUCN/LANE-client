@@ -8,6 +8,9 @@ import { Button, LoadingSpinner } from "components/shared";
 import RunConfigItem from "./RunConfigItem";
 import CreateRunConfigModal from "./CreateRunConfigModal";
 
+const maxMessage = `Run Config limit reached.
+To create a new run config, please delete an existing run config first.`;
+
 const RunConfig = () => {
   React.useEffect(() => {
     document.title = "LANE - Run Config";
@@ -21,6 +24,7 @@ const RunConfig = () => {
   });
 
   const runConfigs = result?.data?.getRunConfigs?.runConfigs ?? [];
+  const isMax = runConfigs.length >= 10;
 
   if (result.fetching) {
     return <LoadingSpinner className="mt-24" />;
@@ -40,8 +44,10 @@ const RunConfig = () => {
         <div className="flex justify-center mt-4">
           <Button
             size="sm"
-            className="m-3"
+            className="m-3 mb-24"
             onClick={() => setIsCreateModalOpen(true)}
+            disabled={isMax}
+            title={isMax ? maxMessage : ""}
           >
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
             Create New Run Config

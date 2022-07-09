@@ -17,48 +17,32 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
     React.useState<boolean>(false);
 
   return (
-    <div
-      className={clsx(
-        "mx-24",
-        "mt-6",
-        "px-6",
-        "py-3",
-        "text-xs",
-        "bg-gray-200",
-        "dark:bg-gray-700",
-        "text-gray-700",
-        "dark:text-gray-400",
-        "grid",
-        "grid-cols-4",
-        "place-items-center",
-        className,
-      )}
-    >
-      <div className="justify-self-start">
+    <div className={clsx(configItemStyles, className)}>
+      <div className="md:justify-self-start justify-self-center md:col-auto col-span-12">
         <Radio />
       </div>
-      <div className="justify-self-start">
+      <div className={clsx(configItemTextFieldStyles, "md:mb-0", "mb-2")}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Config Name
         </div>
         {formatDate(runConfig.name)}
       </div>
-      <div className="justify-self-start">
+      <div className={clsx(configItemTextFieldStyles)}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Last Loaded
         </div>
         {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "Never"}
       </div>
-      <div className="justify-self-end">
+      <div className="md:justify-self-end md:col-auto col-span-12">
         <button type="button">
           <FontAwesomeIcon
-            className="mr-4 text-dark-blue dark:text-white fa-xl"
+            className="md:mr-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
             icon={faPenToSquare}
           />
         </button>
         <button type="button" onClick={() => setIsDeleteModalOpen(true)}>
           <FontAwesomeIcon
-            className="ml-4 text-dark-blue dark:text-white fa-xl"
+            className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
             icon={faTrashCan}
           />
         </button>
@@ -73,3 +57,34 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
 };
 
 export default RunConfigItem;
+
+const configItemStyles = [
+  "md:mx-24",
+  "mx-12",
+  "mt-6",
+  "md:px-6",
+  "px-12",
+  "py-3",
+  "text-xs",
+  "bg-gray-200",
+  "dark:bg-gray-700",
+  "text-gray-700",
+  "dark:text-gray-400",
+  "grid",
+  "md:grid-cols-4",
+  "grid-cols-2",
+  "md:grid-rows-1",
+  "grid-rows-4",
+  "place-items-center",
+].join(" ");
+
+const configItemTextFieldStyles = [
+  "md:justify-self-start",
+  "md:self-start",
+  "justify-self-center",
+  "md:col-auto",
+  "col-span-12",
+  "pr-4",
+  "md:text-start",
+  "text-center",
+].join(" ");

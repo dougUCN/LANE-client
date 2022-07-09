@@ -46,8 +46,8 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
     submit(data);
     if (isSuccessful && !apiError) {
       setApiError("");
-      handleOnClose();
     }
+    handleOnClose();
   };
 
   const handleOnClose = () => {
