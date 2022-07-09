@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "urql";
+import { Context, useQuery } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,6 +21,7 @@ const RunConfig = () => {
 
   const [result] = useQuery({
     query: GetRunConfigsDocument,
+    context: React.useMemo(() => ({ additionalTypenames: ["RunConfig"] }), []),
   });
 
   const runConfigs = result?.data?.getRunConfigs?.runConfigs ?? [];
