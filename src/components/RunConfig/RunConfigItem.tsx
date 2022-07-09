@@ -19,7 +19,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
   return (
     <div className={clsx(configItemStyles, className)}>
       <div className="md:justify-self-start justify-self-center md:col-auto col-span-12">
-        <Radio />
+        <Radio buttonSize="lg" />
       </div>
       <div className={clsx(configItemTextFieldStyles, "md:mb-0", "mb-2")}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">

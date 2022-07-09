@@ -2,13 +2,15 @@ import clsx from "clsx";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   className?: string;
+  buttonSize?: "md" | "lg";
 };
 
-const Radio = ({ className, ...props }: Props) => {
+const Radio = ({ className, buttonSize, ...props }: Props) => {
   return (
     <input
       type="radio"
       className={clsx(
+        buttonSize === "lg" ? "scale-150" : "",
         "w-4",
         "h-4",
         "cursor-pointer",
