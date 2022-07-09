@@ -19,6 +19,8 @@ const RunConfig = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] =
     React.useState<boolean>(false);
 
+  // Need to pass the __typename "RunConfig" in case query returns an empty list (required for caching)
+  // See https://formidable.com/open-source/urql/docs/basics/document-caching/#document-cache-gotchas
   const [result] = useQuery({
     query: GetRunConfigsDocument,
     context: React.useMemo(() => ({ additionalTypenames: ["RunConfig"] }), []),
