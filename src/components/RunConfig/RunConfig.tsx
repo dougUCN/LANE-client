@@ -1,5 +1,5 @@
 import React from "react";
-import { Context, useQuery } from "urql";
+import { useQuery } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
