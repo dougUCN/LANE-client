@@ -5,6 +5,10 @@ query getRunConfigs {
       name
       lastLoaded
       totalTime
+      runConfigStatus {
+        status
+        messages
+      }
     }
     canCreateNewRun
   }
