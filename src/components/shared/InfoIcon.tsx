@@ -3,7 +3,7 @@ import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 import Tooltip from "./Tooltip";
 
-const InfoIcon = ({ message }: { message: string }) => {
+const InfoIcon = ({ message }: { message: JSX.Element }) => {
   return (
     <Tooltip message={message}>
       <button className="cursor-default" type="button">

@@ -32,12 +32,17 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
       <div className={clsx(configItemTextFieldStyles)}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Status
-          {runConfigStatus?.status !== "NONE" ? (
+          {runConfigStatus?.status !== "NONE" &&
+          runConfigStatus?.messages?.length ? (
             <InfoIcon
               message={
-                runConfigStatus?.messages
-                  ? runConfigStatus?.messages[0] || ""
-                  : ""
+                <div>
+                  {runConfigStatus.messages.map((message, index) => (
+                    <React.Fragment key={`${message}_${index}`}>
+                      <div>{message}</div>
+                    </React.Fragment>
+                  ))}
+                </div>
               }
             />
           ) : null}

@@ -1,4 +1,4 @@
-import { cloneElement, useMemo, useState } from "react";
+import React, { cloneElement, useMemo, useState } from "react";
 import {
   Placement,
   offset,
@@ -15,7 +15,7 @@ import {
 import { mergeRefs } from "react-merge-refs";
 
 interface Props {
-  message: string;
+  message: JSX.Element;
   placement?: Placement;
   children: JSX.Element;
 }
