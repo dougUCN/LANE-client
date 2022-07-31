@@ -1,6 +1,7 @@
-import React, { cloneElement, useMemo, useState } from "react";
+import React, { cloneElement, useMemo, useState, useRef } from "react";
 import {
   Placement,
+  arrow,
   offset,
   flip,
   shift,
@@ -16,20 +17,38 @@ import { mergeRefs } from "react-merge-refs";
 
 interface Props {
   message: JSX.Element;
-  placement?: Placement;
+  defaultPlacement?: Placement;
   children: JSX.Element;
 }
 
-const Tooltip = ({ children, message, placement = "top" }: Props) => {
+const Tooltip = ({ children, message, defaultPlacement = "top" }: Props) => {
   const [open, setOpen] = useState(false);
+  const arrowRef = useRef(null);
 
-  const { x, y, reference, floating, strategy, context } = useFloating({
+  const {
+    x,
+    y,
+    reference,
+    floating,
+    strategy,
+    context,
     placement,
+    middlewareData: { arrow: { x: arrowX, y: arrowY } = {} },
+  } = useFloating({
     open,
     onOpenChange: setOpen,
-    middleware: [offset(5), flip(), shift({ padding: 8 })],
+    middleware: [
+      offset({ mainAxis: 8, crossAxis: -8 }),
+      flip(),
+      shift({ padding: 5 }),
+      arrow({ element: arrowRef }),
+    ],
     whileElementsMounted: autoUpdate,
   });
+
+  const staticSide = mapPlacementSideToCSSProperty(placement);
+
+  console.log("static side", staticSide);
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useHover(context),
@@ -60,6 +79,16 @@ const Tooltip = ({ children, message, placement = "top" }: Props) => {
           })}
         >
           {message}
+          <div
+            className={arrowStyles}
+            ref={arrowRef}
+            style={{
+              left: arrowX != null ? `${arrowX}px` : "",
+              top: arrowY != null ? `${arrowY}px` : "",
+              [staticSide as string]: "-4px",
+              transform: "rotate(45deg)",
+            }}
+          />
         </div>
       )}
     </>
@@ -67,6 +96,19 @@ const Tooltip = ({ children, message, placement = "top" }: Props) => {
 };
 
 export default Tooltip;
+
+function mapPlacementSideToCSSProperty(placement: Placement) {
+  const staticPosition = placement.split("-")[0];
+
+  const staticSide = {
+    top: "bottom",
+    right: "left",
+    bottom: "top",
+    left: "right",
+  }[staticPosition];
+
+  return staticSide;
+}
 
 const tooltipStyles = [
   "inline-block",
@@ -81,4 +123,14 @@ const tooltipStyles = [
   "rounded-lg",
   "shadow-sm",
   "dark:bg-black",
+].join(" ");
+
+const arrowStyles = [
+  "absolute",
+  "bg-gray-900",
+  "dark:bg-black",
+  "w-3",
+  "h-3",
+  "rotate-45",
+  "left-3",
 ].join(" ");

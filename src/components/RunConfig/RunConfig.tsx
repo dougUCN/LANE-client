@@ -44,10 +44,10 @@ const RunConfig = () => {
             <RunConfigItem runConfig={runConfig} />
           </React.Fragment>
         ))}
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-4 mb-64">
           <Button
             size="sm"
-            className="m-3 mb-24"
+            className="m-3 mb-24 mt-64"
             onClick={() => setIsCreateModalOpen(true)}
             disabled={isMax}
             title={isMax ? maxMessage : ""}
