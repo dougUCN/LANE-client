@@ -17,6 +17,7 @@
     "generate:local": "graphql-codegen --config codegen/codegen-local.yaml"
   },
   "dependencies": {
+    "@floating-ui/react-dom-interactions": "^0.9.1",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -37,6 +38,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.33.0",
+    "react-merge-refs": "^2.0.1",
+    "react-responsive": "^9.0.0-beta.10",
     "react-router-dom": "^6.3.0",
     "recharts": "^2.1.12",
     "subscriptions-transport-ws": "^0.11.0",
