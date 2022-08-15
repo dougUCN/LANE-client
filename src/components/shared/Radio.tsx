@@ -23,6 +23,7 @@ const Radio = ({ className, buttonSize, ...props }: Props) => {
         "focus:ring-2",
         "dark:bg-gray-700",
         "dark:border-gray-600",
+        props.disabled && "cursor-not-allowed",
         className,
       )}
       {...props}

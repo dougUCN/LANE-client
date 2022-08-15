@@ -21,7 +21,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
   return (
     <div className={clsx(configItemStyles, className)}>
       <div className="md:justify-self-start justify-self-center md:col-auto col-span-12">
-        <Radio />
+        <Radio disabled={runConfigStatus?.status !== "READY"} />
       </div>
       <div className={clsx(configItemTextFieldStyles, "md:mb-0", "mb-2")}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
@@ -32,7 +32,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
       <div className={clsx(configItemTextFieldStyles)}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Status
-          {runConfigStatus?.status !== "NONE" &&
+          {runConfigStatus?.status !== "READY" &&
           runConfigStatus?.messages?.length ? (
             <InfoIcon
               message={
