@@ -48,8 +48,6 @@ const Tooltip = ({ children, message, defaultPlacement = "top" }: Props) => {
 
   const staticSide = mapPlacementSideToCSSProperty(placement);
 
-  console.log("static side", staticSide);
-
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useHover(context),
     useFocus(context),

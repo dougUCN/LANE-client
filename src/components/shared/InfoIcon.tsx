@@ -8,7 +8,7 @@ const InfoIcon = ({ message }: { message: JSX.Element }) => {
     <Tooltip message={message}>
       <button className="cursor-default" type="button">
         <FontAwesomeIcon
-          className="ml-1 md:p-0 p-2 text-dark-blue dark:text-white"
+          className="ml-1 md:p-0 text-dark-blue dark:text-white"
           icon={faCircleInfo}
         />
       </button>

@@ -7,7 +7,6 @@ import { Radio, InfoIcon } from "components/shared";
 import { RunConfig } from "generated";
 import { formatDate } from "utils/formatters";
 import DeleteRunConfigModal from "./DeleteRunConfigModal";
-import useBreakpoint from "hooks/useBreakpoint";
 
 type Props = {
   runConfig: RunConfig;
@@ -16,8 +15,6 @@ type Props = {
 const RunConfigItem = ({ runConfig, className }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] =
     React.useState<boolean>(false);
-
-  const { isMd } = useBreakpoint("md");
 
   const runConfigStatus = runConfig.runConfigStatus;
 
@@ -35,8 +32,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
       <div className={clsx(configItemTextFieldStyles)}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
           Status
-          {isMd &&
-          runConfigStatus?.status !== "NONE" &&
+          {runConfigStatus?.status !== "NONE" &&
           runConfigStatus?.messages?.length ? (
             <InfoIcon
               message={
