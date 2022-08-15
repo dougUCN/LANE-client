@@ -57,6 +57,7 @@ const Tooltip = ({ children, message, defaultPlacement = "top" }: Props) => {
 
   // Preserve the consumer's ref
   const ref = useMemo(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     () => mergeRefs([reference, (children as any).ref]),
     [reference, children],
   );
