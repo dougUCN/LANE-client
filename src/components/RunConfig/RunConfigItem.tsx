@@ -7,6 +7,7 @@ import { Radio, InfoIcon } from "components/shared";
 import { RunConfig } from "generated";
 import { formatDate } from "utils/formatters";
 import DeleteRunConfigModal from "./DeleteRunConfigModal";
+import LoadRunConfigModal from "./LoadRunConfigModal";
 
 type Props = {
   runConfig: RunConfig;
@@ -15,13 +16,30 @@ type Props = {
 const RunConfigItem = ({ runConfig, className }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] =
     React.useState<boolean>(false);
+  const [isLoadConfigModalOpen, setIsLoadConfigModalOpen] =
+    React.useState<boolean>(false);
 
   const runConfigStatus = runConfig.runConfigStatus;
 
+  const isRunConfigLoaded = !!(
+    runConfigStatus?.status === "RUNNING" ||
+    runConfigStatus?.status === "QUEUED"
+  );
+
   return (
-    <div className={clsx(configItemStyles, className)}>
+    <div
+      className={clsx(
+        configItemStyles,
+        isRunConfigLoaded && loadedConfigItemStyles,
+        className,
+      )}
+    >
       <div className="md:justify-self-start justify-self-center md:col-auto col-span-12">
-        <Radio disabled={runConfigStatus?.status !== "READY"} />
+        <Radio
+          checked={isRunConfigLoaded}
+          disabled={runConfigStatus?.status !== "READY"}
+          onChange={() => setIsLoadConfigModalOpen(true)}
+        />
       </div>
       <div className={clsx(configItemTextFieldStyles, "md:mb-0", "mb-2")}>
         <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
@@ -74,6 +92,11 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         closeModal={() => setIsDeleteModalOpen(false)}
         runConfig={runConfig}
       />
+      <LoadRunConfigModal
+        isOpen={isLoadConfigModalOpen}
+        closeModal={() => setIsLoadConfigModalOpen(false)}
+        runConfig={runConfig}
+      />
     </div>
   );
 };
@@ -99,6 +122,8 @@ const configItemStyles = [
   "grid-rows-4",
   "place-items-center",
 ].join(" ");
+
+const loadedConfigItemStyles = ["bg-green-400", "dark:bg-green-900"].join(" ");
 
 const configItemTextFieldStyles = [
   "md:justify-self-start",

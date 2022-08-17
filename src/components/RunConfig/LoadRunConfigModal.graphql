@@ -1,0 +1,9 @@
+mutation loadRunConfig($id: ID!) {
+  loadRunConfig(id: $id) {
+    message
+    success
+    loadedRunConfig {
+      id
+    }
+  }
+}
