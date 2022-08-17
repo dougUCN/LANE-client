@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 import { Button, Modal } from "components/shared";
-import { DeleteRunConfigDocument, RunConfig } from "generated";
+import { LoadRunConfigDocument, RunConfig } from "generated";
 import { formatDate } from "utils/formatters";
 
 type Props = {
@@ -13,21 +13,21 @@ type Props = {
   runConfig: RunConfig;
 };
 
-const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
+const LoadRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
   const [apiError, setApiError] = React.useState("");
-  const [deleteRunConfigResult, deleteRunConfig] = useMutation(
-    DeleteRunConfigDocument,
+  const [loadRunConfigResult, loadRunConfig] = useMutation(
+    LoadRunConfigDocument,
   );
 
   React.useEffect(() => {
-    if (deleteRunConfigResult.error) {
-      setApiError(deleteRunConfigResult.error.message);
+    if (loadRunConfigResult.error) {
+      setApiError(loadRunConfigResult.error.message);
     }
-  }, [deleteRunConfigResult.error]);
+  }, [loadRunConfigResult.error]);
 
-  const handleDelete = () => {
+  const handleLoad = () => {
     const variables = { id: runConfig.id };
-    deleteRunConfig(variables)
+    loadRunConfig(variables)
       .then(() => {
         handleOnClose();
       })
@@ -47,18 +47,14 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       {/** Modal Header */}
       <div className="flex justify-center items-center p-4 rounded-t border-b dark:border-gray-600">
-        <FontAwesomeIcon
-          className="text-yellow-400 mr-4 fa-4x"
-          icon={faWarning}
-        />
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-          Are you sure you want to delete this Run Config?
+          Are you sure you want to load this Run Config?
         </h3>
       </div>
       {/** Modal Body */}
       {apiError && (
         <div className="text-center mt-2 mx-6 text-sm text-red-600 dark:text-red-500">
-          <p>An error occurred during deletion</p>
+          <p>An error occurred. Please try again later.</p>
           <p className="ml-6 mt-2">{apiError}</p>
         </div>
       )}
@@ -80,8 +76,8 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
       </div>
       {/** Modal Footer */}
       <div className="flex justify-around items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-        <Button className="px-8" onClick={handleDelete} type="button">
-          Delete
+        <Button className="px-8" onClick={handleLoad} type="button">
+          Load
         </Button>
         <Button
           className="px-8"
@@ -96,4 +92,4 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
   );
 };
 
-export default DeleteRunConfigModal;
+export default LoadRunConfigModal;
