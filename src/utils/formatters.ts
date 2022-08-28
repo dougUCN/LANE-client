@@ -36,3 +36,10 @@ export const formatName = (name?: string | null) => {
     })
     .join(" ");
 };
+
+// Input: "RUNTIME_ERROR", "_"
+// Output: "Runtime Error"
+export const titleize = (text: string, splitSymbol?: string) => {
+  const result = splitSymbol ? text.split(splitSymbol).join(" ") : text;
+  return result.toLowerCase().replace(/(^|\s)\S/g, L => L.toUpperCase());
+};
