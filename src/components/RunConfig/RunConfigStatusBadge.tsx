@@ -1,7 +1,6 @@
 import React from "react";
 import { RunConfigStatusEnum } from "generated";
 import { titleize } from "utils/formatters";
-import clsx from "clsx";
 
 type Props = {
   status?: RunConfigStatusEnum;
@@ -21,7 +20,7 @@ const RunConfigStatusBadge = ({ status }: Props) => {
 
 export default RunConfigStatusBadge;
 
-const badgeStyle = clsx(
+const badgeStyle = [
   "p-2",
   "text-xs",
   "font-semibold",
@@ -29,7 +28,7 @@ const badgeStyle = clsx(
   "px-3",
   "py-1",
   "rounded-2xl",
-);
+].join(" ");
 
 const badgeStyleColor = (status: RunConfigStatusEnum) => {
   switch (status) {
