@@ -8,6 +8,7 @@ import { RunConfig } from "generated";
 import { formatDate } from "utils/formatters";
 import DeleteRunConfigModal from "./DeleteRunConfigModal";
 import LoadRunConfigModal from "./LoadRunConfigModal";
+import RunConfigStatusBadge from "./RunConfigStatusBadge";
 
 type Props = {
   runConfig: RunConfig;
@@ -42,7 +43,7 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         />
       </div>
       <div className={clsx(configItemTextFieldStyles, "md:mb-0", "mb-2")}>
-        <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
+        <div className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
           Config Name
         </div>
         {runConfig.name}
@@ -65,10 +66,13 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
             />
           ) : null}
         </div>
-        {runConfigStatus?.status}
+        <RunConfigStatusBadge
+          className="mt-2"
+          status={runConfigStatus?.status}
+        />
       </div>
       <div className={clsx(configItemTextFieldStyles)}>
-        <div className="mb-1 dark:text-slate-100 font-bold dark:font-semibold">
+        <div className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
           Last Loaded
         </div>
         {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "Never"}
@@ -109,7 +113,7 @@ const configItemStyles = [
   "mt-6",
   "md:px-6",
   "px-12",
-  "py-3",
+  "py-4",
   "text-xs",
   "bg-gray-200",
   "dark:bg-gray-700",
