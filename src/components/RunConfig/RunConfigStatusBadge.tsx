@@ -5,15 +5,16 @@ import clsx from "clsx";
 
 type Props = {
   status?: RunConfigStatusEnum;
+  className?: string;
 };
 
-const RunConfigStatusBadge = ({ status }: Props) => {
+const RunConfigStatusBadge = ({ status, className }: Props) => {
   if (!status) {
     return null;
   }
 
   return (
-    <div className={clsx(badgeStyle, badgeStyleColor(status))}>
+    <div className={clsx(badgeStyle, badgeStyleColor(status), className)}>
       {titleize(status, "_")}
     </div>
   );
@@ -25,7 +26,6 @@ const badgeStyle = [
   "p-2",
   "text-xs",
   "font-semibold",
-  "mr-2",
   "px-3",
   "py-1",
   "rounded-2xl",
