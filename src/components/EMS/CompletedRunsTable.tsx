@@ -30,7 +30,7 @@ const CompletedRunsTable = ({
   }
 
   return (
-    <div className="lg:mx-48 md:mx-24 mx-0 my-12 text-center">
+    <div className="text-center">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

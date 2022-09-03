@@ -1,12 +1,8 @@
 import React from "react";
 import clsx from "clsx";
-import { UseFormRegisterReturn } from "react-hook-form";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
-  register: UseFormRegisterReturn;
   label?: string;
-  hasError?: boolean;
-  errorMessage?: string;
   className?: string;
 };
 
@@ -29,8 +25,8 @@ const errorStyling = [
   "dark:border-red-500",
 ].join(" ");
 
-const TextField = (
-  { register, className, label, hasError, errorMessage, ...props }: Props,
+const DateField = (
+  { className, label, ...props }: Props,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
   return (
@@ -50,8 +46,7 @@ const TextField = (
         </label>
       ) : null}
       <input
-        {...register}
-        type="text"
+        type="date"
         className={clsx(
           "bg-gray-50 border",
           "border-gray-300",
@@ -71,17 +66,11 @@ const TextField = (
           "dark:focus:ring-blue-500",
           "dark:focus:border-blue-500",
           "dark:outline-none",
-          hasError && errorStyling,
           className,
         )}
       />
-      {hasError ? (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-          <span className="font-medium">{errorMessage}</span>
-        </p>
-      ) : null}
     </div>
   );
 };
 
-export default React.forwardRef(TextField);
+export default DateField;
