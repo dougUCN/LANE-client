@@ -9,6 +9,7 @@ import { formatDate } from "utils/formatters";
 import DeleteRunConfigModal from "./DeleteRunConfigModal";
 import LoadRunConfigModal from "./LoadRunConfigModal";
 import RunConfigStatusBadge from "./RunConfigStatusBadge";
+import { Link } from "react-router-dom";
 
 type Props = {
   runConfig: RunConfig;
@@ -78,12 +79,12 @@ const RunConfigItem = ({ runConfig, className }: Props) => {
         {runConfig.lastLoaded ? formatDate(runConfig.lastLoaded) : "Never"}
       </div>
       <div className="md:justify-self-end md:col-auto col-span-12">
-        <button type="button">
+        <Link to={`/run-config/${runConfig.id}`}>
           <FontAwesomeIcon
             className="md:mr-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
             icon={faPenToSquare}
           />
-        </button>
+        </Link>
         <button type="button" onClick={() => setIsDeleteModalOpen(true)}>
           <FontAwesomeIcon
             className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"

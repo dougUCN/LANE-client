@@ -7,7 +7,7 @@ import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import { CompletedRun, EMS, LiveRun } from "components/EMS";
-import { RunConfig } from "components/RunConfig";
+import { RunConfig, RunConfigSteps } from "components/RunConfig";
 import Navbar from "components/Navbar";
 import NotFound from "components/shared/NotFound";
 
@@ -51,7 +51,10 @@ root.render(
               <Route path="live-run" element={<LiveRun />} />
               <Route path=":runName" element={<CompletedRun />} />
             </Route>
-            <Route path="run-config" element={<RunConfig />} />
+            <Route path="run-config">
+              <Route index element={<RunConfig />} />
+              <Route path=":runConfigId" element={<RunConfigSteps />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

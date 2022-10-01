@@ -1,0 +1,19 @@
+query getRunConfig($id: ID!) {
+  getRunConfig(id: $id) {
+    totalTime
+    steps {
+      time
+      description
+      deviceName
+      timeFrameOptionType
+      deviceOption {
+        optionName
+        deviceOptionType
+        userInput
+        selectOne
+        selectMany
+        options
+      }
+    }
+  }
+}
