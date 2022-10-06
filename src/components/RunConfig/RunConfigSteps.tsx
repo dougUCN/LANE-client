@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { GetRunConfigDocument } from "generated";
 import { LoadingSpinner } from "components/shared";
 import NotFound from "components/shared/NotFound";
+import RunConfigDetails from "./RunConfigDetails";
 
 type RunConfigStepsPageParams = {
   runConfigId: string;
@@ -46,7 +47,7 @@ const RunConfigSteps = () => {
         {steps &&
           steps.map((step, index) => (
             <React.Fragment key={index}>
-              <div>Run Config Step at time: {step.time}</div>
+              <RunConfigDetails step={step} />
             </React.Fragment>
           ))}
       </div>
