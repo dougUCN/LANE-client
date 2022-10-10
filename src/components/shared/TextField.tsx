@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   label?: string;
   hasError?: boolean;
   errorMessage?: string;
@@ -72,6 +72,7 @@ const TextField = (
           hasError && errorStyling,
           className,
         )}
+        {...props}
       />
       {hasError ? (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">

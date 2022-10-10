@@ -2,6 +2,7 @@ query getRunConfig($id: ID!) {
   getRunConfig(id: $id) {
     totalTime
     steps {
+      id
       time
       description
       deviceName

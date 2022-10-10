@@ -45,8 +45,8 @@ const RunConfigSteps = () => {
           {`Run Config Step #${runConfigId}`}
         </h2>
         {steps &&
-          steps.map((step, index) => (
-            <React.Fragment key={index}>
+          steps.map(step => (
+            <React.Fragment key={step.id}>
               <RunConfigDetails step={step} />
             </React.Fragment>
           ))}
