@@ -14,35 +14,40 @@ const RunConfigDetails = ({ step, className }: Props) => {
 
   return (
     <div className={clsx(stylesWrapper, className)}>
-      <div className={runConfigItemStyles}>
-        <label className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
-          Step Description
-        </label>
-        <div>{step.description}</div>
+      <div className="grid grid-cols-12 gap-3">
+        <div className={clsx("col-span-9 sm:col-span-6", runConfigItemStyles)}>
+          <label className="dark:text-slate-100 font-bold dark:font-semibold">
+            Step Description
+          </label>
+          <div className="mt-2">{step.description}</div>
+        </div>
+        <div
+          className={clsx(
+            "col-span-3 col-start-10 lg:col-span-1 lg:col-start-12",
+            runConfigItemStyles,
+          )}
+        >
+          <label className="dark:text-slate-100 font-bold dark:font-semibold">
+            time
+          </label>
+          <div className="mt-2">{step.time}</div>
+        </div>
       </div>
-      <div className={runConfigItemStyles}>
-        <label className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
-          time
-        </label>
-        <div>{step.time}</div>
+
+      <div className="grid grid-cols-12 gap-3 ml-3 sm:ml-12">
+        <div className={clsx("col-span-6", runConfigItemStyles)}>
+          <label className="dark:text-slate-100 font-bold dark:font-semibold">
+            Device Name
+          </label>
+          <div className="mt-2">{step.deviceName}</div>
+        </div>
       </div>
-      <div className={runConfigItemStyles}>
-        <label className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
-          Timeframe
+
+      <div className={clsx("ml-6 sm:ml-24", runConfigItemStyles)}>
+        <label className="dark:text-slate-100 font-bold dark:font-semibold">
+          Device Options
         </label>
-        <div>{step.timeFrameOptionType}</div>
-      </div>
-      <div className={runConfigItemStyles}>
-        <label className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
-          Device Name
-        </label>
-        <div>{step.deviceName}</div>
-      </div>
-      <div className={runConfigItemStyles}>
-        <label className="mb-1 pb-2 dark:text-slate-100 font-bold dark:font-semibold">
-          Options
-        </label>
-        <div>
+        <div className="mt-6 ml-3 sm:ml-12">
           <DeviceOption deviceOption={device} />
         </div>
       </div>
@@ -57,7 +62,12 @@ type DeviceOptionProps = {
 const DeviceOption = ({ deviceOption }: DeviceOptionProps) => {
   const optionType = deviceOption.deviceOptionType;
   return {
-    USER_INPUT: <DeviceOptionTextField savedValue={deviceOption.selected} />,
+    USER_INPUT: (
+      <DeviceOptionTextField
+        label={deviceOption.optionName}
+        savedValue={deviceOption.selected}
+      />
+    ),
     SELECT_ONE: <div />,
     SELECT_MANY: <div />,
   }[optionType];
@@ -70,23 +80,14 @@ const stylesWrapper = [
   "mx-12",
   "mt-6",
   "md:px-6",
-  "px-12",
+  "px-6",
+  "sm:px-12",
   "py-4",
   "text-xs",
   "bg-gray-200",
   "dark:bg-dark-blue",
   "text-gray-700",
   "dark:text-gray-400",
-  "grid",
-  "md:grid-cols-5",
-  "grid-cols-2",
-  "md:grid-rows-1",
-  "grid-rows-4",
-  "place-items-center",
-  "md:items-start",
-  "items-center",
 ].join(" ");
 
-const runConfigItemStyles = ["p-3", "md:mb-0", "mb-2", "dark:bg-gray-700"].join(
-  " ",
-);
+const runConfigItemStyles = ["p-3", "mb-3", "dark:bg-gray-700"].join(" ");
