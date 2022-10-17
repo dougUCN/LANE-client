@@ -28,9 +28,9 @@ const RunConfigDetails = ({ step, className }: Props) => {
           )}
         >
           <label className="dark:text-slate-100 font-bold dark:font-semibold">
-            time
+            Time
           </label>
-          <div className="mt-2">{step.time}</div>
+          <div className="mt-2">{`${step.time} sec`}</div>
         </div>
       </div>
 

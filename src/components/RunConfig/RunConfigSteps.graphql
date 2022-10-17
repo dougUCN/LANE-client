@@ -6,7 +6,6 @@ query getRunConfig($id: ID!) {
       time
       description
       deviceName
-      timeFrameOptionType
       deviceOption {
         optionName
         deviceOptionType

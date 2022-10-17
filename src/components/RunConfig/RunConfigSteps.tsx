@@ -40,7 +40,7 @@ const RunConfigSteps = () => {
 
   return (
     <>
-      <div className="dark:text-slate-100">
+      <div className="dark:text-slate-100 mb-12">
         <h2 className="text-center dark:text-slate-100 font-bold text-2xl mt-5">
           {`Run Config Step #${runConfigId}`}
         </h2>
