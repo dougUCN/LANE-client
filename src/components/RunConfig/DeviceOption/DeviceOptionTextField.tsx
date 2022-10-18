@@ -13,7 +13,7 @@ const DeviceOptionTextField = ({ savedValue, label }: Props) => {
 
   return (
     <TextField
-      className="my-2 max-w-fit"
+      className="my-2 max-w-fit dark:bg-gray-600"
       label={label}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         setValue(e.target.value)

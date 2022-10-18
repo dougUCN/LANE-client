@@ -90,4 +90,11 @@ const stylesWrapper = [
   "dark:text-gray-400",
 ].join(" ");
 
-const runConfigItemStyles = ["p-3", "mb-3", "dark:bg-gray-700"].join(" ");
+const runConfigItemStyles = [
+  "p-3",
+  "mb-3",
+  "dark:bg-gray-700",
+  "bg-white",
+  "shadow-lg",
+  "dark:shadow-none",
+].join(" ");
