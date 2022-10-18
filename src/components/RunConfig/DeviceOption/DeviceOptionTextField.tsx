@@ -14,7 +14,6 @@ const DeviceOptionTextField = ({ savedValue, label }: Props) => {
   return (
     <TextField
       className="my-2 max-w-fit"
-      type="text"
       label={label}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         setValue(e.target.value)
