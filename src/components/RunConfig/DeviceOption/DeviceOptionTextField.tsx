@@ -6,6 +6,7 @@ type Props = {
   label: string;
 };
 
+// component is currently not being used. Remove if unused once feature is complete
 const DeviceOptionTextField = ({ savedValue, label }: Props) => {
   const valueFromProps = savedValue && savedValue.length ? savedValue[0] : "";
 
