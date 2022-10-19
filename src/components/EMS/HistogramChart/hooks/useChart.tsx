@@ -1,6 +1,6 @@
 import React from "react";
 import { LiveHistogram, Histogram, Point } from "generated";
-import useStateFromProps from "./useStateFromProps";
+import useStateFromProps from "hooks/useStateFromProps";
 
 const useChart = (liveHistogram: LiveHistogram | Histogram | null) => {
   const dataFromProps = liveHistogram?.data || [];

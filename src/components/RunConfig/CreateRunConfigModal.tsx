@@ -77,7 +77,6 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             className="mb-2"
-            type="submit"
             label="Config Name"
             minLength={1}
             hasError={!!errors.name}
@@ -86,7 +85,6 @@ const CreateRunConfigModal = ({ isOpen, closeModal }: Props) => {
           />
           <TextField
             className="mt-2"
-            type="submit"
             label="Duration (in seconds)"
             minLength={1}
             hasError={!!errors.totalTime}
