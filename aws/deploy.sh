@@ -17,11 +17,11 @@ else
     echo "No new dependencies found"
 fi
 
-echo "Generate typescript from Heroku endpoint"
+echo "Generate typescript from Railway endpoint"
 npm run generate:staging
 
-echo "Create .env.local file with Heroku endpoint URLs"
-printf 'VITE_GRAPHQL_HTTP_ENDPOINT="https://lane-server.herokuapp.com/graphql/"\nVITE_GRAPHQL_WS_ENDPOINT="ws://lane-server.herokuapp.com/graphql/"' > '.env.local'
+echo "Create .env.local file with Railway endpoint URLs"
+printf 'VITE_GRAPHQL_HTTP_ENDPOINT="https://lane-staging.up.railway.app/graphql/"\nVITE_GRAPHQL_WS_ENDPOINT="ws://lane-staging.up.railway.app/graphql/"' > '.env.local'
 
 echo "Build app"
 npm run build
