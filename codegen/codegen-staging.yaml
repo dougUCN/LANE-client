@@ -1,4 +1,4 @@
-# Generate schema from staging endpoint hosted on Heroku
+# Generate schema from staging endpoint hosted on Railway
 
 schema: https://lane-staging.up.railway.app/graphql/
 documents: ./src/**/*.graphql
