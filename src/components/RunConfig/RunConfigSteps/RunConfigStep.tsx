@@ -1,8 +1,11 @@
 import React from "react";
 import clsx from "clsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 import { RunConfigStep as RunConfigStepType } from "generated";
 import { DeviceOption as DeviceOptionType } from "generated";
+import EditRunConfigStepModal from "./EditRunConfigStepModal";
 
 type Props = {
   step: RunConfigStepType;
@@ -10,6 +13,9 @@ type Props = {
 };
 const RunConfigStep = ({ step, className }: Props) => {
   const device = step.deviceOption;
+
+  const [isEditRunConfigStepModalOpen, setIsEditRunConfigStepModalOpen] =
+    React.useState(false);
 
   return (
     <div className={clsx(stylesWrapper, className)}>
@@ -20,6 +26,15 @@ const RunConfigStep = ({ step, className }: Props) => {
           </label>
           <div className="mt-2">{step.description}</div>
         </div>
+        <button
+          type="button"
+          onClick={() => setIsEditRunConfigStepModalOpen(true)}
+        >
+          <FontAwesomeIcon
+            className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
+            icon={faPenToSquare}
+          />
+        </button>
         <div
           className={clsx(
             "col-span-3 col-start-10 lg:col-span-1 lg:col-start-12",
@@ -50,6 +65,12 @@ const RunConfigStep = ({ step, className }: Props) => {
           <DeviceOption deviceOption={device} />
         </div>
       </div>
+
+      <EditRunConfigStepModal
+        isOpen={isEditRunConfigStepModalOpen}
+        onClose={() => setIsEditRunConfigStepModalOpen(false)}
+        step={step}
+      />
     </div>
   );
 };

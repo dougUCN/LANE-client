@@ -1,0 +1,12 @@
+query getDevices {
+  getDevices {
+    name
+    isOnline
+    deviceOptions {
+      optionName
+      deviceOptionType
+      selected
+      options
+    }
+  }
+}
