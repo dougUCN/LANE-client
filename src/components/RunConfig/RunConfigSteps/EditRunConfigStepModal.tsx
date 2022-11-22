@@ -5,6 +5,8 @@ import { Button, Modal, TextField } from "components/shared";
 import {
   RunConfigStep as RunConfigStepType,
   GetDevicesDocument,
+  GetDeviceDocument,
+  DeviceOptionEnum,
 } from "generated";
 import Dropdown from "components/shared/Dropdown";
 
@@ -17,16 +19,28 @@ type Props = {
 const EditRunConfigStepModal = ({ isOpen, onClose, step }: Props) => {
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
+  const [currentDeviceOptionType, setCurrentDeviceOptionType] =
+    React.useState<DeviceOptionEnum>();
 
-  const [result] = useQuery({
+  const [getDevicesResult] = useQuery({
     query: GetDevicesDocument,
   });
 
   const { deviceName, deviceOption, time } = step;
   const description = step.description;
 
+  const [getDeviceResult, reexecuteQuery] = useQuery({
+    query: GetDeviceDocument,
+    variables: { name: currentDeviceOptionType || "" },
+    pause: !!currentDeviceOptionType,
+  });
+
+  // need to figure out if this variable is of type DeviceOption! or [DeviceOption!]
+  const currentDeviceOptions = getDeviceResult.data?.getDevice?.deviceOptions;
+
+  // retrieve the names of all available devices
   const availableDevices =
-    result.data?.getDevices?.map(device => ({
+    getDevicesResult.data?.getDevices?.map(device => ({
       name: device?.name || "",
       value: device?.name || "",
     })) ?? [];
@@ -45,7 +59,7 @@ const EditRunConfigStepModal = ({ isOpen, onClose, step }: Props) => {
         selectedDevice: deviceName,
       });
     }
-  }, [description, reset]);
+  }, [description, deviceName, reset]);
 
   // React.useEffect(() => {
   //   if (createRunConfigResult.error) {
@@ -110,6 +124,19 @@ const EditRunConfigStepModal = ({ isOpen, onClose, step }: Props) => {
             register={register("selectedDevice")}
             options={availableDevices}
           />
+          {deviceOption.deviceOptionType === "SELECT_ONE" && (
+            <Dropdown
+              className="mb-2"
+              label="Device Option"
+              register={register("options")}
+              options={
+                deviceOption.options?.map(option => ({
+                  name: option,
+                  value: option,
+                })) || []
+              }
+            />
+          )}
         </form>
       </div>
       {/** Modal Footer */}

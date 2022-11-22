@@ -87,7 +87,6 @@ const Dropdown = (
         )}
         {...props}
       >
-        <option value="">--Please select a device--</option>
         {options.map(option => (
           <option value={option.value}>{option.name}</option>
         ))}

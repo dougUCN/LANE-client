@@ -10,3 +10,16 @@ query getDevices {
     }
   }
 }
+
+query getDevice($name: String!) {
+  getDevice(name: $name) {
+    name
+    isOnline
+    deviceOptions {
+      optionName
+      deviceOptionType
+      selected
+      options
+    }
+  }
+}
