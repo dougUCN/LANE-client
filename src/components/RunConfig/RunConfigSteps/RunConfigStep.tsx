@@ -1,15 +1,14 @@
 import React from "react";
 import clsx from "clsx";
 
-import { RunConfigStep } from "generated";
+import { RunConfigStep as RunConfigStepType } from "generated";
 import { DeviceOption as DeviceOptionType } from "generated";
-import { DeviceOptionTextField } from "./DeviceOption";
 
 type Props = {
-  step: RunConfigStep;
+  step: RunConfigStepType;
   className?: string;
 };
-const RunConfigDetails = ({ step, className }: Props) => {
+const RunConfigStep = ({ step, className }: Props) => {
   const device = step.deviceOption;
 
   return (
@@ -75,7 +74,7 @@ const DeviceOption = ({ deviceOption }: DeviceOptionProps) => {
   }[optionType];
 };
 
-export default RunConfigDetails;
+export default RunConfigStep;
 
 const stylesWrapper = [
   "md:mx-24",

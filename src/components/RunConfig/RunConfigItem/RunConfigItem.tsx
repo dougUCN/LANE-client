@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,8 +9,7 @@ import { RunConfig } from "generated";
 import { formatDate } from "utils/formatters";
 import DeleteRunConfigModal from "./DeleteRunConfigModal";
 import LoadRunConfigModal from "./LoadRunConfigModal";
-import RunConfigStatusBadge from "./RunConfigStatusBadge";
-import { Link } from "react-router-dom";
+import RunConfigStatusBadge from "../RunConfigStatusBadge";
 
 type Props = {
   runConfig: RunConfig;
