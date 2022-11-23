@@ -43,7 +43,7 @@ const Dropdown = (
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
   return (
-    <div>
+    <div className={className}>
       {label ? (
         <label
           className={clsx(
@@ -81,7 +81,6 @@ const Dropdown = (
           "focus:border-blue-700",
           "outline-none",
           hasError && errorStyling,
-          className,
         )}
         {...props}
       >

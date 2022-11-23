@@ -34,7 +34,7 @@ const TextField = (
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
   return (
-    <div>
+    <div className={className}>
       {label ? (
         <label
           className={clsx(
@@ -73,7 +73,6 @@ const TextField = (
           "focus:border-blue-700",
           "outline-none",
           hasError && errorStyling,
-          className,
         )}
         {...props}
       />

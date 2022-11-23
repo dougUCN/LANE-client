@@ -4,6 +4,7 @@ import { useQuery } from "urql";
 import { Button, Modal, TextField } from "components/shared";
 import { GetDeviceDocument, Device, Scalars } from "generated";
 import Dropdown from "components/shared/Dropdown";
+import CheckboxField from "components/shared/CheckboxField";
 
 type Props = {
   isOpen: boolean;
@@ -24,7 +25,6 @@ const EditRunConfigStepModal = ({
 }: Props) => {
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
-  const [currentDevice, setCurrentDevice] = React.useState<Device>();
   const [currentDescription, setCurrentDescription] = React.useState("");
 
   const {
@@ -102,7 +102,7 @@ const EditRunConfigStepModal = ({
       {/** Modal Header */}
       <div className="p-4 rounded-t border-b dark:border-gray-600">
         <h3 className="text-center text-xl font-semibold text-gray-900 dark:text-white">
-          Add Run Config Step
+          Update Run Config Step
         </h3>
       </div>
       {apiError && (
@@ -122,7 +122,7 @@ const EditRunConfigStepModal = ({
               onChange={e => setCurrentDescription(e.target.value)}
             />
             <Dropdown
-              className="mb-2"
+              className="ml-8 mb-2"
               label="Device Name"
               register={register("selectedDevice")}
               options={availableDevices.map(deviceName => ({
@@ -137,11 +137,37 @@ const EditRunConfigStepModal = ({
                   <React.Fragment key={deviceOption.optionName}>
                     {deviceOption.deviceOptionType === "SELECT_ONE" && (
                       <Dropdown
-                        className="mb-2"
+                        className="mb-2 ml-16"
                         label={deviceOption.optionName}
                         register={register("selectedDeviceOption")}
                         options={
                           deviceOption.options?.map(option => ({
+                            value: option,
+                            name: option,
+                          })) || []
+                        }
+                      />
+                    )}
+                    {deviceOption.deviceOptionType === "USER_INPUT" && (
+                      <TextField
+                        className="mb-2 ml-16"
+                        label={deviceOption.optionName}
+                        register={register("selectedDeviceOption")}
+                      />
+                    )}
+                    {deviceOption.deviceOptionType === "SELECT_MANY" && (
+                      <CheckboxField
+                        className="mb-2 ml-16"
+                        label={deviceOption.optionName}
+                        register={register("selectedDeviceOptions")}
+                        availableOptions={
+                          deviceOption.options?.map(option => ({
+                            value: option,
+                            name: option,
+                          })) || []
+                        }
+                        selectedOptions={
+                          deviceOption.selected?.map(option => ({
                             value: option,
                             name: option,
                           })) || []
@@ -162,7 +188,7 @@ const EditRunConfigStepModal = ({
           onClick={handleSubmit(onSubmit)}
           type="button"
         >
-          Create
+          Update
         </Button>
         <Button
           className="px-8"
