@@ -2,64 +2,65 @@ import React from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useQuery } from "urql";
 import { Button, Modal, TextField } from "components/shared";
-import {
-  RunConfigStep as RunConfigStepType,
-  GetDevicesDocument,
-  GetDeviceDocument,
-  DeviceOptionEnum,
-} from "generated";
+import { GetDeviceDocument, Device, Scalars } from "generated";
 import Dropdown from "components/shared/Dropdown";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  step: RunConfigStepType;
+  stepId: Scalars["ID"];
+  deviceName?: string;
+  stepDescription?: string | null;
+  availableDevices: string[];
 };
 
-const EditRunConfigStepModal = ({ isOpen, onClose, step }: Props) => {
+const EditRunConfigStepModal = ({
+  isOpen,
+  onClose,
+  stepId,
+  deviceName,
+  stepDescription,
+  availableDevices,
+}: Props) => {
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
-  const [currentDeviceOptionType, setCurrentDeviceOptionType] =
-    React.useState<DeviceOptionEnum>();
-
-  const [getDevicesResult] = useQuery({
-    query: GetDevicesDocument,
-  });
-
-  const { deviceName, deviceOption, time } = step;
-  const description = step.description;
-
-  const [getDeviceResult, reexecuteQuery] = useQuery({
-    query: GetDeviceDocument,
-    variables: { name: currentDeviceOptionType || "" },
-    pause: !!currentDeviceOptionType,
-  });
-
-  // need to figure out if this variable is of type DeviceOption! or [DeviceOption!]
-  const currentDeviceOptions = getDeviceResult.data?.getDevice?.deviceOptions;
-
-  // retrieve the names of all available devices
-  const availableDevices =
-    getDevicesResult.data?.getDevices?.map(device => ({
-      name: device?.name || "",
-      value: device?.name || "",
-    })) ?? [];
+  const [currentDevice, setCurrentDevice] = React.useState<Device>();
+  const [currentDescription, setCurrentDescription] = React.useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm();
 
+  const { selectedDevice } = watch();
+
+  const [getDeviceResult] = useQuery({
+    query: GetDeviceDocument,
+    variables: { name: selectedDevice },
+    pause: !deviceName,
+  });
+
   React.useEffect(() => {
-    if (description) {
+    if (stepDescription) {
+      setCurrentDescription(stepDescription);
+    }
+  }, [reset, stepDescription]);
+
+  React.useEffect(() => {
+    if (deviceName) {
       reset({
-        description,
         selectedDevice: deviceName,
       });
     }
-  }, [description, deviceName, reset]);
+  }, [deviceName, reset]);
+
+  const device = getDeviceResult.data?.getDevice;
+
+  console.log("device", device);
+  console.log("current description", currentDescription);
 
   // React.useEffect(() => {
   //   if (createRunConfigResult.error) {
@@ -113,30 +114,44 @@ const EditRunConfigStepModal = ({ isOpen, onClose, step }: Props) => {
       {/** Modal Body */}
       <div className="p-6 space-y-6">
         <form className="dark:text-white" onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            className="mb-2"
-            label="Description"
-            register={register("description")}
-          />
-          <Dropdown
-            className="mb-2"
-            label="Device Name"
-            register={register("selectedDevice")}
-            options={availableDevices}
-          />
-          {deviceOption.deviceOptionType === "SELECT_ONE" && (
+          <>
+            <TextField
+              className="mb-2"
+              label="Config Step Description"
+              value={currentDescription}
+              onChange={e => setCurrentDescription(e.target.value)}
+            />
             <Dropdown
               className="mb-2"
-              label="Device Option"
-              register={register("options")}
-              options={
-                deviceOption.options?.map(option => ({
-                  name: option,
-                  value: option,
-                })) || []
-              }
+              label="Device Name"
+              register={register("selectedDevice")}
+              options={availableDevices.map(deviceName => ({
+                name: deviceName,
+                value: deviceName,
+              }))}
             />
-          )}
+            {device?.deviceOptions &&
+              device.deviceOptions.length &&
+              device.deviceOptions.map(deviceOption => {
+                return (
+                  <React.Fragment key={deviceOption.optionName}>
+                    {deviceOption.deviceOptionType === "SELECT_ONE" && (
+                      <Dropdown
+                        className="mb-2"
+                        label={deviceOption.optionName}
+                        register={register("selectedDeviceOption")}
+                        options={
+                          deviceOption.options?.map(option => ({
+                            value: option,
+                            name: option,
+                          })) || []
+                        }
+                      />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+          </>
         </form>
       </div>
       {/** Modal Footer */}

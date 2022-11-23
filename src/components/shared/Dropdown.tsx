@@ -1,8 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   register?: UseFormRegisterReturn;
@@ -88,13 +86,11 @@ const Dropdown = (
         {...props}
       >
         {options.map(option => (
-          <option value={option.value}>{option.name}</option>
+          <option key={option.value} value={option.value}>
+            {option.name}
+          </option>
         ))}
       </select>
-      <FontAwesomeIcon
-        className="absolute top-1 left-1 md:mr-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
-        icon={faCartArrowDown}
-      />
       {hasError ? (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">
           <span className="font-medium">{errorMessage}</span>

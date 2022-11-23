@@ -1,9 +1,13 @@
 import React from "react";
 import clsx from "clsx";
+import { useQuery } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  RunConfigStep as RunConfigStepType,
+  GetDevicesDocument,
+} from "generated";
 
-import { RunConfigStep as RunConfigStepType } from "generated";
 import { DeviceOption as DeviceOptionType } from "generated";
 import EditRunConfigStepModal from "./EditRunConfigStepModal";
 
@@ -16,6 +20,16 @@ const RunConfigStep = ({ step, className }: Props) => {
 
   const [isEditRunConfigStepModalOpen, setIsEditRunConfigStepModalOpen] =
     React.useState(false);
+
+  const [getDevicesResult] = useQuery({
+    query: GetDevicesDocument,
+  });
+
+  // retrieve the names of all available devices
+  const availableDevices =
+    getDevicesResult.data?.getDevices
+      ?.map(device => device?.name || "")
+      .filter(el => !!el) ?? [];
 
   return (
     <div className={clsx(stylesWrapper, className)}>
@@ -65,12 +79,16 @@ const RunConfigStep = ({ step, className }: Props) => {
           <DeviceOption deviceOption={device} />
         </div>
       </div>
-
-      <EditRunConfigStepModal
-        isOpen={isEditRunConfigStepModalOpen}
-        onClose={() => setIsEditRunConfigStepModalOpen(false)}
-        step={step}
-      />
+      {isEditRunConfigStepModalOpen && (
+        <EditRunConfigStepModal
+          isOpen={isEditRunConfigStepModalOpen}
+          onClose={() => setIsEditRunConfigStepModalOpen(false)}
+          stepId={step.id}
+          deviceName={step.deviceName}
+          stepDescription={step.description}
+          availableDevices={availableDevices}
+        />
+      )}
     </div>
   );
 };
