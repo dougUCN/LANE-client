@@ -26,6 +26,7 @@ const EditRunConfigStepModal = ({
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
   const [currentDescription, setCurrentDescription] = React.useState("");
+  const [currentDeviceName, setCurrentDeviceName] = React.useState("");
 
   const {
     register,
@@ -37,7 +38,7 @@ const EditRunConfigStepModal = ({
 
   const { selectedDevice } = watch();
 
-  const [getDeviceResult] = useQuery({
+  const [getDeviceResult, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
     variables: { name: selectedDevice },
     pause: !deviceName,
@@ -124,7 +125,11 @@ const EditRunConfigStepModal = ({
             <Dropdown
               className="ml-8 mb-2"
               label="Device Name"
-              register={register("selectedDevice")}
+              onChange={e => {
+                setCurrentDeviceName(e.target.value);
+                reexecuteQuery({ requestPolicy: "network-only" });
+              }}
+              value={currentDeviceName}
               options={availableDevices.map(deviceName => ({
                 name: deviceName,
                 value: deviceName,
