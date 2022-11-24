@@ -8,7 +8,6 @@ import {
   GetDevicesDocument,
 } from "generated";
 
-import { DeviceOption as DeviceOptionType } from "generated";
 import EditRunConfigStepModal from "./EditRunConfigStepModal";
 
 type Props = {
@@ -16,7 +15,7 @@ type Props = {
   className?: string;
 };
 const RunConfigStep = ({ step, className }: Props) => {
-  const device = step.deviceOption;
+  const deviceOptions = step.deviceOptions;
 
   const [isEditRunConfigStepModalOpen, setIsEditRunConfigStepModalOpen] =
     React.useState(false);
@@ -75,8 +74,21 @@ const RunConfigStep = ({ step, className }: Props) => {
         <label className="dark:text-slate-100 font-bold dark:font-semibold">
           Device Options
         </label>
-        <div className="mt-6 ml-3 sm:ml-12">
-          <DeviceOption deviceOption={device} />
+        <div className="mt-4 ml-3 sm:ml-6">
+          {deviceOptions?.length &&
+            deviceOptions.map(deviceOption => (
+              <div key={deviceOption.optionName} className="mb-3">
+                <div>
+                  <label className="dark:text-slate-100 font-bold dark:font-semibold p-3 pl-0 mb-3">
+                    {deviceOption.optionName}
+                  </label>
+                  {deviceOption.selected &&
+                    deviceOption.selected.map(selectedOption => (
+                      <div className="mt-2 ml-3">{selectedOption}</div>
+                    ))}
+                </div>
+              </div>
+            ))}
         </div>
       </div>
       {isEditRunConfigStepModalOpen && (
@@ -91,26 +103,6 @@ const RunConfigStep = ({ step, className }: Props) => {
       )}
     </div>
   );
-};
-
-type DeviceOptionProps = {
-  deviceOption: DeviceOptionType;
-};
-
-const DeviceOption = ({ deviceOption }: DeviceOptionProps) => {
-  const optionType = deviceOption.deviceOptionType;
-  return {
-    USER_INPUT: (
-      <div>
-        <label className="dark:text-slate-100 font-bold dark:font-semibold p-3 pl-0 mb-3">
-          {deviceOption.optionName}
-        </label>
-        <div className="mt-2 ml-3">{deviceOption.selected}</div>
-      </div>
-    ),
-    SELECT_ONE: <div />,
-    SELECT_MANY: <div />,
-  }[optionType];
 };
 
 export default RunConfigStep;
