@@ -33,13 +33,20 @@ const RunConfigStep = ({ step, className }: Props) => {
   return (
     <div className={clsx(stylesWrapper, className)}>
       <div className="grid grid-cols-12 gap-3">
-        <div className={clsx("col-span-9 sm:col-span-6", runConfigItemStyles)}>
+        <div className={clsx("col-span-8 sm:col-span-6", runConfigItemStyles)}>
           <label className="dark:text-slate-100 font-bold dark:font-semibold">
             Step Description
           </label>
           <div className="mt-2">{step.description}</div>
         </div>
+        <div className={clsx("col-span-3 lg:col-span-4", runConfigItemStyles)}>
+          <label className="dark:text-slate-100 font-bold dark:font-semibold">
+            Time
+          </label>
+          <div className="mt-2">{`${step.time} sec`}</div>
+        </div>
         <button
+          className="col-span-1 sm:col-span-2 sm:col-start-12"
           type="button"
           onClick={() => setIsEditRunConfigStepModalOpen(true)}
         >
@@ -48,17 +55,6 @@ const RunConfigStep = ({ step, className }: Props) => {
             icon={faPenToSquare}
           />
         </button>
-        <div
-          className={clsx(
-            "col-span-3 col-start-10 lg:col-span-1 lg:col-start-12",
-            runConfigItemStyles,
-          )}
-        >
-          <label className="dark:text-slate-100 font-bold dark:font-semibold">
-            Time
-          </label>
-          <div className="mt-2">{`${step.time} sec`}</div>
-        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-3 ml-3 sm:ml-12">
@@ -74,7 +70,7 @@ const RunConfigStep = ({ step, className }: Props) => {
         <label className="dark:text-slate-100 font-bold dark:font-semibold">
           Device Options
         </label>
-        <div className="mt-4 ml-3 sm:ml-6">
+        <div className="md:flex md:flex-row md:justify-items-between md:space-x-5 mt-4 ml-3 sm:ml-6">
           {deviceOptions?.length &&
             deviceOptions.map(deviceOption => (
               <div key={deviceOption.optionName} className="mb-3">
@@ -84,7 +80,7 @@ const RunConfigStep = ({ step, className }: Props) => {
                   </label>
                   {deviceOption.selected &&
                     deviceOption.selected.map(selectedOption => (
-                      <div className="mt-2 ml-3">{selectedOption}</div>
+                      <div className="mt-2 ml-3 sm:ml-0">{selectedOption}</div>
                     ))}
                 </div>
               </div>

@@ -51,10 +51,10 @@ const RunConfigSteps = () => {
         <h2 className="text-center dark:text-slate-100 font-bold text-2xl mt-5">
           {`Run Config Step #${runConfigId}`}
         </h2>
-        <div className="flex flex-row-reverse">
+        <div className="flex md:justify-end justify-center">
           <Button
             size="sm"
-            className="m-3 mr-24"
+            className="mt-3 md:mr-24"
             onClick={() => setIsCreateStepModalOpen(true)}
           >
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
