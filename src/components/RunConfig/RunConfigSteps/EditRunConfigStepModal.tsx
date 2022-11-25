@@ -12,6 +12,7 @@ type Props = {
   stepId: Scalars["ID"];
   deviceName?: string;
   stepDescription?: string | null;
+  stepTime?: string | null;
   availableDevices: string[];
 };
 
@@ -21,10 +22,12 @@ const EditRunConfigStepModal = ({
   stepId,
   deviceName,
   stepDescription,
+  stepTime,
   availableDevices,
 }: Props) => {
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
+  const [time, setTime] = React.useState("0");
   const [currentDescription, setCurrentDescription] = React.useState("");
   const [currentDeviceName, setCurrentDeviceName] = React.useState("");
 
@@ -49,6 +52,12 @@ const EditRunConfigStepModal = ({
       setCurrentDescription(stepDescription);
     }
   }, [reset, stepDescription]);
+
+  React.useEffect(() => {
+    if (stepTime) {
+      setTime(stepTime);
+    }
+  }, [reset, stepTime]);
 
   React.useEffect(() => {
     if (deviceName) {
@@ -122,19 +131,26 @@ const EditRunConfigStepModal = ({
               value={currentDescription}
               onChange={e => setCurrentDescription(e.target.value)}
             />
-            <Dropdown
-              className="ml-8 mb-2"
-              label="Device Name"
-              onChange={e => {
-                setCurrentDeviceName(e.target.value);
-                reexecuteQuery({ requestPolicy: "network-only" });
-              }}
-              value={currentDeviceName}
-              options={availableDevices.map(deviceName => ({
-                name: deviceName,
-                value: deviceName,
-              }))}
-            />
+            <div className="flex flex-row justify-between">
+              <Dropdown
+                className="ml-8 mb-2"
+                label="Device Name"
+                onChange={e => {
+                  setCurrentDeviceName(e.target.value);
+                  reexecuteQuery({ requestPolicy: "network-only" });
+                }}
+                value={currentDeviceName}
+                options={availableDevices.map(deviceName => ({
+                  name: deviceName,
+                  value: deviceName,
+                }))}
+              />
+              <TextField
+                label="Time (sec)"
+                value={time}
+                onChange={e => setTime(e.target.value)}
+              />
+            </div>
             {device?.deviceOptions &&
               device.deviceOptions.length &&
               device.deviceOptions.map(deviceOption => {

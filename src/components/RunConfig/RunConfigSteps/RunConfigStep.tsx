@@ -94,6 +94,7 @@ const RunConfigStep = ({ step, className }: Props) => {
           stepId={step.id}
           deviceName={step.deviceName}
           stepDescription={step.description}
+          stepTime={step.time.toString()}
           availableDevices={availableDevices}
         />
       )}
