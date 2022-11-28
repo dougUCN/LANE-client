@@ -12,9 +12,10 @@ import EditRunConfigStepModal from "./EditRunConfigStepModal";
 
 type Props = {
   step: RunConfigStepType;
+  runConfigId: string;
   className?: string;
 };
-const RunConfigStep = ({ step, className }: Props) => {
+const RunConfigStep = ({ step, runConfigId, className }: Props) => {
   const deviceOptions = step.deviceOptions;
 
   const [isEditRunConfigStepModalOpen, setIsEditRunConfigStepModalOpen] =
@@ -94,6 +95,7 @@ const RunConfigStep = ({ step, className }: Props) => {
           isOpen={isEditRunConfigStepModalOpen}
           onClose={() => setIsEditRunConfigStepModalOpen(false)}
           stepId={step.id}
+          runConfigId={runConfigId}
           deviceName={step.deviceName}
           stepDescription={step.description}
           stepTime={step.time.toString()}

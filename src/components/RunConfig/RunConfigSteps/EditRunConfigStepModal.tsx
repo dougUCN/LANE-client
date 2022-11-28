@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { FieldValues, useForm, useFieldArray } from "react-hook-form";
 import { CombinedError, useMutation, useQuery } from "urql";
 import {
@@ -13,14 +12,11 @@ import { Button, Modal, TextField } from "components/shared";
 import Dropdown from "components/shared/Dropdown";
 import CheckboxField from "components/shared/CheckboxField";
 
-type RunConfigStepsPageParams = {
-  runConfigID: string;
-};
-
 type Props = {
   isOpen: boolean;
   onClose: () => void;
   stepId: string;
+  runConfigId: string;
   deviceName?: string;
   stepDescription?: string | null;
   stepTime?: string | null;
@@ -31,13 +27,12 @@ const EditRunConfigStepModal = ({
   isOpen,
   onClose,
   stepId,
+  runConfigId,
   deviceName,
   stepDescription,
   stepTime,
   availableDevices,
 }: Props) => {
-  const { runConfigID } = useParams<RunConfigStepsPageParams>();
-
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
   const [time, setTime] = React.useState("0");
@@ -101,8 +96,12 @@ const EditRunConfigStepModal = ({
 
   React.useEffect(() => {
     if (device && device.deviceOptions?.length) {
+      const options = device.deviceOptions;
+      options.forEach(option => {
+        delete option.__typename;
+      });
       reset({
-        deviceDropdownOptions: device.deviceOptions,
+        deviceDropdownOptions: options,
       });
     }
   }, [device, reset]);
@@ -121,7 +120,7 @@ const EditRunConfigStepModal = ({
       ...(currentDeviceName && { deviceName: currentDeviceName }),
       deviceOptions: watchDeviceDropdownOptions,
     };
-    updateRunConfigStep({ runConfigID: runConfigID || "", step: payload })
+    updateRunConfigStep({ runConfigID: runConfigId || "", step: payload })
       .then(res => {
         if (res.error?.message) {
           setIsSuccessful(false);
