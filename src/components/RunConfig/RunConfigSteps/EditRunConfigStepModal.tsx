@@ -58,7 +58,6 @@ const EditRunConfigStepModal = ({
   const watchDeviceDropdownOptions: DeviceOption[] = watch(
     "deviceDropdownOptions",
   );
-  console.log("watchDeviceDropdownOptions", watchDeviceDropdownOptions);
   const controlledDeviceDropdownOptions = fields.map((field, index) => {
     return {
       ...field,
@@ -89,6 +88,7 @@ const EditRunConfigStepModal = ({
       reset({
         selectedDevice: deviceName,
       });
+      setCurrentDeviceName(deviceName);
     }
   }, [deviceName, reset]);
 
