@@ -33,6 +33,7 @@ const client = new Client({
       forwardSubscription: operation => subscriptionClient.request(operation),
     }),
   ],
+  maskTypename: true,
 });
 
 const root = ReactDOM.createRoot(

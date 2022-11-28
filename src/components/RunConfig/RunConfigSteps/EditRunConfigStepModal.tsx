@@ -96,12 +96,8 @@ const EditRunConfigStepModal = ({
 
   React.useEffect(() => {
     if (device && device.deviceOptions?.length) {
-      const options = device.deviceOptions;
-      options.forEach(option => {
-        delete option.__typename;
-      });
       reset({
-        deviceDropdownOptions: options,
+        deviceDropdownOptions: device.deviceOptions,
       });
     }
   }, [device, reset]);
