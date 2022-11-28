@@ -80,7 +80,9 @@ const RunConfigStep = ({ step, className }: Props) => {
                   </label>
                   {deviceOption.selected &&
                     deviceOption.selected.map(selectedOption => (
-                      <div className="mt-2 ml-3 sm:ml-0">{selectedOption}</div>
+                      <div key={selectedOption} className="mt-2 ml-3 sm:ml-0">
+                        {selectedOption}
+                      </div>
                     ))}
                 </div>
               </div>

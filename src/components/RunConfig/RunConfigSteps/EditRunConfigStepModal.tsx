@@ -1,15 +1,26 @@
 import React from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { useQuery } from "urql";
+import { useParams } from "react-router-dom";
+import { FieldValues, useForm, useFieldArray } from "react-hook-form";
+import { CombinedError, useMutation, useQuery } from "urql";
+import {
+  DeviceOption,
+  GetDeviceDocument,
+  RunConfigStepUpdateInput,
+  UpdateRunConfigStepDocument,
+} from "generated";
+
 import { Button, Modal, TextField } from "components/shared";
-import { GetDeviceDocument, Device, Scalars } from "generated";
 import Dropdown from "components/shared/Dropdown";
 import CheckboxField from "components/shared/CheckboxField";
+
+type RunConfigStepsPageParams = {
+  runConfigID: string;
+};
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  stepId: Scalars["ID"];
+  stepId: string;
   deviceName?: string;
   stepDescription?: string | null;
   stepTime?: string | null;
@@ -25,21 +36,40 @@ const EditRunConfigStepModal = ({
   stepTime,
   availableDevices,
 }: Props) => {
+  const { runConfigID } = useParams<RunConfigStepsPageParams>();
+
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
   const [time, setTime] = React.useState("0");
   const [currentDescription, setCurrentDescription] = React.useState("");
   const [currentDeviceName, setCurrentDeviceName] = React.useState("");
+  const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
+    UpdateRunConfigStepDocument,
+  );
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
+    control,
     reset,
     watch,
   } = useForm();
+  const { fields } = useFieldArray({
+    control,
+    name: "deviceDropdownOptions",
+  });
 
   const { selectedDevice } = watch();
+  const watchDeviceDropdownOptions: DeviceOption[] = watch(
+    "deviceDropdownOptions",
+  );
+  console.log("watchDeviceDropdownOptions", watchDeviceDropdownOptions);
+  const controlledDeviceDropdownOptions = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchDeviceDropdownOptions[index],
+    };
+  });
 
   const [getDeviceResult, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
@@ -69,30 +99,45 @@ const EditRunConfigStepModal = ({
 
   const device = getDeviceResult.data?.getDevice;
 
-  console.log("device", device);
-  console.log("current description", currentDescription);
+  React.useEffect(() => {
+    if (device && device.deviceOptions?.length) {
+      reset({
+        deviceDropdownOptions: device.deviceOptions,
+      });
+    }
+  }, [device, reset]);
 
-  // React.useEffect(() => {
-  //   if (createRunConfigResult.error) {
-  //     setApiError(createRunConfigResult.error.message);
-  //   }
-  // }, [createRunConfigResult.error]);
+  React.useEffect(() => {
+    if (updateRunConfigStepResult.error) {
+      setApiError(updateRunConfigStepResult.error.message);
+    }
+  }, [updateRunConfigStepResult.error]);
 
-  // const submit = (data: FieldValues) => {
-  //   const { name, totalTime } = data;
-  //   const variables = { name, totalTime };
-  //   createRunConfig(variables)
-  //     .then(() => {
-  //       setIsSuccessful(true);
-  //     })
-  //     .catch((error: CombinedError) => {
-  //       setIsSuccessful(false);
-  //       setApiError(error.message);
-  //     });
-  // };
+  const submit = () => {
+    const payload = {
+      id: stepId,
+      time: parseInt(time) || 0,
+      description: currentDescription,
+      ...(currentDeviceName && { deviceName: currentDeviceName }),
+      deviceOptions: watchDeviceDropdownOptions,
+    };
+    updateRunConfigStep({ runConfigID: runConfigID || "", step: payload })
+      .then(res => {
+        if (res.error?.message) {
+          setIsSuccessful(false);
+          setApiError(res.error.message);
+          return;
+        }
+        setIsSuccessful(true);
+      })
+      .catch((error: CombinedError) => {
+        setIsSuccessful(false);
+        setApiError(error.message);
+      });
+  };
 
-  const onSubmit = (data: FieldValues) => {
-    // submit(data);
+  const onSubmit = () => {
+    submit();
     if (isSuccessful && !apiError) {
       setApiError("");
     }
@@ -151,53 +196,48 @@ const EditRunConfigStepModal = ({
                 onChange={e => setTime(e.target.value)}
               />
             </div>
-            {device?.deviceOptions &&
-              device.deviceOptions.length &&
-              device.deviceOptions.map(deviceOption => {
-                return (
-                  <React.Fragment key={deviceOption.optionName}>
-                    {deviceOption.deviceOptionType === "SELECT_ONE" && (
-                      <Dropdown
-                        className="mb-2 ml-16"
-                        label={deviceOption.optionName}
-                        register={register("selectedDeviceOption")}
-                        options={
-                          deviceOption.options?.map(option => ({
-                            value: option,
-                            name: option,
-                          })) || []
-                        }
-                      />
-                    )}
-                    {deviceOption.deviceOptionType === "USER_INPUT" && (
-                      <TextField
-                        className="mb-2 ml-16"
-                        label={deviceOption.optionName}
-                        register={register("selectedDeviceOption")}
-                      />
-                    )}
-                    {deviceOption.deviceOptionType === "SELECT_MANY" && (
-                      <CheckboxField
-                        className="mb-2 ml-16"
-                        label={deviceOption.optionName}
-                        register={register("selectedDeviceOptions")}
-                        availableOptions={
-                          deviceOption.options?.map(option => ({
-                            value: option,
-                            name: option,
-                          })) || []
-                        }
-                        selectedOptions={
-                          deviceOption.selected?.map(option => ({
-                            value: option,
-                            name: option,
-                          })) || []
-                        }
-                      />
-                    )}
-                  </React.Fragment>
-                );
-              })}
+            {controlledDeviceDropdownOptions.map((deviceOption, index) => {
+              return (
+                <React.Fragment key={deviceOption.optionName}>
+                  {deviceOption.deviceOptionType === "SELECT_ONE" && (
+                    <Dropdown
+                      className="mb-2 ml-16"
+                      label={deviceOption.optionName}
+                      options={
+                        deviceOption.options?.map(option => ({
+                          value: option,
+                          name: option,
+                        })) || []
+                      }
+                    />
+                  )}
+                  {deviceOption.deviceOptionType === "USER_INPUT" && (
+                    <TextField
+                      className="mb-2 ml-16"
+                      label={deviceOption.optionName}
+                    />
+                  )}
+                  {deviceOption.deviceOptionType === "SELECT_MANY" && (
+                    <CheckboxField
+                      className="mb-2 ml-16"
+                      label={deviceOption.optionName}
+                      availableOptions={
+                        deviceOption.options?.map(option => ({
+                          value: option,
+                          name: option,
+                        })) || []
+                      }
+                      selectedOptions={
+                        deviceOption.selected?.map(option => ({
+                          value: option,
+                          name: option,
+                        })) || []
+                      }
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </>
         </form>
       </div>

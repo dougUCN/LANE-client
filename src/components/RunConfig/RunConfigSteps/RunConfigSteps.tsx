@@ -33,7 +33,6 @@ const RunConfigSteps = () => {
   });
 
   const steps = result?.data?.getRunConfig?.steps;
-  const totalTime = result?.data?.getRunConfig?.totalTime;
 
   const isLoading = result.fetching;
 
