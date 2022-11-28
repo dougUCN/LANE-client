@@ -67,7 +67,7 @@ const EditRunConfigStepModal = ({
 
   const [getDeviceResult, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
-    variables: { name: selectedDevice },
+    variables: { name: currentDeviceName },
     pause: !deviceName,
   });
 
