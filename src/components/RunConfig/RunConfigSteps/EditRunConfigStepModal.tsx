@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  FieldValues,
-  useForm,
-  useFieldArray,
-  FieldValue,
-} from "react-hook-form";
+import { FieldValues, useForm, useFieldArray } from "react-hook-form";
 import { CombinedError, useMutation, useQuery } from "urql";
 import {
-  Device,
   DeviceOption,
   GetDeviceDocument,
-  RunConfigStepUpdateInput,
   UpdateRunConfigStepDocument,
 } from "generated";
 
@@ -63,7 +56,6 @@ const EditRunConfigStepModal = ({
     name: "deviceDropdownOptions",
   });
 
-  const { selectedDevice } = watch();
   const watchDeviceDropdownOptions: DeviceOption[] = watch(
     "deviceDropdownOptions",
   );
@@ -74,7 +66,7 @@ const EditRunConfigStepModal = ({
     };
   });
 
-  const [getDeviceResult, reexecuteQuery] = useQuery({
+  const [, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
     variables: { name: currentDeviceName },
     pause: !deviceName,
@@ -100,8 +92,6 @@ const EditRunConfigStepModal = ({
       setCurrentDeviceName(deviceName);
     }
   }, [deviceName, reset]);
-
-  const device = getDeviceResult.data?.getDevice;
 
   React.useEffect(() => {
     if (selectedDevices.length) {
