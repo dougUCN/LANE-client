@@ -3,10 +3,10 @@ import { useQuery } from "urql";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
 import { GetRunConfigDocument } from "generated";
+
 import { Button, LoadingSpinner } from "components/shared";
-import NotFound from "components/shared/NotFound";
+import { NotFound } from "components/shared";
 import RunConfigStep from "./RunConfigStep";
 import AddRunConfigStepModal from "./AddRunConfigStepModal";
 

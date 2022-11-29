@@ -1,9 +1,9 @@
-import LoadingSpinner from "components/shared/LoadingSpinner";
-import NotFound from "components/shared/NotFound";
-import { GetHistogramsDocument } from "generated";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "urql";
+
+import { GetHistogramsDocument } from "generated";
+import { LoadingSpinner, NotFound } from "components/shared";
 import HistogramChart from "./HistogramChart";
 
 type CompletedRunPageParams = {

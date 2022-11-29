@@ -1,9 +1,8 @@
 import React from "react";
 
-import LoadingSpinner from "components/shared/LoadingSpinner";
-import Button from "components/shared/Button";
-import CompletedRunsTableRow from "./CompletedRunsTableRow";
 import { HistTablePage, PageInfo } from "generated";
+import { LoadingSpinner, Button } from "components/shared";
+import CompletedRunsTableRow from "./CompletedRunsTableRow";
 
 type Props = {
   tableEntriesFromProps: HistTablePage["edges"];

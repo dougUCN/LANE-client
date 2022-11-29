@@ -3,11 +3,11 @@ import { useSubscription } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHourglassEnd } from "@fortawesome/free-solid-svg-icons";
 
-import Link from "components/shared/Link";
 import {
   GetAllLiveHistogramsDocument,
   GetAllLiveHistogramsSubscription,
 } from "generated";
+import { Link } from "components/shared";
 import HistogramChart from "./HistogramChart";
 
 const handleSubscription = (

@@ -1,15 +1,19 @@
 import React from "react";
 import { FieldValues, useForm, useFieldArray } from "react-hook-form";
 import { CombinedError, useMutation, useQuery } from "urql";
+
 import {
   DeviceOption,
   GetDeviceDocument,
   UpdateRunConfigStepDocument,
 } from "generated";
-
-import { Button, Modal, TextField } from "components/shared";
-import Dropdown from "components/shared/Dropdown";
-import CheckboxField from "components/shared/CheckboxField";
+import {
+  Button,
+  Modal,
+  TextField,
+  Dropdown,
+  CheckboxField,
+} from "components/shared";
 
 type Props = {
   isOpen: boolean;
