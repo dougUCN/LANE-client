@@ -100,6 +100,7 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
           stepDescription={step.description}
           stepTime={step.time.toString()}
           availableDevices={availableDevices}
+          selectedDevices={step.deviceOptions || []}
         />
       )}
     </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { UseFormRegisterReturn } from "react-hook-form";
+import useStateFromProps from "hooks/useStateFromProps";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   register?: UseFormRegisterReturn;
@@ -9,7 +10,7 @@ type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   errorMessage?: string;
   className?: string;
   availableOptions: { name: string; value: string }[];
-  selectedOptions: { name: string; value: string }[];
+  selectedOptions: string[];
 };
 
 const errorStyling = [
@@ -44,16 +45,23 @@ const CheckboxField = (
   }: Props,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
-  const [checkedOptions, setCheckedOptions] = React.useState<string[]>([]);
+  const [checkedOptions, setCheckedOptions] =
+    useStateFromProps<string[]>(selectedOptions);
 
-  React.useEffect(() => {
-    if (selectedOptions.length) {
-      setCheckedOptions([
-        ...checkedOptions,
-        ...selectedOptions.map(option => option.value),
-      ]);
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const clickedOption = e.target.value;
+    if (checkedOptions.includes(clickedOption)) {
+      // uncheck selection if checkbox is already checked
+      const newCheckedOptions = checkedOptions.filter(
+        option => option !== clickedOption,
+      );
+      setCheckedOptions(newCheckedOptions);
+    } else {
+      // check option if checkbox is unchecked
+      setCheckedOptions([...checkedOptions, clickedOption]);
     }
-  }, [checkedOptions, selectedOptions]);
+  };
+
   return (
     <div className={className}>
       {label ? (
@@ -74,13 +82,27 @@ const CheckboxField = (
         {availableOptions.map(option => (
           <div key={option.value}>
             <input
+              {...register}
+              {...props}
               type="checkbox"
               value={option.value}
               checked={checkedOptions.includes(option.value)}
-              onChange={e =>
-                setCheckedOptions([...checkedOptions, e.target.value])
-              }
-              className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              onChange={e => handleCheck(e)}
+              className={clsx(
+                "w-4",
+                "h-4",
+                "text-blue-600",
+                "bg-gray-100",
+                "rounded",
+                "border-gray-300",
+                "focus:ring-blue-500",
+                "dark:focus:ring-blue-600",
+                "dark:ring-offset-gray-800",
+                "focus:ring-2",
+                "dark:bg-gray-700",
+                "dark:border-gray-600",
+                hasError && errorStyling,
+              )}
             />
             <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
               {option.name}

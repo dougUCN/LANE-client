@@ -1,7 +1,13 @@
 import React from "react";
-import { FieldValues, useForm, useFieldArray } from "react-hook-form";
+import {
+  FieldValues,
+  useForm,
+  useFieldArray,
+  FieldValue,
+} from "react-hook-form";
 import { CombinedError, useMutation, useQuery } from "urql";
 import {
+  Device,
   DeviceOption,
   GetDeviceDocument,
   RunConfigStepUpdateInput,
@@ -21,6 +27,7 @@ type Props = {
   stepDescription?: string | null;
   stepTime?: string | null;
   availableDevices: string[];
+  selectedDevices: DeviceOption[];
 };
 
 const EditRunConfigStepModal = ({
@@ -32,6 +39,7 @@ const EditRunConfigStepModal = ({
   stepDescription,
   stepTime,
   availableDevices,
+  selectedDevices,
 }: Props) => {
   const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
   const [apiError, setApiError] = React.useState("");
@@ -46,6 +54,7 @@ const EditRunConfigStepModal = ({
     handleSubmit,
     formState: { errors },
     control,
+    register,
     reset,
     watch,
   } = useForm();
@@ -95,8 +104,8 @@ const EditRunConfigStepModal = ({
   const device = getDeviceResult.data?.getDevice;
 
   React.useEffect(() => {
-    if (device && device.deviceOptions?.length) {
-      const options = device.deviceOptions;
+    if (selectedDevices.length) {
+      const options = selectedDevices;
       options.forEach(option => {
         delete option.__typename;
       });
@@ -104,7 +113,7 @@ const EditRunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [device, reset]);
+  }, [reset, selectedDevices]);
 
   React.useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -112,13 +121,13 @@ const EditRunConfigStepModal = ({
     }
   }, [updateRunConfigStepResult.error]);
 
-  const submit = () => {
+  const submit = (dropdownOptions: DeviceOption[]) => {
     const payload = {
       id: stepId,
       time: parseInt(time) || 0,
       description: currentDescription,
       ...(currentDeviceName && { deviceName: currentDeviceName }),
-      deviceOptions: watchDeviceDropdownOptions,
+      deviceOptions: dropdownOptions,
     };
     updateRunConfigStep({ runConfigID: runConfigId || "", step: payload })
       .then(res => {
@@ -135,8 +144,13 @@ const EditRunConfigStepModal = ({
       });
   };
 
-  const onSubmit = () => {
-    submit();
+  const onSubmit = (data: FieldValues) => {
+    const { deviceOptions } = data;
+    const dropdownOptions = watchDeviceDropdownOptions;
+    deviceOptions.forEach((option: { name?: string[] }, index: number) => {
+      dropdownOptions[index].selected = option.name;
+    });
+    submit(dropdownOptions);
     if (isSuccessful && !apiError) {
       setApiError("");
     }
@@ -201,6 +215,9 @@ const EditRunConfigStepModal = ({
                   {deviceOption.deviceOptionType === "SELECT_ONE" && (
                     <Dropdown
                       className="mb-2 ml-16"
+                      register={register(
+                        `deviceOptions.${index}.name` as const,
+                      )}
                       label={deviceOption.optionName}
                       options={
                         deviceOption.options?.map(option => ({
@@ -213,12 +230,19 @@ const EditRunConfigStepModal = ({
                   {deviceOption.deviceOptionType === "USER_INPUT" && (
                     <TextField
                       className="mb-2 ml-16"
+                      register={register(
+                        `deviceOptions.${index}.name` as const,
+                      )}
+                      defaultValue={deviceOption.selected?.[0] || ""}
                       label={deviceOption.optionName}
                     />
                   )}
                   {deviceOption.deviceOptionType === "SELECT_MANY" && (
                     <CheckboxField
                       className="mb-2 ml-16"
+                      register={register(
+                        `deviceOptions.${index}.name` as const,
+                      )}
                       label={deviceOption.optionName}
                       availableOptions={
                         deviceOption.options?.map(option => ({
@@ -227,10 +251,7 @@ const EditRunConfigStepModal = ({
                         })) || []
                       }
                       selectedOptions={
-                        deviceOption.selected?.map(option => ({
-                          value: option,
-                          name: option,
-                        })) || []
+                        deviceOption.selected?.map(option => option) || []
                       }
                     />
                   )}
