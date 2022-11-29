@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FieldValues, useForm, useFieldArray } from "react-hook-form";
 import { CombinedError, useMutation, useQuery } from "urql";
 
@@ -38,15 +38,15 @@ const EditRunConfigStepModal = ({
   availableDevices,
   selectedDevices,
 }: Props) => {
-  const [isSuccessful, setIsSuccessful] = React.useState<boolean>(false);
-  const [apiError, setApiError] = React.useState("");
-  const [time, setTime] = React.useState("0");
-  const [currentDescription, setCurrentDescription] = React.useState("");
-  const [currentDeviceName, setCurrentDeviceName] = React.useState("");
+  const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
+  const [apiError, setApiError] = useState("");
+  const [time, setTime] = useState("0");
+  const [currentDescription, setCurrentDescription] = useState("");
+  const [currentDeviceName, setCurrentDeviceName] = useState("");
   const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
     UpdateRunConfigStepDocument,
   );
-  const [hasInputChange, setHasInputChange] = React.useState(false);
+  const [hasInputChange, setHasInputChange] = useState(false);
 
   const {
     handleSubmit,
@@ -79,19 +79,19 @@ const EditRunConfigStepModal = ({
 
   const currentDeviceOptions = getDeviceResult.data?.getDevice?.deviceOptions;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (stepDescription) {
       setCurrentDescription(stepDescription);
     }
   }, [reset, stepDescription]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (stepTime) {
       setTime(stepTime);
     }
   }, [reset, stepTime]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (hasInputChange) {
       const options = currentDeviceOptions ?? [];
       options.forEach(option => {
@@ -103,7 +103,7 @@ const EditRunConfigStepModal = ({
     }
   }, [currentDeviceOptions, hasInputChange, reset]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedDevices.length) {
       const options = selectedDevices;
       options.forEach(option => {
@@ -115,7 +115,7 @@ const EditRunConfigStepModal = ({
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (updateRunConfigStepResult.error) {
       setApiError(updateRunConfigStepResult.error.message);
     }
