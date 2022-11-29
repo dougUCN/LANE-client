@@ -90,7 +90,7 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
             ))}
         </div>
       </div>
-      {isEditRunConfigStepModalOpen && (
+      {isEditRunConfigStepModalOpen && step.deviceName && (
         <EditRunConfigStepModal
           isOpen={isEditRunConfigStepModalOpen}
           onClose={() => setIsEditRunConfigStepModalOpen(false)}

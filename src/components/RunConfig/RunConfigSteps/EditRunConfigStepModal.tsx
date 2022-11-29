@@ -20,7 +20,7 @@ type Props = {
   onClose: () => void;
   stepId: string;
   runConfigId: string;
-  deviceName?: string;
+  deviceName: string;
   stepDescription?: string | null;
   stepTime?: string | null;
   availableDevices: string[];
@@ -46,6 +46,7 @@ const EditRunConfigStepModal = ({
   const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
     UpdateRunConfigStepDocument,
   );
+  const [hasInputChange, setHasInputChange] = React.useState(false);
 
   const {
     handleSubmit,
@@ -70,11 +71,13 @@ const EditRunConfigStepModal = ({
     };
   });
 
-  const [, reexecuteQuery] = useQuery({
+  const [getDeviceResult, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
     variables: { name: currentDeviceName },
     pause: !deviceName,
   });
+
+  const currentDeviceOptions = getDeviceResult.data?.getDevice?.deviceOptions;
 
   React.useEffect(() => {
     if (stepDescription) {
@@ -89,13 +92,16 @@ const EditRunConfigStepModal = ({
   }, [reset, stepTime]);
 
   React.useEffect(() => {
-    if (deviceName) {
-      reset({
-        selectedDevice: deviceName,
+    if (hasInputChange) {
+      const options = currentDeviceOptions ?? [];
+      options.forEach(option => {
+        delete option.__typename;
       });
-      setCurrentDeviceName(deviceName);
+      reset({
+        deviceDropdownOptions: options,
+      });
     }
-  }, [deviceName, reset]);
+  }, [currentDeviceOptions, hasInputChange, reset]);
 
   React.useEffect(() => {
     if (selectedDevices.length) {
@@ -107,7 +113,7 @@ const EditRunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [reset, selectedDevices]);
+  }, []);
 
   React.useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -190,6 +196,7 @@ const EditRunConfigStepModal = ({
                 onChange={e => {
                   setCurrentDeviceName(e.target.value);
                   reexecuteQuery({ requestPolicy: "network-only" });
+                  setHasInputChange(true);
                 }}
                 value={currentDeviceName}
                 options={availableDevices.map(deviceName => ({
