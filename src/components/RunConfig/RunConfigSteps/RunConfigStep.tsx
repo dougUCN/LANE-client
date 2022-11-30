@@ -17,7 +17,7 @@ type Props = {
   className?: string;
 };
 const RunConfigStep = ({ step, runConfigId, className }: Props) => {
-  const deviceOptions = step.deviceOptions;
+  const { deviceOptions, id, description, time, deviceName } = step;
 
   const [isEditRunConfigStepModalOpen, setIsEditRunConfigStepModalOpen] =
     React.useState(false);
@@ -28,7 +28,7 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
 
   const [getRunConfigStepResult] = useQuery({
     query: GetRunConfigStepDocument,
-    variables: { runConfigID: runConfigId, stepID: step.id },
+    variables: { runConfigID: runConfigId, stepID: id },
     pause: !isEditRunConfigStepModalOpen,
   });
 
@@ -47,13 +47,13 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
           <label className="dark:text-slate-100 font-bold dark:font-semibold">
             Step Description
           </label>
-          <div className="mt-2">{step.description}</div>
+          <div className="mt-2">{description}</div>
         </div>
         <div className={clsx("col-span-3 lg:col-span-4", runConfigItemStyles)}>
           <label className="dark:text-slate-100 font-bold dark:font-semibold">
             Time
           </label>
-          <div className="mt-2">{`${step.time} sec`}</div>
+          <div className="mt-2">{`${time} sec`}</div>
         </div>
         <button
           className="col-span-1 sm:col-span-2 sm:col-start-12"
@@ -74,7 +74,7 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
           <label className="dark:text-slate-100 font-bold dark:font-semibold">
             Device Name
           </label>
-          <div className="mt-2">{step.deviceName}</div>
+          <div className="mt-2">{deviceName}</div>
         </div>
       </div>
 
