@@ -14,6 +14,7 @@ import {
   Dropdown,
   CheckboxField,
 } from "components/shared";
+import useStateFromProps from "hooks/useStateFromProps";
 
 type Props = {
   isOpen: boolean;
@@ -42,7 +43,8 @@ const EditRunConfigStepModal = ({
   const [apiError, setApiError] = useState("");
   const [time, setTime] = useState("0");
   const [currentDescription, setCurrentDescription] = useState("");
-  const [currentDeviceName, setCurrentDeviceName] = useState("");
+  const [currentDeviceName, setCurrentDeviceName] =
+    useStateFromProps(deviceName);
   const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
     UpdateRunConfigStepDocument,
   );
@@ -71,7 +73,7 @@ const EditRunConfigStepModal = ({
     };
   });
 
-  const [getDeviceResult, reexecuteQuery] = useQuery({
+  const [getDeviceResult] = useQuery({
     query: GetDeviceDocument,
     variables: { name: currentDeviceName },
     pause: !deviceName,
@@ -195,7 +197,7 @@ const EditRunConfigStepModal = ({
                 label="Device Name"
                 onChange={e => {
                   setCurrentDeviceName(e.target.value);
-                  reexecuteQuery({ requestPolicy: "network-only" });
+                  // reexecuteQuery({ requestPolicy: "network-only" });
                   setHasInputChange(true);
                 }}
                 value={currentDeviceName}

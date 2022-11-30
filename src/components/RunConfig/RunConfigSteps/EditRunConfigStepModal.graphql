@@ -1,16 +1,3 @@
-query getDevices {
-  getDevices {
-    name
-    isOnline
-    deviceOptions {
-      optionName
-      deviceOptionType
-      selected
-      options
-    }
-  }
-}
-
 query getDevice($name: String!) {
   getDevice(name: $name) {
     name

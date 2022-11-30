@@ -6,6 +6,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import {
   RunConfigStep as RunConfigStepType,
   GetDevicesDocument,
+  GetRunConfigStepDocument,
 } from "generated";
 
 import EditRunConfigStepModal from "./EditRunConfigStepModal";
@@ -25,11 +26,20 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
     query: GetDevicesDocument,
   });
 
+  const [getRunConfigStepResult] = useQuery({
+    query: GetRunConfigStepDocument,
+    variables: { runConfigID: runConfigId, stepID: step.id },
+  });
+
   // retrieve the names of all available devices
   const availableDevices =
     getDevicesResult.data?.getDevices
       ?.map(device => device?.name || "")
       .filter(el => !!el) ?? [];
+
+  const loadedStep = getRunConfigStepResult.data?.getRunConfigStep;
+
+  console.log("loaded step", loadedStep);
 
   return (
     <div className={clsx(stylesWrapper, className)}>
@@ -49,7 +59,10 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
         <button
           className="col-span-1 sm:col-span-2 sm:col-start-12"
           type="button"
-          onClick={() => setIsEditRunConfigStepModalOpen(true)}
+          onClick={() => {
+            setIsEditRunConfigStepModalOpen(true);
+            // also need to requery run config step to get correct dropdown options
+          }}
         >
           <FontAwesomeIcon
             className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
@@ -90,17 +103,17 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
             ))}
         </div>
       </div>
-      {isEditRunConfigStepModalOpen && step.deviceName && (
+      {isEditRunConfigStepModalOpen && loadedStep?.deviceName && (
         <EditRunConfigStepModal
           isOpen={isEditRunConfigStepModalOpen}
           onClose={() => setIsEditRunConfigStepModalOpen(false)}
-          stepId={step.id}
+          stepId={loadedStep.id}
           runConfigId={runConfigId}
-          deviceName={step.deviceName}
-          stepDescription={step.description}
-          stepTime={step.time.toString()}
+          deviceName={loadedStep.deviceName}
+          stepDescription={loadedStep.description}
+          stepTime={loadedStep.time.toString()}
           availableDevices={availableDevices}
-          selectedDevices={step.deviceOptions || []}
+          selectedDevices={loadedStep.deviceOptions || []}
         />
       )}
     </div>
