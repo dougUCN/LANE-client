@@ -5,6 +5,7 @@ import { CombinedError, useMutation, useQuery } from "urql";
 import {
   DeviceOption,
   GetDeviceDocument,
+  RunConfigStep,
   UpdateRunConfigStepDocument,
 } from "generated";
 import {
@@ -17,38 +18,33 @@ import {
 import useStateFromProps from "hooks/useStateFromProps";
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  stepId: string;
-  runConfigId: string;
-  deviceName: string;
-  stepDescription?: string | null;
-  stepTime?: string | null;
   availableDevices: string[];
-  selectedDevices: DeviceOption[];
+  isOpen: boolean;
+  runConfigID: string;
+  runConfigStep: RunConfigStep;
+  onClose: () => void;
 };
 
 const EditRunConfigStepModal = ({
-  isOpen,
-  onClose,
-  stepId,
-  runConfigId,
-  deviceName,
-  stepDescription,
-  stepTime,
   availableDevices,
-  selectedDevices,
+  isOpen,
+  runConfigID,
+  runConfigStep,
+  onClose,
 }: Props) => {
+  const { id, deviceName, description, time } = runConfigStep;
+
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
   const [apiError, setApiError] = useState("");
-  const [time, setTime] = useState("0");
+  const [currentTime, setCurrentTime] = useState("0");
   const [currentDescription, setCurrentDescription] = useState("");
+  const [hasInputChange, setHasInputChange] = useState(false);
   const [currentDeviceName, setCurrentDeviceName] =
     useStateFromProps(deviceName);
+
   const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
     UpdateRunConfigStepDocument,
   );
-  const [hasInputChange, setHasInputChange] = useState(false);
 
   const {
     handleSubmit,
@@ -82,16 +78,16 @@ const EditRunConfigStepModal = ({
   const currentDeviceOptions = getDeviceResult.data?.getDevice?.deviceOptions;
 
   useEffect(() => {
-    if (stepDescription) {
-      setCurrentDescription(stepDescription);
+    if (description) {
+      setCurrentDescription(description);
     }
-  }, [reset, stepDescription]);
+  }, [reset, description]);
 
   useEffect(() => {
-    if (stepTime) {
-      setTime(stepTime);
+    if (time) {
+      setCurrentTime(time.toString());
     }
-  }, [reset, stepTime]);
+  }, [reset, time]);
 
   useEffect(() => {
     if (hasInputChange) {
@@ -106,6 +102,7 @@ const EditRunConfigStepModal = ({
   }, [currentDeviceOptions, hasInputChange, reset]);
 
   useEffect(() => {
+    const selectedDevices = runConfigStep.deviceOptions ?? [];
     if (selectedDevices.length) {
       const options = selectedDevices;
       options.forEach(option => {
@@ -115,7 +112,7 @@ const EditRunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [reset, selectedDevices]);
+  }, [reset, runConfigStep.deviceOptions]);
 
   useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -125,13 +122,13 @@ const EditRunConfigStepModal = ({
 
   const submit = (dropdownOptions: DeviceOption[]) => {
     const payload = {
-      id: stepId,
-      time: parseInt(time) || 0,
+      id,
+      time: parseInt(currentTime),
       description: currentDescription,
       ...(currentDeviceName && { deviceName: currentDeviceName }),
       deviceOptions: dropdownOptions,
     };
-    updateRunConfigStep({ runConfigID: runConfigId || "", step: payload })
+    updateRunConfigStep({ runConfigID, step: payload })
       .then(res => {
         if (res.error?.message) {
           setIsSuccessful(false);
@@ -207,8 +204,8 @@ const EditRunConfigStepModal = ({
               />
               <TextField
                 label="Time (sec)"
-                value={time}
-                onChange={e => setTime(e.target.value)}
+                value={currentTime}
+                onChange={e => setCurrentTime(e.target.value)}
               />
             </div>
             {controlledDeviceDropdownOptions.map((deviceOption, index) => {

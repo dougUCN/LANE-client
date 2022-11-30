@@ -103,15 +103,11 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
       </div>
       {isEditRunConfigStepModalOpen && loadedStep?.deviceName && (
         <EditRunConfigStepModal
-          isOpen={isEditRunConfigStepModalOpen}
-          onClose={() => setIsEditRunConfigStepModalOpen(false)}
-          stepId={loadedStep.id}
-          runConfigId={runConfigId}
-          deviceName={loadedStep.deviceName}
-          stepDescription={loadedStep.description}
-          stepTime={loadedStep.time.toString()}
           availableDevices={availableDevices}
-          selectedDevices={loadedStep.deviceOptions || []}
+          isOpen={isEditRunConfigStepModalOpen}
+          runConfigID={runConfigId}
+          runConfigStep={loadedStep}
+          onClose={() => setIsEditRunConfigStepModalOpen(false)}
         />
       )}
     </div>
