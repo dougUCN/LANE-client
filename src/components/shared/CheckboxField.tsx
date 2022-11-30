@@ -48,9 +48,6 @@ const CheckboxField = (
   const [checkedOptions, setCheckedOptions] =
     useStateFromProps<string[]>(selectedOptions);
 
-  console.log("selected options", selectedOptions);
-  console.log("checked options", checkedOptions);
-
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const clickedOption = e.target.value;
     if (checkedOptions.includes(clickedOption)) {

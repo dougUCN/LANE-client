@@ -29,6 +29,7 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
   const [getRunConfigStepResult] = useQuery({
     query: GetRunConfigStepDocument,
     variables: { runConfigID: runConfigId, stepID: step.id },
+    pause: !isEditRunConfigStepModalOpen,
   });
 
   // retrieve the names of all available devices
@@ -38,8 +39,6 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
       .filter(el => !!el) ?? [];
 
   const loadedStep = getRunConfigStepResult.data?.getRunConfigStep;
-
-  console.log("loaded step", loadedStep);
 
   return (
     <div className={clsx(stylesWrapper, className)}>
@@ -61,7 +60,6 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
           type="button"
           onClick={() => {
             setIsEditRunConfigStepModalOpen(true);
-            // also need to requery run config step to get correct dropdown options
           }}
         >
           <FontAwesomeIcon

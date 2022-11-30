@@ -115,7 +115,7 @@ const EditRunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, []);
+  }, [reset, selectedDevices]);
 
   useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -197,7 +197,6 @@ const EditRunConfigStepModal = ({
                 label="Device Name"
                 onChange={e => {
                   setCurrentDeviceName(e.target.value);
-                  // reexecuteQuery({ requestPolicy: "network-only" });
                   setHasInputChange(true);
                 }}
                 value={currentDeviceName}
