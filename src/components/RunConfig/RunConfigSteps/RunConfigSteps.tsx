@@ -48,7 +48,7 @@ const RunConfigSteps = () => {
     <>
       <div className="dark:text-slate-100 mb-12">
         <h2 className="text-center dark:text-slate-100 font-bold text-2xl mt-5">
-          {`Run Config Step #${runConfigId}`}
+          {`${runConfigId}`}
         </h2>
         <div className="flex md:justify-end justify-center">
           <Button

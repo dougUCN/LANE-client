@@ -123,7 +123,7 @@ const EditRunConfigStepModal = ({
   const submit = (dropdownOptions: DeviceOption[]) => {
     const payload = {
       id,
-      time: parseInt(currentTime),
+      time: parseFloat(currentTime),
       description: currentDescription,
       ...(currentDeviceName && { deviceName: currentDeviceName }),
       deviceOptions: dropdownOptions,
