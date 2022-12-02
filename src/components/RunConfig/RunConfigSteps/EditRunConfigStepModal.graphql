@@ -1,0 +1,33 @@
+query getDevice($name: String!) {
+  getDevice(name: $name) {
+    name
+    isOnline
+    deviceOptions {
+      optionName
+      deviceOptionType
+      selected
+      options
+    }
+  }
+}
+
+mutation updateRunConfigStep(
+  $runConfigID: ID!
+  $step: RunConfigStepUpdateInput!
+) {
+  updateRunConfigStep(runConfigID: $runConfigID, step: $step) {
+    modifiedStep {
+      id
+      time
+      description
+      deviceName
+      deviceOptions {
+        optionName
+        deviceOptionType
+        selected
+        options
+      }
+    }
+    message
+  }
+}

@@ -11,7 +11,7 @@ const Link = ({ to, children, className, ...props }: Props) => {
   return (
     <ReactRouterLink
       to={to}
-      className={clsx("text-blue-500", "dark:text-white", "className")}
+      className={clsx("text-blue-500", "dark:text-white", className)}
       {...props}
     >
       {children}

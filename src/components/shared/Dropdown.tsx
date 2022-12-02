@@ -2,12 +2,13 @@ import React from "react";
 import clsx from "clsx";
 import { UseFormRegisterReturn } from "react-hook-form";
 
-type Props = React.InputHTMLAttributes<HTMLInputElement> & {
+type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   register?: UseFormRegisterReturn;
   label?: string;
   hasError?: boolean;
   errorMessage?: string;
   className?: string;
+  options: { name: string; value: string }[];
 };
 
 const errorStyling = [
@@ -29,8 +30,16 @@ const errorStyling = [
   "dark:border-red-500",
 ].join(" ");
 
-const TextField = (
-  { register, className, label, hasError, errorMessage, ...props }: Props,
+const Dropdown = (
+  {
+    register,
+    className,
+    label,
+    hasError,
+    errorMessage,
+    options,
+    ...props
+  }: Props,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
   return (
@@ -49,9 +58,8 @@ const TextField = (
           {label}
         </label>
       ) : null}
-      <input
+      <select
         {...register}
-        type="text"
         className={clsx(
           "bg-gray-50 border",
           "border-gray-300",
@@ -75,7 +83,13 @@ const TextField = (
           hasError && errorStyling,
         )}
         {...props}
-      />
+      >
+        {options.map(option => (
+          <option key={option.value} value={option.value}>
+            {option.name}
+          </option>
+        ))}
+      </select>
       {hasError ? (
         <p className="mt-2 text-sm text-red-600 dark:text-red-500">
           <span className="font-medium">{errorMessage}</span>
@@ -85,4 +99,4 @@ const TextField = (
   );
 };
 
-export default React.forwardRef(TextField);
+export default React.forwardRef(Dropdown);

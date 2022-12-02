@@ -11,8 +11,9 @@ import {
 import { CategoricalChartState } from "recharts/types/chart/generateCategoricalChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearchMinus } from "@fortawesome/free-solid-svg-icons";
+
 import { Histogram, LiveHistogram } from "generated";
-import Button from "components/shared/Button";
+import { Button } from "components/shared";
 import { formatDate, formatName } from "utils/formatters";
 import useChart from "./hooks/useChart";
 import useDarkMode from "hooks/useDarkMode";
