@@ -1,9 +1,9 @@
 import React from "react";
 import { useQuery } from "urql";
 
-import LoadingSpinner from "components/shared/LoadingSpinner";
-import CompletedRunsTable from "./CompletedRunsTable";
 import { GetCompletedRunsDocument } from "generated";
+import { LoadingSpinner } from "components/shared";
+import CompletedRunsTable from "./CompletedRunsTable";
 
 const ROWS_PER_QUERY = 15;
 

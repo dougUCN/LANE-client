@@ -21,7 +21,7 @@ interface Props {
   children: JSX.Element;
 }
 
-const Tooltip = ({ children, message, defaultPlacement = "top" }: Props) => {
+const Tooltip = ({ children, message }: Props) => {
   const [open, setOpen] = useState(false);
   const arrowRef = useRef(null);
 

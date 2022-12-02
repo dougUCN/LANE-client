@@ -6,10 +6,10 @@ import { Provider, Client, defaultExchanges, subscriptionExchange } from "urql";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
+import { NotFound } from "components/shared";
 import { CompletedRun, EMS, LiveRun } from "components/EMS";
 import { RunConfig, RunConfigSteps } from "components/RunConfig";
 import Navbar from "components/Navbar";
-import NotFound from "components/shared/NotFound";
 
 const GRAPHQL_WS_ENDPOINT =
   import.meta.env.VITE_GRAPHQL_WS_ENDPOINT || "ws://localhost:8000/graphql/";

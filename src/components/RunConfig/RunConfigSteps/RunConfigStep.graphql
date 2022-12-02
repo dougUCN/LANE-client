@@ -1,0 +1,27 @@
+query getDevices {
+  getDevices {
+    name
+    isOnline
+    deviceOptions {
+      optionName
+      deviceOptionType
+      selected
+      options
+    }
+  }
+}
+
+query getRunConfigStep($runConfigID: ID!, $stepID: ID!) {
+  getRunConfigStep(runConfigID: $runConfigID, stepID: $stepID) {
+    id
+    time
+    description
+    deviceName
+    deviceOptions {
+      optionName
+      deviceOptionType
+      selected
+      options
+    }
+  }
+}

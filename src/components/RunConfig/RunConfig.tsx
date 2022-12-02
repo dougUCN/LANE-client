@@ -5,7 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { GetRunConfigsDocument } from "generated";
 import { Button, LoadingSpinner } from "components/shared";
-import RunConfigItem from "./RunConfigItem";
+import RunConfigItem from "./RunConfigItem/RunConfigItem";
 import CreateRunConfigModal from "./CreateRunConfigModal";
 
 const maxMessage = `Run Config limit reached.
