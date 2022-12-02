@@ -4,7 +4,7 @@ name: AWS Staging Deployment
 on:
   push:
     branches:
-      - main
+      - migrate-be-railway
 
 jobs:
   deploy:
