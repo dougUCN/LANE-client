@@ -60,6 +60,7 @@ const Dropdown = (
       ) : null}
       <select
         {...register}
+        {...ref}
         className={clsx(
           "bg-gray-50 border",
           "border-gray-300",

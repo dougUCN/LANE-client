@@ -1,7 +1,5 @@
 import React from "react";
 import { CombinedError, useMutation } from "urql";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 import { Button, Modal } from "components/shared";
 import { LoadRunConfigDocument, RunConfig } from "generated";
