@@ -84,6 +84,7 @@ const CheckboxField = (
             <input
               {...register}
               {...props}
+              {...ref}
               type="checkbox"
               value={option.value}
               checked={checkedOptions.includes(option.value)}
