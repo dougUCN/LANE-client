@@ -7,7 +7,9 @@ import {
   GetDeviceDocument,
   RunConfigStep,
   UpdateRunConfigStepDocument,
-  CreateRunConfigDocument,
+  CreateRunConfigStepDocument,
+  RunConfigStepUpdateInput,
+  RunConfigStepInput,
 } from "generated";
 import {
   Button,
@@ -47,7 +49,7 @@ const RunConfigStepModal = ({
   );
 
   const [createRunConfigStepResult, createRunConfigStep] = useMutation(
-    CreateRunConfigDocument,
+    CreateRunConfigStepDocument,
   );
 
   const {
@@ -135,15 +137,37 @@ const RunConfigStepModal = ({
     }
   }, [createRunConfigStepResult.error]);
 
-  const submit = (dropdownOptions: DeviceOption[]) => {
+  const submit = (
+    dropdownOptions: DeviceOption[],
+    action: "create" | "edit",
+  ) => {
     const payload = {
-      id: runConfigStep?.id || "",
+      ...(runConfigStep?.id && { id: runConfigStep.id }),
       time: parseFloat(currentTime),
       description: currentDescription,
       ...(currentDeviceName && { deviceName: currentDeviceName }),
       deviceOptions: dropdownOptions,
     };
-    updateRunConfigStep({ runConfigID, step: payload })
+    if (action === "edit") {
+      updateRunConfigStep({
+        runConfigID,
+        step: payload as NonNullable<RunConfigStepUpdateInput>,
+      })
+        .then(res => {
+          if (res.error?.message) {
+            setIsSuccessful(false);
+            setApiError(res.error.message);
+            return;
+          }
+          setIsSuccessful(true);
+        })
+        .catch((error: CombinedError) => {
+          setIsSuccessful(false);
+          setApiError(error.message);
+        });
+      return;
+    }
+    createRunConfigStep({ runConfigID, step: payload as RunConfigStepInput })
       .then(res => {
         if (res.error?.message) {
           setIsSuccessful(false);
@@ -164,7 +188,9 @@ const RunConfigStepModal = ({
     deviceOptions.forEach((option: { name?: string[] }, index: number) => {
       dropdownOptions[index].selected = option.name;
     });
-    submit(dropdownOptions);
+    runConfigStep?.id
+      ? submit(dropdownOptions, "edit")
+      : submit(dropdownOptions, "create");
     if (isSuccessful && !apiError) {
       setApiError("");
     }
@@ -239,7 +265,6 @@ const RunConfigStepModal = ({
                           name: option,
                         })) || []
                       }
-                      value={deviceOption.selected?.[0]}
                     />
                   )}
                   {deviceOption.deviceOptionType === "USER_INPUT" && (

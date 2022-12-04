@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "urql";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   GetDevicesDocument,
   GetRunConfigDocument,
