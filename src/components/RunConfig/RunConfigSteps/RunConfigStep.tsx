@@ -26,32 +26,26 @@ const RunConfigStep = ({
           </label>
           <div className="mt-2">{description}</div>
         </div>
-        <div className={clsx("col-span-3 lg:col-span-4", runConfigItemStyles)}>
+        <div className={clsx("col-span-3 sm:col-span-4", runConfigItemStyles)}>
           <label className="dark:text-slate-100 font-bold dark:font-semibold">
             Time
           </label>
           <div className="mt-2">{`${time} sec`}</div>
         </div>
-        <button
-          className="col-span-1 sm:col-span-2 sm:col-start-12"
-          type="button"
-          onClick={() => onEditModalOpen()}
-        >
-          <FontAwesomeIcon
-            className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
-            icon={faPenToSquare}
-          />
-        </button>
-        <button
-          className="col-span-1 sm:col-span-2 sm:col-start-12"
-          type="button"
-          onClick={() => onDeleteModalOpen()}
-        >
-          <FontAwesomeIcon
-            className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
-            icon={faTrashCan}
-          />
-        </button>
+        <div className="col-span-1 sm:col-span-2 mb-3 sm:ml-8 flex flex-col justify-around items-baseline sm:flex-row sm:justify-around sm:items-center">
+          <button type="button" onClick={() => onEditModalOpen()}>
+            <FontAwesomeIcon
+              className="sm:mr-2 lg:m-0 text-dark-blue dark:text-white fa-xl"
+              icon={faPenToSquare}
+            />
+          </button>
+          <button type="button" onClick={() => onDeleteModalOpen()}>
+            <FontAwesomeIcon
+              className=" sm:ml-2  lg:m-0 text-dark-blue dark:text-white fa-xl"
+              icon={faTrashCan}
+            />
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-3 ml-3 sm:ml-12">
