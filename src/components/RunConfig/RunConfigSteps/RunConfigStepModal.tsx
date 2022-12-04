@@ -7,6 +7,7 @@ import {
   GetDeviceDocument,
   RunConfigStep,
   UpdateRunConfigStepDocument,
+  CreateRunConfigDocument,
 } from "generated";
 import {
   Button,
@@ -21,29 +22,32 @@ type Props = {
   availableDevices: string[];
   isOpen: boolean;
   runConfigID: string;
-  runConfigStep: RunConfigStep;
+  runConfigStep?: RunConfigStep;
   onClose: () => void;
 };
 
-const EditRunConfigStepModal = ({
+const RunConfigStepModal = ({
   availableDevices,
   isOpen,
   runConfigID,
   runConfigStep,
   onClose,
 }: Props) => {
-  const { id, deviceName, description, time } = runConfigStep;
-
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
   const [apiError, setApiError] = useState("");
   const [currentTime, setCurrentTime] = useState("0");
   const [currentDescription, setCurrentDescription] = useState("");
   const [hasInputChange, setHasInputChange] = useState(false);
-  const [currentDeviceName, setCurrentDeviceName] =
-    useStateFromProps(deviceName);
+  const [currentDeviceName, setCurrentDeviceName] = useStateFromProps(
+    runConfigStep?.deviceName,
+  );
 
   const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
     UpdateRunConfigStepDocument,
+  );
+
+  const [createRunConfigStepResult, createRunConfigStep] = useMutation(
+    CreateRunConfigDocument,
   );
 
   const {
@@ -69,28 +73,33 @@ const EditRunConfigStepModal = ({
     };
   });
 
-  const [getDeviceResult] = useQuery({
+  const [getDeviceResult, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
-    variables: { name: currentDeviceName },
-    pause: !deviceName,
+    variables: { name: currentDeviceName || availableDevices[0] },
   });
 
   const currentDeviceOptions = getDeviceResult.data?.getDevice?.deviceOptions;
 
   useEffect(() => {
-    if (description) {
-      setCurrentDescription(description);
+    if (!runConfigStep) {
+      reexecuteQuery();
     }
-  }, [reset, description]);
+  }, [reexecuteQuery, runConfigStep]);
 
   useEffect(() => {
-    if (time) {
-      setCurrentTime(time.toString());
+    if (runConfigStep?.description) {
+      setCurrentDescription(runConfigStep?.description);
     }
-  }, [reset, time]);
+  }, [reset, runConfigStep?.description]);
 
   useEffect(() => {
-    if (hasInputChange) {
+    if (runConfigStep?.time) {
+      setCurrentTime(runConfigStep?.time.toString());
+    }
+  }, [reset, runConfigStep?.time]);
+
+  useEffect(() => {
+    if (hasInputChange || !runConfigStep) {
       const options = currentDeviceOptions ?? [];
       options.forEach(option => {
         delete option.__typename;
@@ -99,10 +108,10 @@ const EditRunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [currentDeviceOptions, hasInputChange, reset]);
+  }, [currentDeviceOptions, hasInputChange, reset, runConfigStep]);
 
   useEffect(() => {
-    const selectedDevices = runConfigStep.deviceOptions ?? [];
+    const selectedDevices = runConfigStep?.deviceOptions ?? [];
     if (selectedDevices.length) {
       const options = selectedDevices;
       options.forEach(option => {
@@ -112,7 +121,7 @@ const EditRunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [reset, runConfigStep.deviceOptions]);
+  }, [reset, runConfigStep?.deviceOptions]);
 
   useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -120,9 +129,15 @@ const EditRunConfigStepModal = ({
     }
   }, [updateRunConfigStepResult.error]);
 
+  useEffect(() => {
+    if (createRunConfigStepResult.error) {
+      setApiError(createRunConfigStepResult.error.message);
+    }
+  }, [createRunConfigStepResult.error]);
+
   const submit = (dropdownOptions: DeviceOption[]) => {
     const payload = {
-      id,
+      id: runConfigStep?.id || "",
       time: parseFloat(currentTime),
       description: currentDescription,
       ...(currentDeviceName && { deviceName: currentDeviceName }),
@@ -224,6 +239,7 @@ const EditRunConfigStepModal = ({
                           name: option,
                         })) || []
                       }
+                      value={deviceOption.selected?.[0]}
                     />
                   )}
                   {deviceOption.deviceOptionType === "USER_INPUT" && (
@@ -283,4 +299,4 @@ const EditRunConfigStepModal = ({
   );
 };
 
-export default EditRunConfigStepModal;
+export default RunConfigStepModal;

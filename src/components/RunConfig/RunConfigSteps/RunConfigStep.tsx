@@ -1,44 +1,22 @@
 import React from "react";
 import clsx from "clsx";
-import { useQuery } from "urql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import {
-  RunConfigStep as RunConfigStepType,
-  GetDevicesDocument,
-  GetRunConfigStepDocument,
-} from "generated";
-
-import EditRunConfigStepModal from "./EditRunConfigStepModal";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { RunConfigStep as Step } from "generated";
 
 type Props = {
-  step: RunConfigStepType;
-  runConfigId: string;
+  step: Step;
   className?: string;
+  onEditModalOpen: () => void;
+  onDeleteModalOpen: () => void;
 };
-const RunConfigStep = ({ step, runConfigId, className }: Props) => {
-  const { deviceOptions, id, description, time, deviceName } = step;
-
-  const [isEditRunConfigStepModalOpen, setIsEditRunConfigStepModalOpen] =
-    React.useState(false);
-
-  const [getDevicesResult] = useQuery({
-    query: GetDevicesDocument,
-  });
-
-  const [getRunConfigStepResult] = useQuery({
-    query: GetRunConfigStepDocument,
-    variables: { runConfigID: runConfigId, stepID: id },
-    pause: !isEditRunConfigStepModalOpen,
-  });
-
-  // retrieve the names of all available devices
-  const availableDevices =
-    getDevicesResult.data?.getDevices
-      ?.map(device => device?.name || "")
-      .filter(el => !!el) ?? [];
-
-  const loadedStep = getRunConfigStepResult.data?.getRunConfigStep;
+const RunConfigStep = ({
+  step,
+  className,
+  onEditModalOpen,
+  onDeleteModalOpen,
+}: Props) => {
+  const { deviceOptions, description, time, deviceName } = step;
 
   return (
     <div className={clsx(stylesWrapper, className)}>
@@ -58,13 +36,21 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
         <button
           className="col-span-1 sm:col-span-2 sm:col-start-12"
           type="button"
-          onClick={() => {
-            setIsEditRunConfigStepModalOpen(true);
-          }}
+          onClick={() => onEditModalOpen()}
         >
           <FontAwesomeIcon
             className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
             icon={faPenToSquare}
+          />
+        </button>
+        <button
+          className="col-span-1 sm:col-span-2 sm:col-start-12"
+          type="button"
+          onClick={() => onDeleteModalOpen()}
+        >
+          <FontAwesomeIcon
+            className="md:ml-4 md:p-0 p-2 text-dark-blue dark:text-white fa-xl"
+            icon={faTrashCan}
           />
         </button>
       </div>
@@ -101,15 +87,6 @@ const RunConfigStep = ({ step, runConfigId, className }: Props) => {
             ))}
         </div>
       </div>
-      {isEditRunConfigStepModalOpen && loadedStep?.deviceName && (
-        <EditRunConfigStepModal
-          availableDevices={availableDevices}
-          isOpen={isEditRunConfigStepModalOpen}
-          runConfigID={runConfigId}
-          runConfigStep={loadedStep}
-          onClose={() => setIsEditRunConfigStepModalOpen(false)}
-        />
-      )}
     </div>
   );
 };

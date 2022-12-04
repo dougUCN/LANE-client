@@ -1,0 +1,8 @@
+mutation deleteRunConfigStep($runConfigID: ID!, $stepID: ID!) {
+  deleteRunConfigStep(runConfigID: $runConfigID, stepID: $stepID) {
+    modifiedStep {
+      id
+      description
+    }
+  }
+}

@@ -31,3 +31,21 @@ mutation updateRunConfigStep(
     message
   }
 }
+
+mutation createRunConfigStep($runConfigID: ID!, $step: RunConfigStepInput!) {
+  createRunConfigStep(runConfigID: $runConfigID, step: $step) {
+    modifiedStep {
+      id
+      time
+      description
+      deviceName
+      deviceOptions {
+        optionName
+        deviceOptionType
+        selected
+        options
+      }
+    }
+    message
+  }
+}
