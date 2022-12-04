@@ -112,7 +112,10 @@ const RunConfigSteps = () => {
           isOpen={isRunConfigModalOpen}
           runConfigID={runConfigId}
           runConfigStep={loadedStep}
-          onClose={() => setIsRunConfigModalOpen(false)}
+          onClose={() => {
+            setIsRunConfigModalOpen(false);
+            setLoadedStep(undefined);
+          }}
         />
       )}
       {isDeleteStepModalOpen && loadedStep?.id && runConfigId && (

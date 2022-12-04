@@ -210,7 +210,7 @@ const RunConfigStepModal = ({
       {/** Modal Header */}
       <div className="p-4 rounded-t border-b dark:border-gray-600">
         <h3 className="text-center text-xl font-semibold text-gray-900 dark:text-white">
-          Update Run Config Step
+          {`${runConfigStep?.id ? "Update" : "Create"} Run Config Step`}
         </h3>
       </div>
       {apiError && (
