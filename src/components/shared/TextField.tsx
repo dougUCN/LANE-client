@@ -51,6 +51,7 @@ const TextField = (
       ) : null}
       <input
         {...register}
+        {...ref}
         type="text"
         className={clsx(
           "bg-gray-50 border",
