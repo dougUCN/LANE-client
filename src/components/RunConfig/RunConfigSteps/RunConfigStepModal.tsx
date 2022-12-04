@@ -265,6 +265,7 @@ const RunConfigStepModal = ({
                           name: option,
                         })) || []
                       }
+                      defaultValue={deviceOption.selected?.[0]}
                     />
                   )}
                   {deviceOption.deviceOptionType === "USER_INPUT" && (
