@@ -11,8 +11,8 @@ query getDevices {
   }
 }
 
-query getRunConfigStep($runConfigID: ID!, $stepID: ID!) {
-  getRunConfigStep(runConfigID: $runConfigID, stepID: $stepID) {
+query getRunConfigStep($runConfigId: ID!, $stepID: ID!) {
+  getRunConfigStep(runConfigId: $runConfigId, stepID: $stepID) {
     id
     time
     description

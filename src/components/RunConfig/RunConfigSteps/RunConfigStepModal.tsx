@@ -23,7 +23,7 @@ import useStateFromProps from "hooks/useStateFromProps";
 type Props = {
   availableDevices: string[];
   isOpen: boolean;
-  runConfigID: string;
+  runConfigId: string;
   runConfigStep?: RunConfigStep;
   onClose: () => void;
 };
@@ -31,7 +31,7 @@ type Props = {
 const RunConfigStepModal = ({
   availableDevices,
   isOpen,
-  runConfigID,
+  runConfigId,
   runConfigStep,
   onClose,
 }: Props) => {
@@ -150,7 +150,7 @@ const RunConfigStepModal = ({
     };
     if (action === "edit") {
       updateRunConfigStep({
-        runConfigID,
+        runConfigId,
         step: payload as NonNullable<RunConfigStepUpdateInput>,
       })
         .then(res => {
@@ -167,7 +167,7 @@ const RunConfigStepModal = ({
         });
       return;
     }
-    createRunConfigStep({ runConfigID, step: payload as RunConfigStepInput })
+    createRunConfigStep({ runConfigId, step: payload as RunConfigStepInput })
       .then(res => {
         if (res.error?.message) {
           setIsSuccessful(false);

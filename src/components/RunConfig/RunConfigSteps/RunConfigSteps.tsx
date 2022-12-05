@@ -53,7 +53,7 @@ const RunConfigSteps = () => {
 
   const [getRunConfigStepResult] = useQuery({
     query: GetRunConfigStepDocument,
-    variables: { runConfigID: runConfigId || "", stepID: loadedStep?.id || "" },
+    variables: { runConfigId: runConfigId || "", stepID: loadedStep?.id || "" },
     pause: !isRunConfigModalOpen || !loadedStep?.id,
   });
 
@@ -96,7 +96,7 @@ const RunConfigSteps = () => {
             Add Step
           </Button>
         </div>
-        {(!steps || !steps?.length) && (
+        {!steps?.length && (
           <div className="mx-24 mt-12 text-center">
             <p>There are currently no steps for this Run Config.</p>
             <p className="mt-4">
@@ -125,7 +125,7 @@ const RunConfigSteps = () => {
         <RunConfigStepModal
           availableDevices={availableDevices}
           isOpen={isRunConfigModalOpen}
-          runConfigID={runConfigId}
+          runConfigId={runConfigId}
           runConfigStep={loadedStep}
           onClose={() => {
             setIsRunConfigModalOpen(false);

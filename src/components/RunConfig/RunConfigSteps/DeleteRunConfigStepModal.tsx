@@ -31,7 +31,7 @@ const DeleteRunConfigStepModal = ({
   }, [deleteRunConfigStepResult.error]);
 
   const handleDelete = () => {
-    const variables = { runConfigID: runConfigId, stepID: runConfigStep.id };
+    const variables = { runConfigId: runConfigId, stepID: runConfigStep.id };
     deleteRunConfigStep(variables)
       .then(() => {
         handleOnClose();
