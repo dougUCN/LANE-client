@@ -33,7 +33,11 @@ const DeleteRunConfigStepModal = ({
   const handleDelete = () => {
     const variables = { runConfigId: runConfigId, stepID: runConfigStep.id };
     deleteRunConfigStep(variables)
-      .then(() => {
+      .then(res => {
+        if (res.error) {
+          setApiError(res.error.message);
+          return;
+        }
         handleOnClose();
       })
       .catch((error: CombinedError) => {

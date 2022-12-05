@@ -28,7 +28,11 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
   const handleDelete = () => {
     const variables = { id: runConfig.id };
     deleteRunConfig(variables)
-      .then(() => {
+      .then(res => {
+        if (res.error) {
+          setApiError(res.error?.message);
+          return;
+        }
         handleOnClose();
       })
       .catch((error: CombinedError) => {

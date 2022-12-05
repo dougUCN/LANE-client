@@ -154,12 +154,13 @@ const RunConfigStepModal = ({
         step: payload as NonNullable<RunConfigStepUpdateInput>,
       })
         .then(res => {
-          if (res.error?.message) {
+          if (res.error) {
             setIsSuccessful(false);
             setApiError(res.error.message);
             return;
           }
           setIsSuccessful(true);
+          handleOnClose();
         })
         .catch((error: CombinedError) => {
           setIsSuccessful(false);
@@ -169,12 +170,13 @@ const RunConfigStepModal = ({
     }
     createRunConfigStep({ runConfigId, step: payload as RunConfigStepInput })
       .then(res => {
-        if (res.error?.message) {
+        if (res.error) {
           setIsSuccessful(false);
           setApiError(res.error.message);
           return;
         }
         setIsSuccessful(true);
+        handleOnClose();
       })
       .catch((error: CombinedError) => {
         setIsSuccessful(false);
@@ -200,7 +202,6 @@ const RunConfigStepModal = ({
     if (isSuccessful && !apiError) {
       setApiError("");
     }
-    handleOnClose();
   };
 
   const handleOnClose = () => {
