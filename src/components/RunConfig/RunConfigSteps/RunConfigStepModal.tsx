@@ -69,6 +69,7 @@ const RunConfigStepModal = ({
     "deviceDropdownOptions",
   );
   const controlledDeviceDropdownOptions = fields.map((field, index) => {
+    // console.log("field", field);
     return {
       ...field,
       ...watchDeviceDropdownOptions[index],
@@ -145,7 +146,7 @@ const RunConfigStepModal = ({
       ...(runConfigStep?.id && { id: runConfigStep.id }),
       time: parseFloat(currentTime),
       description: currentDescription,
-      ...(currentDeviceName && { deviceName: currentDeviceName }),
+      deviceName: currentDeviceName || "",
       deviceOptions: dropdownOptions,
     };
     if (action === "edit") {
