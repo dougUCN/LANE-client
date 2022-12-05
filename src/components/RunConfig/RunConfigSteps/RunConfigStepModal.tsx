@@ -37,7 +37,6 @@ const RunConfigStepModal = ({
 }: Props) => {
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
   const [apiError, setApiError] = useState("");
-  const [currentTime, setCurrentTime] = useState("0");
   const [currentDescription, setCurrentDescription] = useState("");
   const [hasInputChange, setHasInputChange] = useState(false);
   const [currentDeviceName, setCurrentDeviceName] = useStateFromProps(
@@ -68,6 +67,7 @@ const RunConfigStepModal = ({
   const watchDeviceDropdownOptions: DeviceOption[] = watch(
     "deviceDropdownOptions",
   );
+  const { time } = watch();
   const controlledDeviceDropdownOptions = fields.map((field, index) => {
     return {
       ...field,
@@ -93,12 +93,6 @@ const RunConfigStepModal = ({
       setCurrentDescription(runConfigStep?.description);
     }
   }, [reset, runConfigStep?.description]);
-
-  useEffect(() => {
-    if (runConfigStep?.time) {
-      setCurrentTime(runConfigStep?.time.toString());
-    }
-  }, [reset, runConfigStep?.time]);
 
   useEffect(() => {
     if (hasInputChange || !runConfigStep) {
@@ -137,13 +131,21 @@ const RunConfigStepModal = ({
     }
   }, [createRunConfigStepResult.error]);
 
+  useEffect(() => {
+    if (typeof runConfigStep?.time === "number" && runConfigStep.time >= 0) {
+      reset({
+        time: runConfigStep.time.toString(),
+      });
+    }
+  }, [reset, runConfigStep?.time]);
+
   const submit = (
     dropdownOptions: DeviceOption[],
     action: "create" | "edit",
   ) => {
     const payload = {
       ...(runConfigStep?.id && { id: runConfigStep.id }),
-      time: parseFloat(currentTime),
+      time: parseFloat(time),
       description: currentDescription,
       deviceName: currentDeviceName,
       deviceOptions: dropdownOptions,
@@ -210,7 +212,7 @@ const RunConfigStepModal = ({
     onClose();
   };
 
-  const hasFormErrors = !!errors.runConfigName || !!errors.totalTime;
+  const hasFormErrors = !!errors.runConfigName || !!errors.time;
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
@@ -252,9 +254,12 @@ const RunConfigStepModal = ({
               />
               <TextField
                 label="Time (sec)"
-                value={currentTime}
-                onChange={e => setCurrentTime(e.target.value)}
-                hasError={!parseFloat(currentTime)}
+                defaultValue={time}
+                register={register("time", {
+                  validate: value => !!parseFloat(value),
+                })}
+                hasError={!!errors.time}
+                errorMessage="Please enter a valid time in seconds."
               />
             </div>
             {controlledDeviceDropdownOptions.map((deviceOption, index) => {
@@ -313,7 +318,7 @@ const RunConfigStepModal = ({
       {/** Modal Footer */}
       <div className="flex justify-around items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
         <Button
-          disabled={hasFormErrors || !parseFloat(currentTime)}
+          disabled={hasFormErrors}
           className="px-8"
           onClick={handleSubmit(onSubmit)}
           type="button"
