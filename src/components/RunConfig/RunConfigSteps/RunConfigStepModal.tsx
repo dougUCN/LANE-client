@@ -316,7 +316,7 @@ const RunConfigStepModal = ({
           onClick={handleSubmit(onSubmit)}
           type="button"
         >
-          Update
+          {runConfigStep?.id ? "Update" : "Create"}
         </Button>
         <Button
           className="px-8"
