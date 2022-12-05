@@ -254,6 +254,7 @@ const RunConfigStepModal = ({
                 label="Time (sec)"
                 value={currentTime}
                 onChange={e => setCurrentTime(e.target.value)}
+                hasError={!parseFloat(currentTime)}
               />
             </div>
             {controlledDeviceDropdownOptions.map((deviceOption, index) => {
@@ -312,7 +313,7 @@ const RunConfigStepModal = ({
       {/** Modal Footer */}
       <div className="flex justify-around items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
         <Button
-          disabled={hasFormErrors}
+          disabled={hasFormErrors || !parseFloat(currentTime)}
           className="px-8"
           onClick={handleSubmit(onSubmit)}
           type="button"
