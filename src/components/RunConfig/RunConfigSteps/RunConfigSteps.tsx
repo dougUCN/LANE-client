@@ -90,7 +90,10 @@ const RunConfigSteps = () => {
           <Button
             size="sm"
             className="mt-3 md:mr-24"
-            onClick={() => setIsRunConfigModalOpen(true)}
+            onClick={() => {
+              setLoadedStep(undefined);
+              setIsRunConfigModalOpen(true);
+            }}
           >
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
             Add Step
