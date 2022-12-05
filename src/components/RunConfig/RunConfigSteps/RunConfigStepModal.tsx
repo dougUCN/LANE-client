@@ -37,7 +37,6 @@ const RunConfigStepModal = ({
 }: Props) => {
   const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
   const [apiError, setApiError] = useState("");
-  const [currentDescription, setCurrentDescription] = useState("");
   const [hasInputChange, setHasInputChange] = useState(false);
   const [currentDeviceName, setCurrentDeviceName] = useStateFromProps(
     runConfigStep?.deviceName || availableDevices[0],
@@ -67,7 +66,7 @@ const RunConfigStepModal = ({
   const watchDeviceDropdownOptions: DeviceOption[] = watch(
     "deviceDropdownOptions",
   );
-  const { time } = watch();
+  const { time, description } = watch();
   const controlledDeviceDropdownOptions = fields.map((field, index) => {
     return {
       ...field,
@@ -87,12 +86,6 @@ const RunConfigStepModal = ({
       reexecuteQuery();
     }
   }, [reexecuteQuery, runConfigStep]);
-
-  useEffect(() => {
-    if (runConfigStep?.description) {
-      setCurrentDescription(runConfigStep?.description);
-    }
-  }, [reset, runConfigStep?.description]);
 
   useEffect(() => {
     if (hasInputChange || !runConfigStep) {
@@ -139,6 +132,14 @@ const RunConfigStepModal = ({
     }
   }, [reset, runConfigStep?.time]);
 
+  useEffect(() => {
+    if (runConfigStep?.description) {
+      reset({
+        description: runConfigStep.description,
+      });
+    }
+  }, [reset, runConfigStep?.description]);
+
   const submit = (
     dropdownOptions: DeviceOption[],
     action: "create" | "edit",
@@ -146,7 +147,7 @@ const RunConfigStepModal = ({
     const payload = {
       ...(runConfigStep?.id && { id: runConfigStep.id }),
       time: parseFloat(time),
-      description: currentDescription,
+      description,
       deviceName: currentDeviceName,
       deviceOptions: dropdownOptions,
     };
@@ -235,8 +236,12 @@ const RunConfigStepModal = ({
             <TextField
               className="mb-2"
               label="Config Step Description"
-              value={currentDescription}
-              onChange={e => setCurrentDescription(e.target.value)}
+              defaultValue={description}
+              register={register("description", {
+                required: true,
+              })}
+              hasError={!!errors.description}
+              errorMessage="Please enter a description."
             />
             <div className="flex flex-row justify-between">
               <Dropdown
@@ -256,7 +261,7 @@ const RunConfigStepModal = ({
                 label="Time (sec)"
                 defaultValue={time}
                 register={register("time", {
-                  validate: value => !!parseFloat(value),
+                  validate: value => typeof parseFloat(value) === "number",
                 })}
                 hasError={!!errors.time}
                 errorMessage="Please enter a valid time in seconds."
