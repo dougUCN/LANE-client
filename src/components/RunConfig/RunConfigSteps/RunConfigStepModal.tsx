@@ -41,7 +41,7 @@ const RunConfigStepModal = ({
   const [currentDescription, setCurrentDescription] = useState("");
   const [hasInputChange, setHasInputChange] = useState(false);
   const [currentDeviceName, setCurrentDeviceName] = useStateFromProps(
-    runConfigStep?.deviceName,
+    runConfigStep?.deviceName || availableDevices[0],
   );
 
   const [updateRunConfigStepResult, updateRunConfigStep] = useMutation(
@@ -69,7 +69,6 @@ const RunConfigStepModal = ({
     "deviceDropdownOptions",
   );
   const controlledDeviceDropdownOptions = fields.map((field, index) => {
-    // console.log("field", field);
     return {
       ...field,
       ...watchDeviceDropdownOptions[index],
@@ -146,7 +145,7 @@ const RunConfigStepModal = ({
       ...(runConfigStep?.id && { id: runConfigStep.id }),
       time: parseFloat(currentTime),
       description: currentDescription,
-      deviceName: currentDeviceName || "",
+      deviceName: currentDeviceName,
       deviceOptions: dropdownOptions,
     };
     if (action === "edit") {
@@ -187,6 +186,12 @@ const RunConfigStepModal = ({
     const { deviceOptions } = data;
     const dropdownOptions = watchDeviceDropdownOptions;
     deviceOptions.forEach((option: { name?: string[] }, index: number) => {
+      // temp fix for checkbox fields defaulting to false instead of []
+      // TODO: investigate why react hook form is setting option.name to false by default
+      if (typeof option.name === "boolean" && !option.name) {
+        dropdownOptions[index].selected = [];
+        return;
+      }
       dropdownOptions[index].selected = option.name;
     });
     runConfigStep?.id
