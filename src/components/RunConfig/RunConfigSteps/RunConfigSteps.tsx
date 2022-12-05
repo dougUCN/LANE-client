@@ -29,16 +29,23 @@ const RunConfigSteps = () => {
 
   const [isRunConfigModalOpen, setIsRunConfigModalOpen] = useState(false);
   const [isDeleteStepModalOpen, setIsDeleteStepModalOpen] = useState(false);
+  const [hasApiError, setHasApiError] = React.useState(false);
 
   const [loadedStep, setLoadedStep] = useState<Step>();
 
   // Need to pass the __typename "RunConfig" in case query returns an empty list (required for caching)
   // See https://formidable.com/open-source/urql/docs/basics/document-caching/#document-cache-gotchas
-  const [result] = useQuery({
+  const [getRunConfigResult] = useQuery({
     query: GetRunConfigDocument,
     variables: { id: runConfigId || "" },
     context: React.useMemo(() => ({ additionalTypenames: ["RunConfig"] }), []),
   });
+
+  useEffect(() => {
+    if (getRunConfigResult.error) {
+      setHasApiError(true);
+    }
+  }, [getRunConfigResult.error]);
 
   const [getDevicesResult] = useQuery({
     query: GetDevicesDocument,
@@ -50,8 +57,8 @@ const RunConfigSteps = () => {
     pause: !isRunConfigModalOpen || !loadedStep?.id,
   });
 
-  const steps = result?.data?.getRunConfig?.steps;
-  const isLoading = result.fetching;
+  const steps = getRunConfigResult?.data?.getRunConfig?.steps;
+  const isLoading = getRunConfigResult.fetching;
 
   useEffect(() => {
     if (getRunConfigStepResult.data?.getRunConfigStep?.id) {
@@ -65,7 +72,7 @@ const RunConfigSteps = () => {
       ?.map(device => device?.name || "")
       .filter(el => !!el) ?? [];
 
-  if (!isLoading && (!steps || !steps?.length)) {
+  if (!isLoading && hasApiError) {
     return <NotFound customText="run config step" />;
   }
 
@@ -89,6 +96,14 @@ const RunConfigSteps = () => {
             Add Step
           </Button>
         </div>
+        {(!steps || !steps?.length) && (
+          <div className="mx-24 mt-12 text-center">
+            <p>There are currently no steps for this Run Config.</p>
+            <p className="mt-4">
+              To create a new step, click on the Add Step button above.
+            </p>
+          </div>
+        )}
         {steps &&
           steps.map(step => (
             <React.Fragment key={step.id}>
