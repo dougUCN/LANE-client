@@ -9,7 +9,6 @@ query getRunConfig($id: ID!) {
       deviceOptions {
         optionName
         deviceOptionType
-        options
         selected
         options
       }
