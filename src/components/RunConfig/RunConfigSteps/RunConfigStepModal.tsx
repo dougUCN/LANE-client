@@ -171,7 +171,10 @@ const RunConfigStepModal = ({
         });
       return;
     }
-    createRunConfigStep({ runConfigId, step: payload as RunConfigStepInput })
+    createRunConfigStep(
+      { runConfigId, step: payload as RunConfigStepInput },
+      { additionalTypenames: ["RunConfig"] },
+    )
       .then(res => {
         if (res.error) {
           setIsSuccessful(false);
