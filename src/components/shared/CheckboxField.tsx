@@ -86,8 +86,7 @@ const CheckboxField = (
               {...props}
               {...ref}
               type="checkbox"
-              value={option.value}
-              checked={checkedOptions.includes(option.value)}
+              defaultChecked={checkedOptions.includes(option.value)}
               onChange={e => handleCheck(e)}
               className={clsx(
                 "w-4",

@@ -50,6 +50,11 @@ const RunConfigStepModal = ({
     CreateRunConfigStepDocument,
   );
 
+  const selectedDevices = React.useMemo(
+    () => runConfigStep?.deviceOptions ?? [],
+    [runConfigStep?.deviceOptions],
+  );
+
   const {
     handleSubmit,
     formState: { errors },
@@ -100,8 +105,9 @@ const RunConfigStepModal = ({
   }, [currentDeviceOptions, hasInputChange, reset, runConfigStep]);
 
   useEffect(() => {
-    const selectedDevices = runConfigStep?.deviceOptions ?? [];
+    // const selectedDevices = runConfigStep?.deviceOptions ?? [];
     if (selectedDevices.length) {
+      console.log("resetting deviceDropdownOptions (register)");
       const options = selectedDevices;
       options.forEach(option => {
         delete option.__typename;
@@ -110,7 +116,7 @@ const RunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [reset, runConfigStep?.deviceOptions]);
+  }, [reset, selectedDevices]);
 
   useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -218,6 +224,8 @@ const RunConfigStepModal = ({
 
   const hasFormErrors = !!errors.runConfigName || !!errors.time;
 
+  console.log("controlled options", controlledDeviceDropdownOptions);
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       {/** Modal Header */}
@@ -262,7 +270,9 @@ const RunConfigStepModal = ({
               />
               <TextField
                 label="Time (sec)"
-                defaultValue={time}
+                defaultValue={
+                  runConfigStep?.time ? runConfigStep.time.toString() : ""
+                }
                 register={register("time", {
                   validate: value => typeof parseFloat(value) === "number",
                 })}
@@ -270,56 +280,69 @@ const RunConfigStepModal = ({
                 errorMessage="Please enter a valid time in seconds."
               />
             </div>
-            {controlledDeviceDropdownOptions.map((deviceOption, index) => {
-              return (
-                <React.Fragment key={deviceOption.optionName}>
-                  {deviceOption.deviceOptionType === "SELECT_ONE" && (
-                    <Dropdown
-                      className="mb-2 ml-16"
-                      register={register(
-                        `deviceOptions.${index}.name` as const,
-                      )}
-                      label={deviceOption.optionName}
-                      options={
-                        deviceOption.options?.map(option => ({
-                          value: option,
-                          name: option,
-                        })) || []
-                      }
-                      defaultValue={deviceOption.selected?.[0]}
-                    />
-                  )}
-                  {deviceOption.deviceOptionType === "USER_INPUT" && (
-                    <TextField
-                      className="mb-2 ml-16"
-                      register={register(
-                        `deviceOptions.${index}.name` as const,
-                      )}
-                      defaultValue={deviceOption.selected?.[0] || ""}
-                      label={deviceOption.optionName}
-                    />
-                  )}
-                  {deviceOption.deviceOptionType === "SELECT_MANY" && (
-                    <CheckboxField
-                      className="mb-2 ml-16"
-                      register={register(
-                        `deviceOptions.${index}.name` as const,
-                      )}
-                      label={deviceOption.optionName}
-                      availableOptions={
-                        deviceOption.options?.map(option => ({
-                          value: option,
-                          name: option,
-                        })) || []
-                      }
-                      selectedOptions={
-                        deviceOption.selected?.map(option => option) || []
-                      }
-                    />
-                  )}
-                </React.Fragment>
-              );
-            })}
+            {currentDeviceOptions?.length &&
+              currentDeviceOptions.map((deviceOption, index) => {
+                return (
+                  <React.Fragment key={deviceOption.optionName}>
+                    {deviceOption.deviceOptionType === "SELECT_ONE" && (
+                      <Dropdown
+                        className="mb-2 ml-16"
+                        register={register(
+                          `deviceOptions.${index}.name` as const,
+                        )}
+                        label={deviceOption.optionName}
+                        options={
+                          deviceOption.options?.map(option => ({
+                            value: option,
+                            name: option,
+                          })) || []
+                        }
+                        defaultValue={
+                          selectedDevices.length
+                            ? selectedDevices[index].selected?.[0]
+                            : ""
+                        }
+                      />
+                    )}
+                    {deviceOption.deviceOptionType === "USER_INPUT" && (
+                      <TextField
+                        className="mb-2 ml-16"
+                        register={register(
+                          `deviceOptions.${index}.name` as const,
+                        )}
+                        defaultValue={
+                          selectedDevices.length
+                            ? selectedDevices[index].selected?.[0] || ""
+                            : ""
+                        }
+                        label={deviceOption.optionName}
+                      />
+                    )}
+                    {deviceOption.deviceOptionType === "SELECT_MANY" && (
+                      <CheckboxField
+                        className="mb-2 ml-16"
+                        register={register(
+                          `deviceOptions.${index}.name` as const,
+                        )}
+                        label={deviceOption.optionName}
+                        availableOptions={
+                          deviceOption.options?.map(option => ({
+                            value: option,
+                            name: option,
+                          })) || []
+                        }
+                        selectedOptions={
+                          selectedDevices.length
+                            ? selectedDevices[index].selected?.map(
+                                option => option,
+                              ) || []
+                            : []
+                        }
+                      />
+                    )}
+                  </React.Fragment>
+                );
+              })}
           </>
         </form>
       </div>
