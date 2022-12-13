@@ -4,10 +4,24 @@ query getRunConfigs {
       id
       name
       lastLoaded
-      totalTime
+      lastSaved
+      priority
       runConfigStatus {
         status
         messages
+      }
+      totalTime
+      steps {
+        id
+        time
+        description
+        deviceName
+        deviceOptions {
+          optionName
+          deviceOptionType
+          selected
+          options
+        }
       }
     }
     canCreateNewRun

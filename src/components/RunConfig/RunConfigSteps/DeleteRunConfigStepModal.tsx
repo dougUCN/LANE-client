@@ -4,33 +4,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 import { Button, Modal } from "components/shared";
-import { DeleteRunConfigDocument, RunConfig } from "generated";
-import { formatDate } from "utils/formatters";
+import { DeleteRunConfigStepDocument, RunConfigStep as Step } from "generated";
 
 type Props = {
   isOpen: boolean;
-  closeModal: () => void;
-  runConfig: RunConfig;
+  onClose: () => void;
+  runConfigId: string;
+  runConfigStep: Step;
 };
 
-const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
+const DeleteRunConfigStepModal = ({
+  isOpen,
+  onClose,
+  runConfigId,
+  runConfigStep,
+}: Props) => {
   const [apiError, setApiError] = React.useState("");
-  const [deleteRunConfigResult, deleteRunConfig] = useMutation(
-    DeleteRunConfigDocument,
+  const [deleteRunConfigStepResult, deleteRunConfigStep] = useMutation(
+    DeleteRunConfigStepDocument,
   );
 
   React.useEffect(() => {
-    if (deleteRunConfigResult.error) {
-      setApiError(deleteRunConfigResult.error.message);
+    if (deleteRunConfigStepResult.error) {
+      setApiError(deleteRunConfigStepResult.error.message);
     }
-  }, [deleteRunConfigResult.error]);
+  }, [deleteRunConfigStepResult.error]);
 
   const handleDelete = () => {
-    const variables = { id: runConfig.id };
-    deleteRunConfig(variables)
+    const variables = { runConfigId: runConfigId, stepID: runConfigStep.id };
+    deleteRunConfigStep(variables)
       .then(res => {
         if (res.error) {
-          setApiError(res.error?.message);
+          setApiError(res.error.message);
           return;
         }
         handleOnClose();
@@ -42,10 +47,10 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
 
   const handleOnClose = () => {
     setApiError("");
-    closeModal();
+    onClose();
   };
 
-  const { name, lastLoaded } = runConfig;
+  const { description, deviceName } = runConfigStep;
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
@@ -56,7 +61,7 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
           icon={faWarning}
         />
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-          Are you sure you want to delete this Run Config?
+          Are you sure you want to delete this Run Config Step?
         </h3>
       </div>
       {/** Modal Body */}
@@ -69,15 +74,15 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
       <div className="mx-6 my-4 text-sm font-medium">
         <div className="grid grid-cols-2 text-gray-900 dark:text-gray-300">
           <div className="justify-self-center mb-1 dark:text-slate-100 font-bold dark:font-semibold">
-            Run Config Name
+            Run Config Step
             <p className="mt-1 text-sm font-normal text-gray-700 dark:text-gray-400">
-              {name}
+              {deviceName}
             </p>
           </div>
           <div className="justify-self-center mb-1 dark:text-slate-100 font-bold dark:font-semibold">
-            Last Loaded
+            Description
             <p className="mt-1 text-sm font-normal text-gray-700 dark:text-gray-400">
-              {lastLoaded ? formatDate(lastLoaded) : "Never Used"}
+              {description}
             </p>
           </div>
         </div>
@@ -100,4 +105,4 @@ const DeleteRunConfigModal = ({ isOpen, closeModal, runConfig }: Props) => {
   );
 };
 
-export default DeleteRunConfigModal;
+export default DeleteRunConfigStepModal;

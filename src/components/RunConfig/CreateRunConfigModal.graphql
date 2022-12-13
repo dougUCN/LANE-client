@@ -1,4 +1,4 @@
-mutation createRunConfig($name: String!, $totalTime: Int!) {
+mutation createRunConfig($name: String!, $totalTime: Float!) {
   createRunConfig(runConfig: { name: $name, totalTime: $totalTime }) {
     message
     success

@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "urql";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { GetRunConfigDocument } from "generated";
+import {
+  GetDevicesDocument,
+  GetRunConfigDocument,
+  GetRunConfigStepDocument,
+  RunConfigStep as Step,
+} from "generated";
 
 import { Button, LoadingSpinner } from "components/shared";
 import { NotFound } from "components/shared";
 import RunConfigStep from "./RunConfigStep";
-import AddRunConfigStepModal from "./AddRunConfigStepModal";
+import RunConfigStepModal from "./RunConfigStepModal";
+import DeleteRunConfigStepModal from "./DeleteRunConfigStepModal";
 
 type RunConfigStepsPageParams = {
   runConfigId: string;
@@ -17,26 +23,56 @@ type RunConfigStepsPageParams = {
 const RunConfigSteps = () => {
   const { runConfigId } = useParams<RunConfigStepsPageParams>();
 
-  const [isCreateStepModalOpen, setIsCreateStepModalOpen] =
-    React.useState(false);
-
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = `LANE - Run Config ${runConfigId}`;
   }, [runConfigId]);
 
+  const [isRunConfigModalOpen, setIsRunConfigModalOpen] = useState(false);
+  const [isDeleteStepModalOpen, setIsDeleteStepModalOpen] = useState(false);
+  const [hasApiError, setHasApiError] = React.useState(false);
+
+  const [loadedStep, setLoadedStep] = useState<Step>();
+
   // Need to pass the __typename "RunConfig" in case query returns an empty list (required for caching)
   // See https://formidable.com/open-source/urql/docs/basics/document-caching/#document-cache-gotchas
-  const [result] = useQuery({
+  const [getRunConfigResult] = useQuery({
     query: GetRunConfigDocument,
     variables: { id: runConfigId || "" },
     context: React.useMemo(() => ({ additionalTypenames: ["RunConfig"] }), []),
   });
 
-  const steps = result?.data?.getRunConfig?.steps;
+  useEffect(() => {
+    if (getRunConfigResult.error) {
+      setHasApiError(true);
+    }
+  }, [getRunConfigResult.error]);
 
-  const isLoading = result.fetching;
+  const [getDevicesResult] = useQuery({
+    query: GetDevicesDocument,
+  });
 
-  if (!isLoading && (!steps || !steps?.length)) {
+  const [getRunConfigStepResult] = useQuery({
+    query: GetRunConfigStepDocument,
+    variables: { runConfigId: runConfigId || "", stepID: loadedStep?.id || "" },
+    pause: !isRunConfigModalOpen || !loadedStep?.id,
+  });
+
+  const steps = getRunConfigResult?.data?.getRunConfig?.steps;
+  const isLoading = getRunConfigResult.fetching;
+
+  useEffect(() => {
+    if (getRunConfigStepResult.data?.getRunConfigStep?.id) {
+      setLoadedStep(getRunConfigStepResult.data?.getRunConfigStep);
+    }
+  }, [getRunConfigStepResult.data?.getRunConfigStep]);
+
+  // retrieve the names of all available devices
+  const availableDevices =
+    getDevicesResult.data?.getDevices
+      ?.map(device => device?.name || "")
+      .filter(el => !!el) ?? [];
+
+  if (!isLoading && hasApiError) {
     return <NotFound customText="run config step" />;
   }
 
@@ -54,23 +90,60 @@ const RunConfigSteps = () => {
           <Button
             size="sm"
             className="mt-3 md:mr-24"
-            onClick={() => setIsCreateStepModalOpen(true)}
+            onClick={() => {
+              setLoadedStep(undefined);
+              setIsRunConfigModalOpen(true);
+            }}
           >
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
             Add Step
           </Button>
         </div>
+        {!steps?.length && (
+          <div className="mx-24 mt-12 text-center">
+            <p>There are currently no steps for this Run Config.</p>
+            <p className="mt-4">
+              To create a new step, click on the Add Step button above.
+            </p>
+          </div>
+        )}
         {steps &&
           steps.map(step => (
             <React.Fragment key={step.id}>
-              <RunConfigStep step={step} runConfigId={runConfigId || ""} />
+              <RunConfigStep
+                step={step}
+                onEditModalOpen={() => {
+                  setLoadedStep(step);
+                  setIsRunConfigModalOpen(true);
+                }}
+                onDeleteModalOpen={() => {
+                  setLoadedStep(step);
+                  setIsDeleteStepModalOpen(true);
+                }}
+              />
             </React.Fragment>
           ))}
       </div>
-      <AddRunConfigStepModal
-        isOpen={isCreateStepModalOpen}
-        closeModal={() => setIsCreateStepModalOpen(false)}
-      />
+      {isRunConfigModalOpen && runConfigId && (
+        <RunConfigStepModal
+          availableDevices={availableDevices}
+          isOpen={isRunConfigModalOpen}
+          runConfigId={runConfigId}
+          runConfigStep={loadedStep}
+          onClose={() => {
+            setIsRunConfigModalOpen(false);
+            setLoadedStep(undefined);
+          }}
+        />
+      )}
+      {isDeleteStepModalOpen && loadedStep?.id && runConfigId && (
+        <DeleteRunConfigStepModal
+          isOpen={isDeleteStepModalOpen}
+          runConfigId={runConfigId}
+          runConfigStep={loadedStep}
+          onClose={() => setIsDeleteStepModalOpen(false)}
+        />
+      )}
     </>
   );
 };

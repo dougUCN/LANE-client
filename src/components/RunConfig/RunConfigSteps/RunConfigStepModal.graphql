@@ -12,10 +12,28 @@ query getDevice($name: String!) {
 }
 
 mutation updateRunConfigStep(
-  $runConfigID: ID!
+  $runConfigId: ID!
   $step: RunConfigStepUpdateInput!
 ) {
-  updateRunConfigStep(runConfigID: $runConfigID, step: $step) {
+  updateRunConfigStep(runConfigId: $runConfigId, step: $step) {
+    modifiedStep {
+      id
+      time
+      description
+      deviceName
+      deviceOptions {
+        optionName
+        deviceOptionType
+        selected
+        options
+      }
+    }
+    message
+  }
+}
+
+mutation createRunConfigStep($runConfigId: ID!, $step: RunConfigStepInput!) {
+  createRunConfigStep(runConfigId: $runConfigId, step: $step) {
     modifiedStep {
       id
       time
