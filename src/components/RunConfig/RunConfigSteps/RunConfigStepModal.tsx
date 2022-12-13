@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FieldValues, useForm, useFieldArray } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { CombinedError, useMutation, useQuery } from "urql";
 
 import {
@@ -50,29 +50,23 @@ const RunConfigStepModal = ({
     CreateRunConfigStepDocument,
   );
 
+  const selectedDevices = React.useMemo(
+    () => runConfigStep?.deviceOptions ?? [],
+    [runConfigStep?.deviceOptions],
+  );
+
   const {
     handleSubmit,
     formState: { errors },
-    control,
     register,
     reset,
     watch,
   } = useForm();
-  const { fields } = useFieldArray({
-    control,
-    name: "deviceDropdownOptions",
-  });
 
   const watchDeviceDropdownOptions: DeviceOption[] = watch(
     "deviceDropdownOptions",
   );
   const { time, description } = watch();
-  const controlledDeviceDropdownOptions = fields.map((field, index) => {
-    return {
-      ...field,
-      ...watchDeviceDropdownOptions[index],
-    };
-  });
 
   const [getDeviceResult, reexecuteQuery] = useQuery({
     query: GetDeviceDocument,
@@ -100,7 +94,6 @@ const RunConfigStepModal = ({
   }, [currentDeviceOptions, hasInputChange, reset, runConfigStep]);
 
   useEffect(() => {
-    const selectedDevices = runConfigStep?.deviceOptions ?? [];
     if (selectedDevices.length) {
       const options = selectedDevices;
       options.forEach(option => {
@@ -110,7 +103,7 @@ const RunConfigStepModal = ({
         deviceDropdownOptions: options,
       });
     }
-  }, [reset, runConfigStep?.deviceOptions]);
+  }, [reset, selectedDevices]);
 
   useEffect(() => {
     if (updateRunConfigStepResult.error) {
@@ -194,9 +187,7 @@ const RunConfigStepModal = ({
     const { deviceOptions } = data;
     const dropdownOptions = watchDeviceDropdownOptions;
     deviceOptions.forEach((option: { name?: string[] }, index: number) => {
-      // temp fix for checkbox fields defaulting to false instead of []
-      // TODO: investigate why react hook form is setting option.name to false by default
-      if (typeof option.name === "boolean" && !option.name) {
+      if (!option.name) {
         dropdownOptions[index].selected = [];
         return;
       }
@@ -262,7 +253,9 @@ const RunConfigStepModal = ({
               />
               <TextField
                 label="Time (sec)"
-                defaultValue={time}
+                defaultValue={
+                  runConfigStep?.time ? runConfigStep.time.toString() : ""
+                }
                 register={register("time", {
                   validate: value => typeof parseFloat(value) === "number",
                 })}
@@ -270,56 +263,77 @@ const RunConfigStepModal = ({
                 errorMessage="Please enter a valid time in seconds."
               />
             </div>
-            {controlledDeviceDropdownOptions.map((deviceOption, index) => {
-              return (
-                <React.Fragment key={deviceOption.optionName}>
-                  {deviceOption.deviceOptionType === "SELECT_ONE" && (
-                    <Dropdown
-                      className="mb-2 ml-16"
-                      register={register(
-                        `deviceOptions.${index}.name` as const,
+            {currentDeviceOptions?.length &&
+              currentDeviceOptions.map((deviceOption, index) => {
+                return (
+                  <React.Fragment key={deviceOption.optionName}>
+                    {deviceOption.deviceOptionType === "SELECT_ONE" && (
+                      <Dropdown
+                        className="mb-2 ml-16"
+                        register={register(`deviceOptions.${index}.name.0`)}
+                        label={deviceOption.optionName}
+                        options={
+                          deviceOption.options?.map(option => {
+                            return {
+                              value: option,
+                              name: option,
+                            };
+                          }) || []
+                        }
+                        defaultValue={
+                          selectedDevices.length
+                            ? selectedDevices[index]?.selected?.[0]
+                            : ""
+                        }
+                      />
+                    )}
+                    {deviceOption.deviceOptionType === "USER_INPUT" && (
+                      <TextField
+                        className="mb-2 ml-16"
+                        register={register(`deviceOptions.${index}.name.0`)}
+                        defaultValue={
+                          selectedDevices.length
+                            ? selectedDevices[index]?.selected?.[0] || ""
+                            : ""
+                        }
+                        label={deviceOption.optionName}
+                      />
+                    )}
+                    {deviceOption.deviceOptionType === "SELECT_MANY" &&
+                      deviceOption.options?.length && (
+                        <>
+                          <label className="block mb-2 ml-16 text-sm font-medium text-gray-900 dark:text-gray-300">
+                            {deviceOption.optionName}
+                          </label>
+                          <div className="flex flex-row justify-around">
+                            {deviceOption.options.map(option => (
+                              <div
+                                key={option}
+                                className="mb-2 ml-16 flex flex-row items-center space-x-3"
+                              >
+                                <CheckboxField
+                                  register={register(
+                                    `deviceOptions.${index}.name`,
+                                  )}
+                                  value={option}
+                                  label={option}
+                                  defaultChecked={
+                                    !!(
+                                      selectedDevices.length &&
+                                      selectedDevices[
+                                        index
+                                      ]?.selected?.includes(option)
+                                    )
+                                  }
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </>
                       )}
-                      label={deviceOption.optionName}
-                      options={
-                        deviceOption.options?.map(option => ({
-                          value: option,
-                          name: option,
-                        })) || []
-                      }
-                      defaultValue={deviceOption.selected?.[0]}
-                    />
-                  )}
-                  {deviceOption.deviceOptionType === "USER_INPUT" && (
-                    <TextField
-                      className="mb-2 ml-16"
-                      register={register(
-                        `deviceOptions.${index}.name` as const,
-                      )}
-                      defaultValue={deviceOption.selected?.[0] || ""}
-                      label={deviceOption.optionName}
-                    />
-                  )}
-                  {deviceOption.deviceOptionType === "SELECT_MANY" && (
-                    <CheckboxField
-                      className="mb-2 ml-16"
-                      register={register(
-                        `deviceOptions.${index}.name` as const,
-                      )}
-                      label={deviceOption.optionName}
-                      availableOptions={
-                        deviceOption.options?.map(option => ({
-                          value: option,
-                          name: option,
-                        })) || []
-                      }
-                      selectedOptions={
-                        deviceOption.selected?.map(option => option) || []
-                      }
-                    />
-                  )}
-                </React.Fragment>
-              );
-            })}
+                  </React.Fragment>
+                );
+              })}
           </>
         </form>
       </div>
