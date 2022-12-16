@@ -101,26 +101,26 @@ The github actions for CI on AWS will ssh into the EC2 instance, run `git pull` 
 
 ### Production
 
-As of 12/15/2022, the production client may only be accessed on the LANL OCE network at http://nedm-macpro.lanl.gov. (Note that LANE currently only supports `http` not `https`)
+As of 12/15/2022, the production LANE-client may only be accessed on the LANL OCE network at http://nedm-macpro.lanl.gov. (Note that LANE currently only supports `http` not `https`)
 
-To update the production client, perform the following:
+To update the production LANE-client, perform the following:
 
 1. Update the server on production as per the instructions [here](https://github.com/dougUCN/LANE-server)
 2. Run the `deploy.sh` script located in `$HOME/LANE/LANE-client/deploy-prod`
 
 ```bash
-# Assuming you are in the LANE-client directory
+# Assuming you are in the $HOME/LANE/LANE-client directory
 chmod u+x deploy-prod/deploy.sh
 ./deploy-prod/deploy.sh # Doesn't matter which directory from which you call deploy.sh
 ```
 
-This will pause the production client, check for updates, rebuild the client, and redeploy.
+This will pause the production LANE-client, check for updates, rebuild, and redeploy.
 
 **Note:** Changes to the `deploy-prod/lane.conf` file will not propagate to the actual Nginx config file located in production. This needs to be done manually
 
-The steps for setting up the client on the LANL production server for the first time are as follows:
+The steps for setting up the LANE-client on the LANL production server for the first time are as follows:
 
-1. Make sure that the production backend server has been deployed as described [here](https://github.com/dougUCN/LANE-server)
+1. Make sure that the production backend server has been deployed as described in the `CONTRIBUTING.md` file [here](https://github.com/dougUCN/LANE-server)
 2. In the folder `$HOME/LANE`, run `git clone https://github.com/dougUCN/LANE-client.git`. (The server repo should be cloned into the same folder). Your directory structure should look as follows:
 
 ```
@@ -177,3 +177,5 @@ chmod u+x deploy-prod/deploy.sh
 ```
 
 14. Get the pm2 process manager to run at startup as per the instructions [here](https://pm2.keymetrics.io/docs/usage/startup/)
+
+The LANE client should now be accessible at http://nedm-macpro.lanl.gov
