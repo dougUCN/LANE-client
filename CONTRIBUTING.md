@@ -111,7 +111,7 @@ To update the production LANE-client, perform the following:
 ```bash
 # Assuming you are in the $HOME/LANE/LANE-client directory
 chmod u+x deploy-prod/deploy.sh
-./deploy-prod/deploy.sh # Doesn't matter which directory from which you call deploy.sh
+./deploy-prod/deploy.sh
 ```
 
 This will pause the production LANE-client, check for updates, rebuild, and redeploy.
@@ -173,7 +173,7 @@ systemctl status nginx # Check nginx status
 ```bash
 # Assuming you are in the LANE-client directory
 chmod u+x deploy-prod/deploy.sh
-./deploy-prod/deploy.sh # Doesn't matter which directory from which you call deploy.sh
+./deploy-prod/deploy.sh
 ```
 
 14. Get the pm2 process manager to run at startup as per the instructions [here](https://pm2.keymetrics.io/docs/usage/startup/)
