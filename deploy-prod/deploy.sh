@@ -24,4 +24,4 @@ npm run build
 
 echo "Run new PM2 action"
 cp ./deploy-prod/ecosystem.config.js ecosystem.config.js
-pm2 start ecosystem.config.js -i 4
+pm2 start ecosystem.config.js -i 2
