@@ -7,6 +7,7 @@ echo "Jump to app folder"
 cd $HOME/LANE/LANE-client
 pwd
 
+git checkout -- deploy-prod/deploy.sh
 git pull
 
 echo "Installing dependencies"
