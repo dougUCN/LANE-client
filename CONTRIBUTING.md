@@ -166,7 +166,7 @@ systemctl status nginx # Check nginx status
 
 9.  Copy the contents of the file `/deploy-prod/lane.conf` to the nginx config file at `etc/nginx/conf.d`.
 10. If there is a file `/nginx/sites-enabled/default`, either delete the file or move it to the folder `/nginx/sites-available`
-11. If ufw is enabled, modify firewall rules with the command `sudo ufw allow 'Nginx Full'` (ONLY if ufw is enabled. By default on the production server it was not.)
+11. If ufw is enabled, modify firewall rules with the command `sudo ufw allow 'Nginx Full'` (Only perform this step if ufw is enabled. By default on the production server it was not. View ufw status with `sudo ufw status verbose`.)
 12. Restart nginx with `sudo systemctl restart nginx`
 13. Run the deploy shell script
 
