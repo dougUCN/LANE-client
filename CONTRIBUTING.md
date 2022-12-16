@@ -108,6 +108,12 @@ To update the production client, perform the following:
 1. Update the server on production as per the instructions [here](https://github.com/dougUCN/LANE-server)
 2. Run the `deploy.sh` script located in `$HOME/LANE/LANE-client/deploy-prod`
 
+```bash
+# Assuming you are in the LANE-client directory
+chmod u+x deploy-prod/deploy.sh
+./deploy-prod/deploy.sh # Doesn't matter which directory from which you call deploy.sh
+```
+
 This will pause the production client, check for updates, rebuild the client, and redeploy.
 
 **Note:** Changes to the `deploy-prod/lane.conf` file will not propagate to the actual Nginx config file located in production. This needs to be done manually
