@@ -9,8 +9,7 @@ pwd
 
 git pull
 
-echo "Reinstalling dependencies"
-rm -rf node_modules
+echo "Installing dependencies"
 npm ci
 
 echo "Generate typescript from local files"
