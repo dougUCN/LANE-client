@@ -98,3 +98,74 @@ The steps for setting up the client on AWS EC2 are outlined as follows:
 10. Add your EC2 login username and private key into Github secrets on the repo
 
 The github actions for CI on AWS will ssh into the EC2 instance, run `git pull` and then run the pulled `aws/deploy.sh`
+
+### Production
+
+As of 12/15/2022, the production client may only be accessed on the LANL OCE network at http://nedm-macpro.lanl.gov. (Note that LANE currently only supports `http` not `https`)
+
+To update the production client, perform the following:
+
+1. Update the server on production as per the instructions [here](https://github.com/dougUCN/LANE-server)
+2. Run the `deploy.sh` script located in `$HOME/LANE/LANE-client/deploy-prod`
+
+This will pause the production client, check for updates, rebuild the client, and redeploy.
+
+The steps for setting up the client on the LANL production server for the first time are as follows:
+
+1. Make sure that the production backend server has been deployed as described [here](https://github.com/dougUCN/LANE-server)
+2. In the folder `$HOME/LANE`, run `git clone https://github.com/dougUCN/LANE-client.git`. (The server repo should be cloned into the same folder). Your directory structure should look as follows:
+
+```
+LANE
+├── LANE-client
+└── LANE-server
+```
+
+3. Set the curl proxy (to install nvm). Create a file `~/.curlrc` with the text `proxy=http://proxyout.lanl.gov:8080`
+4. Install Node 16.15.0 and npm via [nvm](https://github.com/nvm-sh/nvm).
+
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+```
+
+5. Set the Lanl proxy on npm
+
+```
+npm config set proxy http://proxyout.lanl.gov:8080
+```
+
+6. Install pm2 globally via npm
+
+```
+npm install pm2 -g
+```
+
+7. Install dependencies for the client repo and build
+
+```
+npm ci
+npm run generate:local
+npm run build
+```
+
+8. Install nginx
+
+```
+sudo apt update
+sudo apt install nginx
+systemctl status nginx # Check nginx status
+```
+
+9.  Copy the contents of the file `/deploy-prod/lane.conf` to the nginx config file at `etc/nginx/conf.d`.
+10. If there is a file `/nginx/sites-enabled/default`, either delete the file or move it to the folder `/nginx/sites-available`
+11. If ufw is enabled, modify firewall rules with the command `sudo ufw allow 'Nginx Full'` (ONLY if ufw is enabled. By default on the production server it was not.)
+12. Restart nginx with `sudo systemctl restart nginx`
+13. Run the deploy shell script
+
+```bash
+# Assuming you are in the LANE-client directory
+chmod u+x deploy-prod/deploy.sh
+./deploy-prod/deploy.sh # Doesn't matter which directory from which you call deploy.sh
+```
+
+14. Get the pm2 process manager to run at startup as per the instructions [here](https://pm2.keymetrics.io/docs/usage/startup/)
