@@ -110,6 +110,8 @@ To update the production client, perform the following:
 
 This will pause the production client, check for updates, rebuild the client, and redeploy.
 
+**Note:** Changes to the `deploy-prod/lane.conf` file will not propagate to the actual Nginx config file located in production. This needs to be done manually
+
 The steps for setting up the client on the LANL production server for the first time are as follows:
 
 1. Make sure that the production backend server has been deployed as described [here](https://github.com/dougUCN/LANE-server)
