@@ -11,7 +11,6 @@ echo "Check for any dependency updates"
 NPM_DEPENDENCIES_UPDATED=($(git diff --name-only HEAD HEAD~1 | grep "^package.*json$"))
 if [[ "$NPM_DEPENDENCIES_UPDATED" != "" ]]; then
     echo "Reinstalling depdenencies"
-    rm -rf node_modules
     npm ci
 else
     echo "No new dependencies found"
